@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Identity;
+use App\Core\Models\Identity;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -21,13 +22,14 @@ class IdentityFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     * @throws BindingResolutionException
      */
     public function definition(): array
     {
         return [
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= app()->make(Hasher::class)->make(fake()->password()),
             'remember_token' => Str::random(10),
         ];
     }

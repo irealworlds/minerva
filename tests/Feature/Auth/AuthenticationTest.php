@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Identity;
+use App\Core\Models\Identity;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');

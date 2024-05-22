@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Models\Identity;
+
 return [
 
     /*
@@ -62,7 +64,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Identity::class),
+            'model' => env('AUTH_MODEL', Identity::class),
         ],
 
         // 'users' => [

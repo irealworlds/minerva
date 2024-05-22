@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Identity;
+use App\Core\Models\Identity;
 use Illuminate\Support\Facades\Hash;
 
 test('password can be updated', function () {

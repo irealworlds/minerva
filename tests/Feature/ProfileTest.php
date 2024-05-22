@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Identity;
+use App\Core\Models\Identity;
 
 test('profile page is displayed', function () {
     $user = Identity::factory()->create();

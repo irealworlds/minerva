@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Identity;
+use App\Core\Models\Identity;
 
 test('confirm password screen can be rendered', function () {
     $user = Identity::factory()->create();
