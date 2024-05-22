@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Presentation\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Presentation\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;

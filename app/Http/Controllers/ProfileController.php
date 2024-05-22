@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Presentation\Http\Controllers;
+namespace App\Http\Controllers;
 
 use App\ApplicationServices\Identities\Update\UpdateIdentityCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
-use App\Presentation\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Presentation\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Presentation\Http\Controllers\Controller;
-use App\Presentation\Http\Requests\Auth\LoginRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\RedirectResponse;

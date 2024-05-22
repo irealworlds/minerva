@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Presentation\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
-use App\Presentation\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Events\Dispatcher;
