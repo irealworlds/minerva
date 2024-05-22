@@ -15,6 +15,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\RouteAttributes\Attributes\Get;
+use Spatie\RouteAttributes\Attributes\Post;
 
 final class NewPasswordController extends Controller
 {
@@ -29,6 +31,7 @@ final class NewPasswordController extends Controller
     /**
      * Display the password reset view.
      */
+    #[Get("/Reset-Password/{token}", name: "password.reset", middleware: "guest")]
     public function create(Request $request): Response
     {
         return Inertia::render('Auth/ResetPassword', [
@@ -42,6 +45,7 @@ final class NewPasswordController extends Controller
      *
      * @throws ValidationException
      */
+    #[Post("/Reset-Password", name: "password.store", middleware: "guest")]
     public function store(Request $request): RedirectResponse
     {
         $request->validate([

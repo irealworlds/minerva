@@ -14,6 +14,8 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\RouteAttributes\Attributes\Get;
+use Spatie\RouteAttributes\Attributes\Post;
 
 final class RegisteredUserController extends Controller
 {
@@ -28,6 +30,7 @@ final class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
+    #[Get("/Register", name: "register", middleware: "guest")]
     public function create(): Response
     {
         return Inertia::render('Auth/Register');
@@ -36,6 +39,7 @@ final class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      */
+    #[Post("/Register", middleware: "guest")]
     public function store(Request $request): RedirectResponse
     {
         $request->validate([

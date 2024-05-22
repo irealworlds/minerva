@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\Rules\Password;
+use Spatie\RouteAttributes\Attributes\Get;
 
 final class PasswordController extends Controller
 {
@@ -20,6 +22,8 @@ final class PasswordController extends Controller
     /**
      * Update the user's password.
      */
+    #[Get("/Password", name: "password.update")]
+    #[Authorize]
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +15,8 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\RouteAttributes\Attributes\Get;
+use Spatie\RouteAttributes\Attributes\Post;
 
 final class AuthenticatedSessionController extends Controller
 {
@@ -29,6 +32,7 @@ final class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
+    #[Get("/Login", name: "login", middleware: "guest")]
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
@@ -42,6 +46,7 @@ final class AuthenticatedSessionController extends Controller
      *
      * @throws ValidationException
      */
+    #[Post("/Login", middleware: "guest")]
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
@@ -56,6 +61,8 @@ final class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
+    #[Post("/Logout", name: "logout")]
+    #[Authorize]
     public function destroy(Request $request): RedirectResponse
     {
         $this->_authManager->guard('web')->logout();

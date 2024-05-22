@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\RouteAttributes\Attributes\Get;
+use Spatie\RouteAttributes\Attributes\Post;
 
 final class ConfirmablePasswordController extends Controller
 {
@@ -20,6 +23,8 @@ final class ConfirmablePasswordController extends Controller
     /**
      * Show the confirm password view.
      */
+    #[Get("/Confirm-Password", name: "password.confirm")]
+    #[Authorize]
     public function show(): Response
     {
         return Inertia::render('Auth/ConfirmPassword');
@@ -30,6 +35,8 @@ final class ConfirmablePasswordController extends Controller
      *
      * @throws ValidationException
      */
+    #[Post("/Confirm-Password")]
+    #[Authorize]
     public function store(Request $request): RedirectResponse
     {
         if (! $this->_authManager->guard('web')->validate([
