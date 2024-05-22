@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\ViewModels\AuthenticatedUserViewModel;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -33,7 +34,12 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? new AuthenticatedUserViewModel(
+                    id: $request->user()->getKey(),
+                    email: $request->user()->email,
+                    emailVerified: $request->user()->hasVerifiedEmail(),
+                    pictureUri: "https://ui-avatars.com/api/?name=" . urlencode($request->user()->email) . "&background=random&size=128"
+                ) : null,
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

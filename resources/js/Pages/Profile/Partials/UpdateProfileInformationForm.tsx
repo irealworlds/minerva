@@ -31,22 +31,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
-                {/*<div>*/}
-                {/*    <InputLabel htmlFor="name" value="Name" />*/}
-
-                {/*    <TextInput*/}
-                {/*        id="name"*/}
-                {/*        className="mt-1 block w-full"*/}
-                {/*        value={data.name}*/}
-                {/*        onChange={(e) => setData('name', e.target.value)}*/}
-                {/*        required*/}
-                {/*        isFocused*/}
-                {/*        autoComplete="name"*/}
-                {/*    />*/}
-
-                {/*    <InputError className="mt-2" message={errors.name} />*/}
-                {/*</div>*/}
-
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -63,7 +47,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
-                {mustVerifyEmail && user.email_verified_at === null && (
+                {mustVerifyEmail && !user.emailVerified && (
                     <div>
                         <p className="text-sm mt-2 text-gray-800 dark:text-gray-200">
                             Your email address is unverified.

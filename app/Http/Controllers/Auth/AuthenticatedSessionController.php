@@ -61,7 +61,7 @@ final class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    #[Post("/Logout", name: "logout")]
+    #[Get("/Logout", name: "logout")]
     #[Authorize]
     public function destroy(Request $request): RedirectResponse
     {
