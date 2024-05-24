@@ -1,17 +1,30 @@
-import React, { Fragment, PropsWithChildren, useState } from 'react';
-import { HomeIcon } from '@heroicons/react/24/outline'
+import React, { Fragment, PropsWithChildren, useState } from "react";
+import { BuildingLibraryIcon, HomeIcon } from "@heroicons/react/24/outline";
 import Sidebar from "@/Layouts/Authenticated/Partials/Sidebar";
 import MobileSidebarOverlay from "@/Layouts/Authenticated/Partials/MobileSidebarOverlay";
-import { User } from "@/types";
 import Navbar from "@/Layouts/Authenticated/Partials/Navbar";
+import { AuthenticatedUserViewModel } from "@/types/authenticated-user.model";
+import { Permission } from "@/types/permission.enum";
+import { hasPermission } from "@/utils/access-control/has-permission.function";
 
 
-export default function Authenticated({ children, user }: PropsWithChildren<{ user: User }>) {
+export default function Authenticated({ children, user }: PropsWithChildren<{ user: AuthenticatedUserViewModel }>) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const navigation = [
-        { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard') },
-    ];
+        { name: 'Dashboard', actionRoute: 'dashboard', icon: HomeIcon },
+        { name: 'Institutions', actionRoute: 'institutions.index', icon: BuildingLibraryIcon, permissions: [Permission.InstitutionsCreate] },
+    ].filter(item => {
+        if ("permissions" in item) {
+            return hasPermission(user, item.permissions as Permission[]);
+        }
+
+        return true;
+    }).map(item => ({
+        ...item,
+        href: route(item.actionRoute),
+        current: route().current(item.actionRoute)
+    }));
 
     return (
         <>

@@ -6,5 +6,6 @@ use Codestage\Authorization\Contracts\IPermissionEnum;
 
 enum Permission: string implements IPermissionEnum
 {
-    //
+    case InstitutionsCreate = "institutions.create";
+    case InstitutionDelete = "institutions.delete";
 }

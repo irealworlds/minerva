@@ -1,15 +1,9 @@
-import { Config } from 'ziggy-js';
-
-export interface User {
-    id: number;
-    email: string;
-    emailVerified: boolean;
-    pictureUri: string;
-}
+import { Config } from "ziggy-js";
+import { AuthenticatedUserViewModel } from "@/types/authenticated-user.model";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
-        user: User;
+        user: AuthenticatedUserViewModel;
     };
     ziggy: Config & { location: string };
 };

@@ -3,10 +3,10 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid"
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Link } from "@inertiajs/react";
-import { User } from "@/types";
 import { combineClassNames } from "@/utils/combine-class-names.function";
+import { AuthenticatedUserViewModel } from "@/types/authenticated-user.model";
 
-export default function Navbar({ onSidebarOpen, user }: { onSidebarOpen: () => void, user: User }) {
+export default function Navbar({ onSidebarOpen, user }: { onSidebarOpen: () => void, user: AuthenticatedUserViewModel }) {
     const userNavigation = [
         { name: 'Your profile', href: route('profile.edit') },
         { name: 'Sign out', href: route('logout') },

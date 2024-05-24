@@ -18,7 +18,14 @@ return [
         app_path('Http/Controllers') => [
             "middleware" => "web",
             // only register routes in files that match the patterns
-           'patterns' => ['*Controller.php'],
+            'patterns' => ['*Controller.php'],
+        ],
+        app_path('Http/Endpoints') => [
+            "middleware" => "api",
+            "prefix" => "api",
+            "name" => "api.",
+            // only register routes in files that match the patterns
+            'patterns' => ['*.php'],
         ]
         /*
         app_path('Http/Controllers/Api') => [

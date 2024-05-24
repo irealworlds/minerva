@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\ViewModels\AuthenticatedUserViewModel;
+use App\Core\Models\Identity;
+use App\Http\ViewModels\ViewModels\AuthenticatedUserViewModel;
 use Illuminate\Http\Request;
-use Inertia\Middleware;
+use Inertia\Middleware as InertiaMiddleware;
 use Tighten\Ziggy\Ziggy;
 
-class HandleInertiaRequests extends Middleware
+class HandleInertiaRequestsMiddleware extends InertiaMiddleware
 {
     /**
      * The root template that is loaded on the first page visit.
@@ -31,14 +32,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        /** @var Identity|null $user */
+        $user = $request->user();
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user() ? new AuthenticatedUserViewModel(
-                    id: $request->user()->getKey(),
-                    email: $request->user()->email,
-                    emailVerified: $request->user()->hasVerifiedEmail(),
-                    pictureUri: "https://ui-avatars.com/api/?name=" . urlencode($request->user()->email) . "&background=random&size=128"
+                'user' => $user ? new AuthenticatedUserViewModel(
+                    id: $user->getKey(),
+                    email: $user->email,
+                    emailVerified: $user->hasVerifiedEmail(),
+                    pictureUri: "https://ui-avatars.com/api/?name=" . urlencode($user->email) . "&background=random&size=128",
+                    permissions: $user->getPermissions()
                 ) : null,
             ],
             'ziggy' => fn () => [
