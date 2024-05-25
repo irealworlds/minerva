@@ -1,28 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Auth\Factory;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Auth\{
+    Factory,
+    StatefulGuard};
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
 use Illuminate\Routing\Redirector;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Validation\{
+    Rules,
+    ValidationException};
+use Inertia\{
+    Inertia,
+    Response};
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Post;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Post};
 
 final class RegisteredUserController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Dispatcher $_eventDispatcher,
         private readonly Factory $_authManager,
         private readonly Redirector $_redirector,
@@ -35,7 +42,7 @@ final class RegisteredUserController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Register", name: "register", middleware: "guest")]
+    #[Get('/Register', name: 'register', middleware: 'guest')]
     public function create(): Response
     {
         return Inertia::render('Auth/Register');
@@ -46,7 +53,7 @@ final class RegisteredUserController extends Controller
      *
      * @throws ValidationException
      */
-    #[Post("/Register", middleware: "guest")]
+    #[Post('/Register', middleware: 'guest')]
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -56,8 +63,8 @@ final class RegisteredUserController extends Controller
 
         /** @var Identity $identity */
         $identity = Identity::query()->create([
-            'email' => $request->string("email"),
-            'password' => $this->_hasher->make($request->string("password")),
+            'email' => $request->string('email'),
+            'password' => $this->_hasher->make($request->string('password')->toString()),
         ]);
 
         $this->_eventDispatcher->dispatch(new Registered($identity));
@@ -67,6 +74,6 @@ final class RegisteredUserController extends Controller
             $guard->login($identity);
         }
 
-        return $this->_redirector->route("dashboard");
+        return $this->_redirector->route('dashboard');
     }
 }

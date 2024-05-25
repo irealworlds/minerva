@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Core\Models\Identity;
@@ -29,7 +31,6 @@ class HandleInertiaRequestsMiddleware extends InertiaMiddleware
     /**
      * Define the props that are shared by default.
      *
-     * @param Request $request
      * @return array{errors: Closure, auth: array{user: AuthenticatedUserViewModel|null}, ziggy: Closure}
      */
     public function share(Request $request): array
@@ -44,12 +45,12 @@ class HandleInertiaRequestsMiddleware extends InertiaMiddleware
                     id: $user->getKey(),
                     email: $user->email,
                     emailVerified: $user->hasVerifiedEmail(),
-                    pictureUri: "https://ui-avatars.com/api/?name=" . urlencode($user->email) . "&background=random&size=128",
+                    pictureUri: 'https://ui-avatars.com/api/?name=' . urlencode($user->email) . '&background=random&size=128',
                     permissions: $user->getPermissions()
                 ) : null,
             ],
-            'ziggy' => fn () => [
-                ...(new Ziggy)->toArray(),
+            'ziggy' => static fn () => [
+                ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
         ];

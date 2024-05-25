@@ -1,23 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Post;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Post};
 
 final class PasswordResetLinkController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Redirector $_redirector,
         private readonly SessionManager $_sessionManager,
         private readonly PasswordBroker $_passwordBroker
@@ -29,7 +34,7 @@ final class PasswordResetLinkController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Forgot-Password", name: "password.request", middleware: "guest")]
+    #[Get('/Forgot-Password', name: 'password.request', middleware: 'guest')]
     public function create(): Response
     {
         return Inertia::render('Auth/ForgotPassword', [
@@ -42,7 +47,7 @@ final class PasswordResetLinkController extends Controller
      *
      * @throws ValidationException
      */
-    #[Post("/Forgot-Password", name: "password.email", middleware: "guest")]
+    #[Post('/Forgot-Password', name: 'password.email', middleware: 'guest')]
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -56,7 +61,7 @@ final class PasswordResetLinkController extends Controller
             $request->only('email')
         );
 
-        if ($status == PasswordBroker::RESET_LINK_SENT) {
+        if ($status === PasswordBroker::RESET_LINK_SENT) {
             return $this->_redirector->back()->with('status', __($status));
         }
 

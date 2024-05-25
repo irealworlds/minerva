@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ApplicationServices\Institutions\Create;
 
 use App\Core\Contracts\Cqrs\ICommandHandler;
@@ -13,6 +15,7 @@ final readonly class CreateInstitutionHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

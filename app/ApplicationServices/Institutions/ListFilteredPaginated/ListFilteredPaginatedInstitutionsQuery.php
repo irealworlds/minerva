@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ApplicationServices\Institutions\ListFilteredPaginated;
 
 use App\Core\Contracts\Cqrs\IQuery;
@@ -14,8 +16,6 @@ use Illuminate\Pagination\AbstractPaginator;
 final readonly class ListFilteredPaginatedInstitutionsQuery implements IQuery
 {
     /**
-     * @param int $page
-     * @param int $pageSize
      * @param Optional<string|null> $parentId
      * @param Optional<string> $searchQuery
      */

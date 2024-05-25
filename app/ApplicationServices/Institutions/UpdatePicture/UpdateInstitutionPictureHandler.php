@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ApplicationServices\Institutions\UpdatePicture;
 
 use App\Core\Contracts\Cqrs\ICommandHandler;
@@ -14,6 +16,7 @@ final readonly class UpdateInstitutionPictureHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
+     *
      * @throws ValidationException
      */
     public function __invoke(mixed $command): void
@@ -27,7 +30,7 @@ final readonly class UpdateInstitutionPictureHandler implements ICommandHandler
                     ->toMediaCollection(Institution::EmblemPictureMediaCollection);
             } catch (FileCannotBeAdded $e) {
                 throw ValidationException::withMessages([
-                    "newPicture" => $e->getMessage()
+                    'newPicture' => $e->getMessage()
                 ]);
             }
         }

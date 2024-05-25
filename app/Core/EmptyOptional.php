@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
 use Override;
@@ -9,7 +11,8 @@ use Override;
  */
 final readonly class EmptyOptional extends Optional
 {
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct(false);
     }
 
@@ -17,6 +20,6 @@ final readonly class EmptyOptional extends Optional
     #[Override]
     public function __toString(): string
     {
-        return "<empty optional>";
+        return '<empty optional>';
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Institutions;
 
 use App\ApplicationServices\Institutions\Create\CreateInstitutionCommand;
@@ -15,20 +17,22 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response as InertiaResponse;
+use Inertia\{
+    Inertia,
+    Response as InertiaResponse};
 use ReflectionException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Post;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Post,
+    Prefix};
 use Throwable;
 
-#[Prefix("/Institutions/Create")]
+#[Prefix('/Institutions/Create')]
 #[Authorize(permissions: Permission::InstitutionsCreate)]
 final class InstitutionCreateController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Redirector $_redirector,
         private readonly ICommandBus $_commandBus
     ) {
@@ -37,10 +41,10 @@ final class InstitutionCreateController extends Controller
     /**
      * @throws RuntimeException
      */
-    #[Get("/", name: 'institutions.create')]
+    #[Get('/', name: 'institutions.create')]
     public function create(): InertiaResponse
     {
-        return Inertia::render("Institutions/Create");
+        return Inertia::render('Institutions/Create');
     }
 
     /**
@@ -49,7 +53,7 @@ final class InstitutionCreateController extends Controller
      * @throws BindingResolutionException
      * @throws ValidationException
      */
-    #[Post("/", name: "institutions.store")]
+    #[Post('/', name: 'institutions.store')]
     public function store(InstitutionCreateRequest $request): RedirectResponse
     {
         // Create a new institution
@@ -76,9 +80,9 @@ final class InstitutionCreateController extends Controller
                 } catch (ValidationException $e) {
                     $errors = $e->errors();
 
-                    if (isset($errors["newPicture"])) {
-                        $errors["picture"] = $errors["newPicture"];
-                        unset ($errors["newPicture"]);
+                    if (isset($errors['newPicture'])) {
+                        $errors['picture'] = $errors['newPicture'];
+                        unset($errors['newPicture']);
                     }
 
                     throw ValidationException::withMessages($errors);
@@ -91,7 +95,7 @@ final class InstitutionCreateController extends Controller
 
         // Redirect to the institution details page
         return $this->_redirector->action(InstitutionReadController::class, [
-            "institution" => $institution->getRouteKey()
+            'institution' => $institution->getRouteKey()
         ]);
     }
 }

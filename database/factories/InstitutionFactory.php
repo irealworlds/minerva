@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Core\Models\Institution;
@@ -18,9 +20,9 @@ final class InstitutionFactory extends Factory
     public function definition(): array
     {
         return [
-            "name" => "University of " . fake()->city(),
-            "website" => fake()->optional()->url(),
-            "parent_institution_id" => Institution::factory()
+            'name' => 'University of ' . fake()->city(),
+            'website' => fake()->optional()->url(),
+            'parent_institution_id' => Institution::factory()
         ];
     }
 }

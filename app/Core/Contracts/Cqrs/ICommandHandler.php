@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Contracts\Cqrs;
 
 /**
@@ -11,7 +13,6 @@ interface ICommandHandler
      * Handle the command.
      *
      * @param TCommand $command
-     * @return void
      */
     public function __invoke(mixed $command): void;
 }

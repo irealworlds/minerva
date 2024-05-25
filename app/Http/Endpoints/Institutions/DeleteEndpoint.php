@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Endpoints\Institutions;
 
 use App\ApplicationServices\Institutions\Delete\DeleteInstitutionCommand;
@@ -16,7 +18,7 @@ use Spatie\RouteAttributes\Attributes\Delete;
 
 final class DeleteEndpoint extends Endpoint
 {
-    function __construct(
+    public function __construct(
         private readonly ICommandBus $_commandBus
     ) {
     }
@@ -26,7 +28,7 @@ final class DeleteEndpoint extends Endpoint
      * @throws BindingResolutionException
      * @throws InvalidArgumentException
      */
-    #[Delete("/Institutions/{institution}", name: "api.institutions.delete")]
+    #[Delete('/Institutions/{institution}', name: 'api.institutions.delete')]
     #[Authorize(permissions: Permission::InstitutionDelete)]
     public function __invoke(Institution $institution): Response
     {

@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Providers;
 
-use App\CommandBus;
-use App\Core\Contracts\Cqrs\ICommandBus;
-use App\Core\Contracts\Cqrs\IQueryBus;
-use App\QueryBus;
+use App\{
+    CommandBus,
+    QueryBus};
+use App\Core\Contracts\Cqrs\{
+    ICommandBus,
+    IQueryBus};
 use Illuminate\Support\ServiceProvider;
 
-class
-AppServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.

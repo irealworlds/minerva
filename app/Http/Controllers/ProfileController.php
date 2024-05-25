@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\ApplicationServices\Identities\Update\UpdateIdentityCommand;
@@ -9,20 +11,23 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Session\SessionManager;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use ReflectionException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Patch;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Patch};
 
 final class ProfileController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly SessionManager $_sessionManager,
         private readonly Redirector $_redirector,
         private readonly ICommandBus $_commandBus
@@ -34,7 +39,7 @@ final class ProfileController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Profile", name: "profile.edit")]
+    #[Get('/Profile', name: 'profile.edit')]
     #[Authorize]
     public function edit(Request $request): Response
     {
@@ -51,14 +56,14 @@ final class ProfileController extends Controller
      * @throws BindingResolutionException
      * @throws ReflectionException
      */
-    #[Patch("/Profile", name: "profile.update")]
+    #[Patch('/Profile', name: 'profile.update')]
     #[Authorize]
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         /** @var Identity $identity */
         $identity = $request->user();
 
-        $command = new UpdateIdentityCommand($identity, $request->string("email")->toString());
+        $command = new UpdateIdentityCommand($identity, $request->string('email')->toString());
         $this->_commandBus->dispatch($command);
 
         return $this->_redirector->route('profile.edit');

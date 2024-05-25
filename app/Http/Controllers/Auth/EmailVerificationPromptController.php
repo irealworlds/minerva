@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
@@ -7,18 +9,20 @@ use App\Http\Controllers\Controller;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
 use Illuminate\Routing\Redirector;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use InvalidArgumentException;
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 
 final class EmailVerificationPromptController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Redirector $_redirector,
         private readonly UrlGenerator $_urlGenerator,
         private readonly AuthManager $_authManager
@@ -31,7 +35,7 @@ final class EmailVerificationPromptController extends Controller
      * @throws RuntimeException
      * @throws InvalidArgumentException
      */
-    #[Get("Verify-Email", name: "verification.notice")]
+    #[Get('Verify-Email', name: 'verification.notice')]
     #[Authorize]
     public function __invoke(Request $request): RedirectResponse|Response
     {

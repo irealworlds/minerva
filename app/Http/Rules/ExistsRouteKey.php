@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Rules;
 
 use Illuminate\Database\Eloquent\Model;
@@ -13,10 +15,11 @@ final class ExistsRouteKey extends Exists
     /**
      * @param class-string<TModel> $model
      */
-    function __construct(string $model) {
+    public function __construct(string $model)
+    {
         parent::__construct(
-            (new $model)->getTable(),
-            (new $model)->getRouteKeyName()
+            (new $model())->getTable(),
+            (new $model())->getRouteKeyName()
         );
     }
 }

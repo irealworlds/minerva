@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ApplicationServices\Institutions\Delete;
 
 use App\Core\Contracts\Cqrs\ICommandHandler;

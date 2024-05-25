@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Institutions;
 
 use App\Core\Models\Institution;
@@ -18,15 +20,15 @@ class InstitutionCreateRequest extends FormRequest
     /**
      * Get a list of validation rules to apply to this request.
      *
-     * @return array<string, string[]>
+     * @return array<string, array<string|ExistsRouteKey<Institution>>>
      */
     public function rules(): array
     {
         return [
-            "name" => ["required", "string", "max:128"],
-            "website" => ["sometimes", "nullable", "string", "url", "max:64"],
-            "picture" => ["sometimes", "nullable", "image", "max:1024"],
-            "parentInstitutionId" => ["sometimes", "nullable", new ExistsRouteKey(Institution::class)],
+            'name' => ['required', 'string', 'max:128'],
+            'website' => ['sometimes', 'nullable', 'string', 'url', 'max:64'],
+            'picture' => ['sometimes', 'nullable', 'image', 'max:1024'],
+            'parentInstitutionId' => ['sometimes', 'nullable', new ExistsRouteKey(Institution::class)],
         ];
     }
 }

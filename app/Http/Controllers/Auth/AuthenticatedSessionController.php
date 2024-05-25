@@ -1,29 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Codestage\Authorization\Attributes\Authorize;
-use Illuminate\Contracts\Auth\Factory;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Auth\{
+    Factory,
+    StatefulGuard};
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
-use Illuminate\Routing\Router;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
+use Illuminate\Routing\{
+    Redirector,
+    Router};
 use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use InvalidArgumentException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Post;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Post};
 
 final class AuthenticatedSessionController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Router $_router,
         private readonly Factory $_authManager,
         private readonly Redirector $_redirector,
@@ -37,7 +44,7 @@ final class AuthenticatedSessionController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Login", name: "login", middleware: "guest")]
+    #[Get('/Login', name: 'login', middleware: 'guest')]
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
@@ -53,7 +60,7 @@ final class AuthenticatedSessionController extends Controller
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    #[Post("/Login", middleware: "guest")]
+    #[Post('/Login', middleware: 'guest')]
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
@@ -70,7 +77,7 @@ final class AuthenticatedSessionController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Logout", name: "logout")]
+    #[Get('/Logout', name: 'logout')]
     #[Authorize]
     public function destroy(Request $request): RedirectResponse
     {

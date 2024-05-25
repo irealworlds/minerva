@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasMany};
 use Illuminate\Support\Enumerable;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\{
+    HasMedia,
+    InteractsWithMedia};
 
 /**
  * @property string $id
@@ -28,12 +32,12 @@ class Institution extends Model implements HasMedia
     use InteractsWithMedia;
     use HasFactory;
 
-    const EmblemPictureMediaCollection = "emblem_picture";
-    
+    public const EmblemPictureMediaCollection = 'emblem_picture';
+
     protected $fillable = [
-        "name",
-        "website",
-        "parent_institution_id"
+        'name',
+        'website',
+        'parent_institution_id'
     ];
 
     public function registerMediaCollections(): void
@@ -49,7 +53,7 @@ class Institution extends Model implements HasMedia
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Institution::class, "parent_institution_id");
+        return $this->belongsTo(Institution::class, 'parent_institution_id');
     }
 
     /**
@@ -57,7 +61,8 @@ class Institution extends Model implements HasMedia
      *
      * @return HasMany<Institution>
      */
-    public function children(): HasMany {
-        return $this->hasMany(Institution::class, "parent_institution_id");
+    public function children(): HasMany
+    {
+        return $this->hasMany(Institution::class, 'parent_institution_id');
     }
 }

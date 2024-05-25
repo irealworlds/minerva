@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
@@ -14,7 +16,7 @@ use Spatie\RouteAttributes\Attributes\Post;
 
 final class EmailVerificationNotificationController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Redirector $_redirector,
         private readonly UrlGenerator $_urlGenerator,
         private readonly AuthManager $_authManager
@@ -26,7 +28,7 @@ final class EmailVerificationNotificationController extends Controller
      *
      * @throws InvalidArgumentException
      */
-    #[Post("/Email/Verification-Notification", name: "verification.send", middleware: "throttle:6,1")]
+    #[Post('/Email/Verification-Notification', name: 'verification.send', middleware: 'throttle:6,1')]
     #[Authorize]
     public function store(): RedirectResponse
     {

@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
+use const PHP_VERSION;
 
 class IndexController extends Controller
 {
     /**
      * @throws RuntimeException
      */
-    #[Get("/")]
+    #[Get('/')]
     public function __invoke(Request $request): Response
     {
         return Inertia::render('Welcome', [

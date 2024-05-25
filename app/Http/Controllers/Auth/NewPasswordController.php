@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
@@ -8,21 +10,26 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Validation\{
+    Rules,
+    ValidationException};
+use Inertia\{
+    Inertia,
+    Response};
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Post;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Post};
+use function is_string;
 
 final class NewPasswordController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Dispatcher $_eventDispatcher,
         private readonly Redirector $_redirector,
         private readonly Hasher $_hasher,
@@ -35,11 +42,11 @@ final class NewPasswordController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Reset-Password/{token}", name: "password.reset", middleware: "guest")]
+    #[Get('/Reset-Password/{token}', name: 'password.reset', middleware: 'guest')]
     public function create(Request $request): Response
     {
         return Inertia::render('Auth/ResetPassword', [
-            'email' => $request->str("email"),
+            'email' => $request->str('email'),
             'token' => $request->route('token'),
         ]);
     }
@@ -49,7 +56,7 @@ final class NewPasswordController extends Controller
      *
      * @throws ValidationException
      */
-    #[Post("/Reset-Password", name: "password.store", middleware: "guest")]
+    #[Post('/Reset-Password', name: 'password.store', middleware: 'guest')]
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -63,9 +70,9 @@ final class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = $this->_passwordBroker->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (Identity $user) use ($request) {
+            function (Identity $user) use ($request): void {
                 $user->forceFill([
-                    'password' => $this->_hasher->make($request->string("password")),
+                    'password' => $this->_hasher->make($request->string('password')->toString()),
                     'remember_token' => Str::random(60),
                 ])->save();
 
@@ -76,9 +83,9 @@ final class NewPasswordController extends Controller
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        if ($status == PasswordBroker::PASSWORD_RESET) {
+        if ($status === PasswordBroker::PASSWORD_RESET) {
             return $this->_redirector->route('login')
-                ->with('status', is_string($status) ? trans($status) : $status);
+                ->with('status', trans($status));
         }
 
         throw ValidationException::withMessages([

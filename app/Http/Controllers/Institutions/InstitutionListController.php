@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Institutions;
 
 use App\ApplicationServices\Institutions\ListFilteredPaginated\ListFilteredPaginatedInstitutionsQuery;
@@ -11,14 +13,15 @@ use App\Http\Requests\Institutions\InstitutionListRequest;
 use App\Http\ViewModels\ViewModels\InstitutionViewModel;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 
 final class InstitutionListController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly IQueryBus $_queryBus
     ) {
     }
@@ -27,31 +30,31 @@ final class InstitutionListController extends Controller
      * @throws RuntimeException
      * @throws ValidationException
      */
-    #[Get("/Institutions", name: "institutions.index")]
+    #[Get('/Institutions', name: 'institutions.index')]
     #[Authorize(permissions: Permission::InstitutionsCreate)]
     public function __invoke(InstitutionListRequest $request): Response
     {
         // Fetch the institutions via a query
         $institutions = $this->_queryBus->dispatch(new ListFilteredPaginatedInstitutionsQuery(
-            page: $request->integer("page", 1),
-            pageSize: $request->integer("pageSize", 10),
+            page: $request->integer('page', 1),
+            pageSize: $request->integer('pageSize', 10),
             parentId: Optional::of(null),
-            searchQuery: $request->optionalString("search", false)
+            searchQuery: $request->optionalString('search', false)
         ));
 
         // Map results to view models
         $institutions->setCollection(
             $institutions->getCollection()
-                ->map(fn(mixed $institution) => InstitutionViewModel::fromModel($institution))
+                ->map(static fn (mixed $institution) => InstitutionViewModel::fromModel($institution))
         );
 
         $institutions = $institutions->withQueryString();
 
         // Render the view
-        return Inertia::render("Institutions/List", [
-            "institutions" => $institutions,
-            "filters" => [
-                "search" => $request->search
+        return Inertia::render('Institutions/List', [
+            'institutions' => $institutions,
+            'filters' => [
+                'search' => $request->search
             ]
         ]);
     }

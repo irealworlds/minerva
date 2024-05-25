@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
@@ -15,7 +17,7 @@ use Throwable;
 
 final class PasswordController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Redirector $_redirector,
         private readonly Hasher $_hasher,
         private readonly AuthManager $_authManager
@@ -27,7 +29,7 @@ final class PasswordController extends Controller
      *
      * @throws Throwable
      */
-    #[Get("/Password", name: "password.update")]
+    #[Get('/Password', name: 'password.update')]
     #[Authorize]
     public function update(PasswordUpdateRequest $request): RedirectResponse
     {

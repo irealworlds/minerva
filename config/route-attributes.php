@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Routing\Middleware\SubstituteBindings;
 
 return [
@@ -16,14 +18,14 @@ return [
      */
     'directories' => [
         app_path('Http/Controllers') => [
-            "middleware" => "web",
+            'middleware' => 'web',
             // only register routes in files that match the patterns
             'patterns' => ['*Controller.php'],
         ],
         app_path('Http/Endpoints') => [
-            "middleware" => "api",
-            "prefix" => "api",
-            "name" => "api.",
+            'middleware' => 'api',
+            'prefix' => 'api',
+            'name' => 'api.',
             // only register routes in files that match the patterns
             'patterns' => ['*.php'],
         ]

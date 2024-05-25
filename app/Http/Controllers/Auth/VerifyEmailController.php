@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
@@ -7,8 +9,9 @@ use App\Http\Controllers\Controller;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Contracts\Auth\Factory as AuthManager;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\{
+    Factory as AuthManager,
+    MustVerifyEmail};
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -20,7 +23,7 @@ use UnexpectedValueException;
 
 final class VerifyEmailController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly Redirector $_redirector,
         private readonly UrlGenerator $_urlGenerator,
         private readonly Dispatcher $_eventDispatcher,
@@ -35,7 +38,7 @@ final class VerifyEmailController extends Controller
      * @throws UnexpectedValueException
      * @throws InvalidArgumentException
      */
-    #[Get("Verify-Email/{id}/{hash}", name: "verification.verify", middleware: ["signed", "throttle:6,1"])]
+    #[Get('Verify-Email/{id}/{hash}', name: 'verification.verify', middleware: ['signed', 'throttle:6,1'])]
     #[Authorize]
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
@@ -47,7 +50,7 @@ final class VerifyEmailController extends Controller
         }
 
         if(!($user instanceof MustVerifyEmail)) {
-            throw new UnexpectedValueException("Identity class [" . get_class($user) . "] doesn't implement the [MustVerifyEmail] contract.");
+            throw new UnexpectedValueException('Identity class [' . $user::class . "] doesn't implement the [MustVerifyEmail] contract.");
         }
 
         if ($user->hasVerifiedEmail()) {

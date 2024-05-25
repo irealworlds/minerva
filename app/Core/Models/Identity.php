@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -21,7 +23,9 @@ use Illuminate\Notifications\Notifiable;
  */
 class Identity extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
+
     /** @use HasPermissions<Permission> */
     use HasPermissions;
 
@@ -34,6 +38,7 @@ class Identity extends Authenticatable
         'email',
         'password',
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *

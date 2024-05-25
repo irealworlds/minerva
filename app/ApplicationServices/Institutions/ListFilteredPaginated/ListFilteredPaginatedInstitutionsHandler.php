@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ApplicationServices\Institutions\ListFilteredPaginated;
 
 use App\Core\Contracts\Cqrs\IQueryHandler;
@@ -22,9 +24,10 @@ final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryH
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
-    public function __invoke(mixed $query): LengthAwarePaginator & AbstractPaginator
+    public function __invoke(mixed $query): AbstractPaginator&LengthAwarePaginator
     {
         $queryBuilder = Institution::query();
 
@@ -39,19 +42,19 @@ final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryH
         // Add the search query filter
         if ($query->searchQuery->hasValue()) {
             if ($search = $query->searchQuery->value) {
-                $queryBuilder = $queryBuilder->where(function (Builder $searchQueryBuilder) use ($search) {
+                $queryBuilder = $queryBuilder->where(function (Builder $searchQueryBuilder) use ($search): void {
                     $searchQueryBuilder
                         ->where(
-                            $this->_db->raw("LOWER(name)"),
-                            "like",
-                            "%" . mb_strtolower($search, "UTF-8") . "%"
+                            $this->_db->raw('LOWER(name)'),
+                            'like',
+                            '%' . mb_strtolower($search, 'UTF-8') . '%'
                         );
                 });
             }
         }
 
         return $queryBuilder
-            ->with(["parent", "children"])
+            ->with(['parent', 'children'])
             ->latest()
             ->paginate(
                 perPage: $query->pageSize,

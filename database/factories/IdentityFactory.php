@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Core\Models\Identity;
@@ -24,6 +26,7 @@ class IdentityFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     *
      * @throws BindingResolutionException
      * @throws OverflowException
      * @throws RuntimeException
@@ -46,7 +49,7 @@ class IdentityFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(static fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

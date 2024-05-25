@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Contracts\Cqrs;
 
 /**
@@ -12,6 +14,7 @@ interface IQueryHandler
      * Get a result for the {@link $query query}.
      *
      * @param TQuery $query
+     *
      * @return TResult
      */
     public function __invoke(mixed $query): mixed;

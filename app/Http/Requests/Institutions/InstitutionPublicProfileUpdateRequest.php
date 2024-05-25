@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Institutions;
 
 use App\Core\Traits\Requests\WithOptionals;
@@ -14,7 +16,7 @@ use Illuminate\Http\UploadedFile;
 class InstitutionPublicProfileUpdateRequest extends FormRequest
 {
     use WithOptionals;
-    
+
     /**
      * Get a list of validation rules to apply to this request.
      *
@@ -23,9 +25,9 @@ class InstitutionPublicProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => ["sometimes", "required", "string", "max:128"],
-            "website" => ["sometimes", "nullable", "string", "url", "max:64"],
-            "picture" => ["sometimes", "nullable", "image", "max:1024"],
+            'name' => ['sometimes', 'required', 'string', 'max:128'],
+            'website' => ['sometimes', 'nullable', 'string', 'url', 'max:64'],
+            'picture' => ['sometimes', 'nullable', 'image', 'max:1024'],
         ];
     }
 }

@@ -1,29 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
-use App\Core\Contracts\Cqrs\IQuery;
-use App\Core\Contracts\Cqrs\IQueryBus;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Container\Container;
+use App\Core\Contracts\Cqrs\{
+    IQuery,
+    IQueryBus};
+use Illuminate\Contracts\Container\{
+    BindingResolutionException,
+    Container};
 use ReflectionClass;
+use function is_callable;
 
 final readonly class QueryBus implements IQueryBus
 {
-    function __construct(
+    public function __construct(
         private Container $_container
     ) {
     }
 
     /**
      * @inheritDoc
+     *
      * @throws BindingResolutionException
      */
     public function dispatch(IQuery $query): mixed
     {
         // resolve handler
         $reflection = new ReflectionClass($query);
-        $handlerName = str_replace("Query", "Handler", $reflection->getShortName());
+        $handlerName = str_replace('Query', 'Handler', $reflection->getShortName());
         $handlerName = str_replace($reflection->getShortName(), $handlerName, $reflection->getName());
         $handler = $this->_container->make($handlerName);
 

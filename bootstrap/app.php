@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Middleware\HandleInertiaRequestsMiddleware;
 use Codestage\Authorization\Middleware\AuthorizationMiddleware;
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Configuration\{
+    Exceptions,
+    Middleware};
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(static function (Middleware $middleware): void {
         $middleware->web(append: [
             HandleInertiaRequestsMiddleware::class,
             AddLinkHeadersForPreloadedAssets::class,
@@ -23,6 +26,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('web', AuthorizationMiddleware::class);
         $middleware->appendToGroup('api', AuthorizationMiddleware::class);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
+    ->withExceptions(static function (Exceptions $exceptions): void {
         //
     })->create();

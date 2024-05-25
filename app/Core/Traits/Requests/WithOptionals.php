@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Traits\Requests;
 
 use App\Core\Optional;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
+use function is_string;
 
 trait WithOptionals
 {
     /**
      * Get a value from the request as an {@link Optional}.
      *
-     * @param string $key
-     * @param bool $nullable
      * @return ($nullable is true ? Optional<string|null> : Optional<string>)
+     *
      * @throws ValidationException
      */
     public function optionalString(string $key, bool $nullable = true): Optional
@@ -23,7 +25,7 @@ trait WithOptionals
 
             if ($value === null && !$nullable) {
                 throw ValidationException::withMessages([
-                    $key => __("validation.required", ["attribute" => $key])
+                    $key => __('validation.required', ['attribute' => $key])
                 ]);
             }
 
@@ -31,7 +33,7 @@ trait WithOptionals
                 return Optional::of($value);
             } else {
                 throw ValidationException::withMessages([
-                    $key => __("validation.string", ["attribute" => $key])
+                    $key => __('validation.string', ['attribute' => $key])
                 ]);
             }
         } else {
@@ -42,9 +44,8 @@ trait WithOptionals
     /**
      * Get a value from the request as an {@link Optional}.
      *
-     * @param string $key
-     * @param bool $nullable
      * @return ($nullable is true ? Optional<UploadedFile|null> : Optional<UploadedFile>)
+     *
      * @throws ValidationException
      */
     public function optionalFile(string $key, bool $nullable = true): Optional
@@ -54,7 +55,7 @@ trait WithOptionals
 
             if ($value === null && !$nullable) {
                 throw ValidationException::withMessages([
-                    $key => __("validation.required", ["attribute" => $key])
+                    $key => __('validation.required', ['attribute' => $key])
                 ]);
             }
 
@@ -62,7 +63,7 @@ trait WithOptionals
                 return Optional::of($value);
             } else {
                 throw ValidationException::withMessages([
-                    $key => __("validation.file", ["attribute" => $key])
+                    $key => __('validation.file', ['attribute' => $key])
                 ]);
             }
         } else {

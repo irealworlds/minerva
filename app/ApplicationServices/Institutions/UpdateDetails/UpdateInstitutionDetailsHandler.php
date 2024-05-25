@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ApplicationServices\Institutions\UpdateDetails;
 
 use App\Core\Contracts\Cqrs\ICommandHandler;
@@ -12,6 +14,7 @@ final readonly class UpdateInstitutionDetailsHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

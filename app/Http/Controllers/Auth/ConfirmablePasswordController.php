@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Core\Models\Identity;
@@ -7,20 +9,23 @@ use App\Http\Controllers\Controller;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{
+    RedirectResponse,
+    Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\{
+    Inertia,
+    Response};
 use InvalidArgumentException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Post;
+use Spatie\RouteAttributes\Attributes\{
+    Get,
+    Post};
 
 final class ConfirmablePasswordController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly AuthManager $_authManager,
         private readonly Redirector $_redirector,
         private readonly UrlGenerator $_urlGenerator
@@ -32,7 +37,7 @@ final class ConfirmablePasswordController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get("/Confirm-Password", name: "password.confirm")]
+    #[Get('/Confirm-Password', name: 'password.confirm')]
     #[Authorize]
     public function show(): Response
     {
@@ -46,7 +51,7 @@ final class ConfirmablePasswordController extends Controller
      * @throws InvalidArgumentException
      * @throws ValidationException
      */
-    #[Post("/Confirm-Password")]
+    #[Post('/Confirm-Password')]
     #[Authorize]
     public function store(Request $request): RedirectResponse
     {
@@ -55,7 +60,7 @@ final class ConfirmablePasswordController extends Controller
 
         if (! $this->_authManager->guard('web')->validate([
             'email' => $user->email,
-            'password' => $request->string("password"),
+            'password' => $request->string('password'),
         ])) {
             throw ValidationException::withMessages([
                 'password' => __('auth.password'),

@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\ViewModels\ViewModels;
 
 use App\Core\Models\Institution;
 
 final readonly class InstitutionViewModel
 {
-    /**
-     * @param mixed $id
-     * @param string $name
-     * @param string|null $website
-     * @param string|null $pictureUri
-     */
-    function __construct(
+    public function __construct(
         public mixed $id,
         public string $name,
         public string|null $website,
@@ -23,7 +19,6 @@ final readonly class InstitutionViewModel
     /**
      * Create a new view model from a domain model.
      *
-     * @param Institution $model
      * @return static
      */
     public static function fromModel(Institution $model): InstitutionViewModel

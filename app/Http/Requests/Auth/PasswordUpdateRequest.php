@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,7 +14,7 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 final class PasswordUpdateRequest extends FormRequest
 {
     /**
-     * @return array<string, array<integer, PasswordRule|string|null>>
+     * @return array<string, array<int, PasswordRule|string|null>>
      */
     public function rules(): array
     {

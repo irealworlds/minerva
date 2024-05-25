@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Institutions;
 
 use App\ApplicationServices\Institutions\UpdateDetails\UpdateInstitutionDetailsCommand;
@@ -13,13 +15,14 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use ReflectionException;
-use Spatie\RouteAttributes\Attributes\Patch;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes\{
+    Patch,
+    Prefix};
 
-#[Prefix("/Institutions/{institution}")]
+#[Prefix('/Institutions/{institution}')]
 final class InstitutionUpdateController extends Controller
 {
-    function __construct(
+    public function __construct(
         private readonly ICommandBus $_commandBus,
         private readonly Redirector $_redirector
     ) {
@@ -30,16 +33,16 @@ final class InstitutionUpdateController extends Controller
      * @throws BindingResolutionException
      * @throws Exception
      */
-    #[Patch("/PublicProfile", name: "institutions.update.public")]
+    #[Patch('/PublicProfile', name: 'institutions.update.public')]
     public function updatePublicProfile(Institution $institution, InstitutionPublicProfileUpdateRequest $request): RedirectResponse
     {
         $this->_commandBus->dispatch(new UpdateInstitutionDetailsCommand(
             institution: $institution,
-            name: $request->optionalString("name", false),
-            website: $request->optionalString("website")
+            name: $request->optionalString('name', false),
+            website: $request->optionalString('website')
         ));
 
-        $picture = $request->optionalFile("picture");
+        $picture = $request->optionalFile('picture');
         if ($picture->hasValue()) {
             $this->_commandBus->dispatch(new UpdateInstitutionPictureCommand(
                 institution: $institution,
