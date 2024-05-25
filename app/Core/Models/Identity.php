@@ -3,6 +3,7 @@
 namespace App\Core\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Core\Enums\Permission;
 use Carbon\Carbon;
 use Codestage\Authorization\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,12 +22,13 @@ use Illuminate\Notifications\Notifiable;
 class Identity extends Authenticatable
 {
     use HasFactory, Notifiable;
+    /** @use HasPermissions<Permission> */
     use HasPermissions;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'email',
@@ -35,7 +37,7 @@ class Identity extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',

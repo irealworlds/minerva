@@ -6,12 +6,13 @@ use App\ApplicationServices\Institutions\UpdateDetails\UpdateInstitutionDetailsC
 use App\ApplicationServices\Institutions\UpdatePicture\UpdateInstitutionPictureCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\Institution;
-use App\Core\Optional;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Institutions\InstitutionPublicProfileUpdateRequest;
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Redirector;
+use ReflectionException;
 use Spatie\RouteAttributes\Attributes\Patch;
 use Spatie\RouteAttributes\Attributes\Prefix;
 
@@ -24,21 +25,25 @@ final class InstitutionUpdateController extends Controller
     ) {
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws BindingResolutionException
+     * @throws Exception
+     */
     #[Patch("/PublicProfile", name: "institutions.update.public")]
     public function updatePublicProfile(Institution $institution, InstitutionPublicProfileUpdateRequest $request): RedirectResponse
     {
         $this->_commandBus->dispatch(new UpdateInstitutionDetailsCommand(
             institution: $institution,
-            name: $request->optional("name"),
-            website: $request->optional("website")
+            name: $request->optionalString("name", false),
+            website: $request->optionalString("website")
         ));
 
-        /** @var Optional<UploadedFile> $picture */
-        $picture = $request->optional("picture");
+        $picture = $request->optionalFile("picture");
         if ($picture->hasValue()) {
             $this->_commandBus->dispatch(new UpdateInstitutionPictureCommand(
                 institution: $institution,
-                newPicture: $picture->getValue()
+                newPicture: $picture->value
             ));
         }
 

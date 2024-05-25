@@ -1,0 +1,22 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+parameters:
+    level: 9
+    paths:
+        - app
+        - bootstrap
+        - database
+    stubFiles:
+        - stubs/phpstan/InertiaMiddleware.stub
+    checkUninitializedProperties: true
+    checkImplicitMixed: true
+    checkBenevolentUnionTypes: true
+    rememberPossiblyImpureFunctionValues: true
+    reportPossiblyNonexistentGeneralArrayOffset: true
+    exceptions:
+        implicitThrows: false
+        reportUncheckedExceptionDeadCatch: false
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true

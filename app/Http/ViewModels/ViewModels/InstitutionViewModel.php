@@ -4,15 +4,16 @@ namespace App\Http\ViewModels\ViewModels;
 
 use App\Core\Models\Institution;
 
-class InstitutionViewModel
+final readonly class InstitutionViewModel
 {
     /**
-     * @param string $id
+     * @param mixed $id
      * @param string $name
      * @param string|null $website
+     * @param string|null $pictureUri
      */
     function __construct(
-        public string $id,
+        public mixed $id,
         public string $name,
         public string|null $website,
         public string|null $pictureUri,
@@ -25,13 +26,14 @@ class InstitutionViewModel
      * @param Institution $model
      * @return static
      */
-    public static function fromModel(Institution $model): static {
+    public static function fromModel(Institution $model): InstitutionViewModel
+    {
         $pictureUri = $model->getFirstMediaUrl(Institution::EmblemPictureMediaCollection);
         if (empty($pictureUri)) {
             $pictureUri = null;
         }
 
-        return new static(
+        return new InstitutionViewModel(
             id: $model->getRouteKey(),
             name: $model->name,
             website: $model->website,

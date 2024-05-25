@@ -8,7 +8,7 @@ use Throwable;
 /**
  * @implements ICommandHandler<UpdateInstitutionDetailsCommand>
  */
-class UpdateInstitutionDetailsHandler implements ICommandHandler
+final readonly class UpdateInstitutionDetailsHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
@@ -17,11 +17,13 @@ class UpdateInstitutionDetailsHandler implements ICommandHandler
     public function __invoke(mixed $command): void
     {
         if ($command->name->hasValue()) {
-            $command->institution->name = $command->name->getValue();
+            $command->institution->name = $command->name->value;
         }
+
         if ($command->website->hasValue()) {
-            $command->institution->website = $command->website->getValue();
+            $command->institution->website = $command->website->value;
         }
+
         if ($command->institution->isDirty()) {
             $command->institution->saveOrFail();
         }

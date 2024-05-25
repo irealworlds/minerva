@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ApplicationServices\Identities\Update\UpdateIdentityCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
+use App\Core\Models\Identity;
 use App\Http\Requests\ProfileUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,6 +16,7 @@ use Illuminate\Session\SessionManager;
 use Inertia\Inertia;
 use Inertia\Response;
 use ReflectionException;
+use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Patch;
 
@@ -29,6 +31,8 @@ final class ProfileController extends Controller
 
     /**
      * Display the user's profile form.
+     *
+     * @throws RuntimeException
      */
     #[Get("/Profile", name: "profile.edit")]
     #[Authorize]
@@ -51,7 +55,10 @@ final class ProfileController extends Controller
     #[Authorize]
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $command = new UpdateIdentityCommand($request->user(), $request->string("email"));
+        /** @var Identity $identity */
+        $identity = $request->user();
+
+        $command = new UpdateIdentityCommand($identity, $request->string("email")->toString());
         $this->_commandBus->dispatch($command);
 
         return $this->_redirector->route('profile.edit');

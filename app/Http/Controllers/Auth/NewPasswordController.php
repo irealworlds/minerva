@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Core\Models\Identity;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -15,6 +16,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Post;
 
@@ -30,6 +32,8 @@ final class NewPasswordController extends Controller
 
     /**
      * Display the password reset view.
+     *
+     * @throws RuntimeException
      */
     #[Get("/Reset-Password/{token}", name: "password.reset", middleware: "guest")]
     public function create(Request $request): Response
@@ -59,7 +63,7 @@ final class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = $this->_passwordBroker->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
+            function (Identity $user) use ($request) {
                 $user->forceFill([
                     'password' => $this->_hasher->make($request->string("password")),
                     'remember_token' => Str::random(60),
@@ -74,11 +78,11 @@ final class NewPasswordController extends Controller
         // redirect them back to where they came from with their error message.
         if ($status == PasswordBroker::PASSWORD_RESET) {
             return $this->_redirector->route('login')
-                ->with('status', __($status));
+                ->with('status', is_string($status) ? trans($status) : $status);
         }
 
         throw ValidationException::withMessages([
-            'email' => [trans($status)],
+            'email' => [is_string($status) ? trans($status) : $status],
         ]);
     }
 }

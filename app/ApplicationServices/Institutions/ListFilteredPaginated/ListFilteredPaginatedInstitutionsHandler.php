@@ -4,19 +4,27 @@ namespace App\ApplicationServices\Institutions\ListFilteredPaginated;
 
 use App\Core\Contracts\Cqrs\IQueryHandler;
 use App\Core\Models\Institution;
+use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Pagination\AbstractPaginator;
 
 /**
- * @implements IQueryHandler<ListFilteredPaginatedInstitutionsQuery>
+ * @implements IQueryHandler<ListFilteredPaginatedInstitutionsQuery, LengthAwarePaginator<Institution> & AbstractPaginator<Institution>>
  */
 final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryHandler
 {
+    public function __construct(
+        private DatabaseManager $_db
+    ) {
+    }
+
     /**
      * @inheritDoc
+     * @throws Exception
      */
-    public function __invoke(mixed $query): LengthAwarePaginator
+    public function __invoke(mixed $query): LengthAwarePaginator & AbstractPaginator
     {
         $queryBuilder = Institution::query();
 
@@ -24,17 +32,17 @@ final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryH
         if ($query->parentId->hasValue()) {
             $queryBuilder = $queryBuilder->where(
                 (new Institution())->parent()->getForeignKeyName(),
-                $query->parentId->getValue()
+                $query->parentId->value
             );
         }
 
         // Add the search query filter
         if ($query->searchQuery->hasValue()) {
-            if ($search = $query->searchQuery->getValue()) {
+            if ($search = $query->searchQuery->value) {
                 $queryBuilder = $queryBuilder->where(function (Builder $searchQueryBuilder) use ($search) {
                     $searchQueryBuilder
                         ->where(
-                            DB::raw("LOWER(name)"),
+                            $this->_db->raw("LOWER(name)"),
                             "like",
                             "%" . mb_strtolower($search, "UTF-8") . "%"
                         );

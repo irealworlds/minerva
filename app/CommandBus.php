@@ -4,6 +4,7 @@ namespace App;
 
 use App\Core\Contracts\Cqrs\ICommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\ConnectionInterface;
 use ReflectionClass;
@@ -26,7 +27,11 @@ final readonly class CommandBus implements ICommandBus
         $handler = $this->_container->make($handlerName);
 
         // invoke handler
-        $this->_connection->transaction(function () use ($handler, $command) {
+        $this->_connection->transaction(function () use ($handlerName, $handler, $command) {
+            if (!is_callable($handler)) {
+                throw new BindingResolutionException("Could not resolve [$handlerName] to a callable type.");
+            }
+
             $handler($command);
         });
     }

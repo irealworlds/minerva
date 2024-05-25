@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /** @throws RuntimeException */
     public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
@@ -33,6 +34,7 @@ return new class extends Migration
         });
     }
 
+    /** @throws RuntimeException */
     public function down(): void
     {
         Schema::dropIfExists("media");

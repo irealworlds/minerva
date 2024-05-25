@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    /** @throws RuntimeException */
     public function up(): void
     {
         Schema::create('institutions', function (Blueprint $table) {
@@ -34,9 +32,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    /** @throws RuntimeException */
     public function down(): void
     {
         Schema::dropIfExists('institutions');

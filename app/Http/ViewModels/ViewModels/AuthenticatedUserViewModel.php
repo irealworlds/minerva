@@ -8,14 +8,14 @@ use Illuminate\Support\Enumerable;
 final readonly class AuthenticatedUserViewModel
 {
     /**
-     * @param int $id
+     * @param mixed $id
      * @param string $email
      * @param bool $emailVerified
      * @param string $pictureUri
-     * @param Enumerable<Permission> $permissions
+     * @param Enumerable<int, Permission> $permissions
      */
     function __construct(
-        public int $id,
+        public mixed $id,
         public string $email,
         public bool $emailVerified,
         public string $pictureUri,

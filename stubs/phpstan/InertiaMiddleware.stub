@@ -1,0 +1,15 @@
+<?php
+
+namespace Inertia;
+
+class Middleware
+{
+    /**
+     * Defines the props that are shared by default.
+     *
+     * @see https://inertiajs.com/shared-data
+     *
+     * @return array{errors: \Closure(): object}
+     */
+    public function share(\Illuminate\Http\Request $request);
+}

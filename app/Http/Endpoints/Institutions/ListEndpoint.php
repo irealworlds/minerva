@@ -9,6 +9,8 @@ use App\Http\Endpoints\Endpoint;
 use App\Http\Requests\Institutions\InstitutionListRequest;
 use App\Http\ViewModels\ViewModels\InstitutionViewModel;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
 use Spatie\RouteAttributes\Attributes\Get;
 
 final class ListEndpoint extends Endpoint
@@ -18,6 +20,10 @@ final class ListEndpoint extends Endpoint
     ) {
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws ValidationException
+     */
     #[Get("/Institutions", name: "api.institutions.index")]
     public function __invoke(InstitutionListRequest $request): JsonResponse
     {
@@ -25,8 +31,8 @@ final class ListEndpoint extends Endpoint
         $institutions = $this->_queryBus->dispatch(new ListFilteredPaginatedInstitutionsQuery(
             page: $request->integer("page", 1),
             pageSize: $request->integer("pageSize", 10),
-            parentId: $request->optional("parentId"),
-            searchQuery: $request->optional("search")
+            parentId: $request->optionalString("parentId"),
+            searchQuery: $request->optionalString("search", false)
         ));
 
         // Map results to view models

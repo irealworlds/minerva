@@ -4,6 +4,7 @@ namespace App;
 
 use App\Core\Contracts\Cqrs\IQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
 use ReflectionClass;
 
@@ -14,7 +15,10 @@ final readonly class QueryBus implements IQueryBus
     ) {
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @throws BindingResolutionException
+     */
     public function dispatch(IQuery $query): mixed
     {
         // resolve handler
@@ -22,6 +26,10 @@ final readonly class QueryBus implements IQueryBus
         $handlerName = str_replace("Query", "Handler", $reflection->getShortName());
         $handlerName = str_replace($reflection->getShortName(), $handlerName, $reflection->getName());
         $handler = $this->_container->make($handlerName);
+
+        if (!is_callable($handler)) {
+            throw new BindingResolutionException("Could not resolve [$handlerName] to a callable type.");
+        }
 
         // invoke handler
         return $handler($query);

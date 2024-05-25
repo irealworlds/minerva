@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Core\Models\Identity;
 use App\Http\ViewModels\ViewModels\AuthenticatedUserViewModel;
+use Closure;
 use Illuminate\Http\Request;
 use Inertia\Middleware as InertiaMiddleware;
 use Tighten\Ziggy\Ziggy;
@@ -28,7 +29,8 @@ class HandleInertiaRequestsMiddleware extends InertiaMiddleware
     /**
      * Define the props that are shared by default.
      *
-     * @return array<string, mixed>
+     * @param Request $request
+     * @return array{errors: Closure, auth: array{user: AuthenticatedUserViewModel|null}, ziggy: Closure}
      */
     public function share(Request $request): array
     {

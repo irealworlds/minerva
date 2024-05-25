@@ -7,6 +7,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use OverflowException;
+use RuntimeException;
 
 /**
  * @extends Factory<Identity>
@@ -23,13 +25,18 @@ class IdentityFactory extends Factory
      *
      * @return array<string, mixed>
      * @throws BindingResolutionException
+     * @throws OverflowException
+     * @throws RuntimeException
      */
     public function definition(): array
     {
+        /** @var Hasher $hasher */
+        $hasher = app()->make(Hasher::class);
+
         return [
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= app()->make(Hasher::class)->make(fake()->password()),
+            'password' => static::$password ??= $hasher->make(fake()->password()),
             'remember_token' => Str::random(10),
         ];
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
+use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Post;
 
@@ -31,6 +34,8 @@ final class AuthenticatedSessionController extends Controller
 
     /**
      * Display the login view.
+     *
+     * @throws RuntimeException
      */
     #[Get("/Login", name: "login", middleware: "guest")]
     public function create(): Response
@@ -45,6 +50,8 @@ final class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      *
      * @throws ValidationException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     #[Post("/Login", middleware: "guest")]
     public function store(LoginRequest $request): RedirectResponse
@@ -60,12 +67,17 @@ final class AuthenticatedSessionController extends Controller
 
     /**
      * Destroy an authenticated session.
+     *
+     * @throws RuntimeException
      */
     #[Get("/Logout", name: "logout")]
     #[Authorize]
     public function destroy(Request $request): RedirectResponse
     {
-        $this->_authManager->guard('web')->logout();
+        $guard = $this->_authManager->guard('web');
+        if ($guard instanceof StatefulGuard) {
+            $guard->logout();
+        }
 
         $request->session()->invalidate();
 

@@ -11,6 +11,7 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Post;
 
@@ -25,6 +26,8 @@ final class PasswordResetLinkController extends Controller
 
     /**
      * Display the password reset link request view.
+     *
+     * @throws RuntimeException
      */
     #[Get("/Forgot-Password", name: "password.request", middleware: "guest")]
     public function create(): Response

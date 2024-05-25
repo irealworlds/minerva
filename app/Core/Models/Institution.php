@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @property string $id
  * @property string $name
- * @property string $parent_institution_id
+ * @property string|null $parent_institution_id
  * @property string|null $website
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -29,7 +29,7 @@ class Institution extends Model implements HasMedia
     use HasFactory;
 
     const EmblemPictureMediaCollection = "emblem_picture";
-
+    
     protected $fillable = [
         "name",
         "website",
@@ -45,7 +45,7 @@ class Institution extends Model implements HasMedia
     /**
      * Get the institution this entity is subordinated to.
      *
-     * @return BelongsTo<Institution>
+     * @return BelongsTo<Institution, Institution>
      */
     public function parent(): BelongsTo
     {

@@ -2,38 +2,39 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Core\Models\Identity;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\PasswordUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
+use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Validation\Rules\Password;
 use Spatie\RouteAttributes\Attributes\Get;
+use Throwable;
 
 final class PasswordController extends Controller
 {
     function __construct(
         private readonly Redirector $_redirector,
-        private readonly Hasher $_hasher
+        private readonly Hasher $_hasher,
+        private readonly AuthManager $_authManager
     ) {
     }
 
     /**
      * Update the user's password.
+     *
+     * @throws Throwable
      */
     #[Get("/Password", name: "password.update")]
     #[Authorize]
-    public function update(Request $request): RedirectResponse
+    public function update(PasswordUpdateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
-
-        $request->user()->update([
-            'password' => $this->_hasher->make($validated['password']),
-        ]);
+        /** @var Identity $user */
+        $user = $this->_authManager->guard()->user();
+        $user->password = $this->_hasher->make($request->password);
+        $user->saveOrFail();
 
         return $this->_redirector->back();
     }

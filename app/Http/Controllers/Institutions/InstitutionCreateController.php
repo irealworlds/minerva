@@ -18,6 +18,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 use ReflectionException;
+use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Post;
 use Spatie\RouteAttributes\Attributes\Prefix;
@@ -33,6 +34,9 @@ final class InstitutionCreateController extends Controller
     ) {
     }
 
+    /**
+     * @throws RuntimeException
+     */
     #[Get("/", name: 'institutions.create')]
     public function create(): InertiaResponse
     {
@@ -51,7 +55,7 @@ final class InstitutionCreateController extends Controller
         // Create a new institution
         $id = Str::uuid();
         $this->_commandBus->dispatch(new CreateInstitutionCommand(
-            id: $id,
+            id: $id->toString(),
             name: $request->name,
             website: $request->website,
             parentId: $request->parentInstitutionId
@@ -64,14 +68,20 @@ final class InstitutionCreateController extends Controller
         try {
             if ($request->picture) {
                 try {
+                    /** @throws ValidationException */
                     $this->_commandBus->dispatch(new UpdateInstitutionPictureCommand(
                         institution: $institution,
                         newPicture: $request->picture
                     ));
                 } catch (ValidationException $e) {
-                    throw ValidationException::withMessages([
-                        "picture" => $e->errors()["newPicture"]
-                    ]);
+                    $errors = $e->errors();
+
+                    if (isset($errors["newPicture"])) {
+                        $errors["picture"] = $errors["newPicture"];
+                        unset ($errors["newPicture"]);
+                    }
+
+                    throw ValidationException::withMessages($errors);
                 }
             }
         } catch (Throwable $t) {

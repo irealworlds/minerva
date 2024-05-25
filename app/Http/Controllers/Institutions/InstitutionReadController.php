@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
+use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
@@ -28,6 +29,9 @@ final class InstitutionReadController extends Controller
     ) {
     }
 
+    /**
+     * @throws RuntimeException
+     */
     #[Get("/Institutions/Manage/{institution}/{tab?}", name: "institutions.show")]
     public function __invoke(Institution $institution, InstitutionReadPageTab|null $tab = null): InertiaResponse|RedirectResponse
     {
