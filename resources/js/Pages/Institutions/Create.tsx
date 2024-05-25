@@ -21,6 +21,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { PaginatedCollection } from '@/types/paginated-result.contract';
+import axios from 'axios';
 
 interface CreationForm {
   name: string;
@@ -56,34 +57,28 @@ export default function Create({ auth }: PageProps) {
     InstitutionViewModel[]
   >([]);
 
-  const updateParents = useDebouncedCallback(async (searchQuery: string) => {
-    // todo Replace with axios
-    const response = await fetch(
-      route('api.institutions.index', {
-        search: searchQuery,
-      }),
-      {
-        headers: {
-          accept: 'application/json',
-        },
-      }
-    );
-    if (response.ok) {
-      const body = (await response.json()) as unknown as {
-        institutions: PaginatedCollection<InstitutionViewModel>;
-      };
-      setFilteredParents(body.institutions.data);
+  const updateParents = useDebouncedCallback((searchQuery: string) => {
+    const query: {
+      search?: string;
+    } = {};
+
+    if (searchQuery.length) {
+      query.search = searchQuery;
     }
+
+    axios
+      .get<{
+        institutions: PaginatedCollection<InstitutionViewModel>;
+      }>(route('api.institutions.index', query))
+      .then(response => {
+        setFilteredParents(response.data.institutions.data);
+      })
+      .catch(() => {
+        // Do nothing
+      });
   }, 400);
   useEffect(() => {
-    updateParents(parentQuery)?.then(
-      () => {
-        // Do nothing
-      },
-      () => {
-        // Do nothing
-      }
-    );
+    updateParents(parentQuery);
   }, [parentQuery]);
 
   const pictureInput = useRef<HTMLInputElement>(null);
