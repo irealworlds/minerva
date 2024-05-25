@@ -1,3 +1,5 @@
-export function combineClassNames(...classNames: Array<string|null|undefined>) {
-    return classNames.filter(Boolean).join(" ");
+export function combineClassNames(
+  ...classNames: (string | null | undefined)[]
+) {
+  return classNames.filter(Boolean).join(' ');
 }

@@ -1,1 +1,2 @@
 vendor/bin/phpstan analyse -c phpstan.neon
+npm run lint
