@@ -33,8 +33,7 @@ export default function Sidebar({
                           ? 'bg-gray-800 text-white'
                           : 'text-gray-400 hover:text-white hover:bg-gray-800',
                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                      )}
-                    >
+                      )}>
                       <item.icon
                         className="h-6 w-6 shrink-0"
                         aria-hidden="true"
@@ -48,8 +47,7 @@ export default function Sidebar({
             <li className="mt-auto">
               <Link
                 href="#"
-                className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
-              >
+                className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
                 <Cog6ToothIcon
                   className="h-6 w-6 shrink-0"
                   aria-hidden="true"

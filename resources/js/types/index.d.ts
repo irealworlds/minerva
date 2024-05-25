@@ -5,7 +5,7 @@ export type PageProps<
   T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
   auth: {
-    user: AuthenticatedUserViewModel | null;
+    user: AuthenticatedUserViewModel;
   };
   ziggy: Config & { location: string };
 };

@@ -5,17 +5,34 @@ import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model'
 import ManageInstitutionLayout from '@/Pages/Institutions/Partials/ManageInstitutionLayout';
 import { JSX } from 'react';
 import ManageInstitutionDetails from '@/Pages/Institutions/Partials/Tabs/ManageInstitutionDetails';
+import ManageInstitutionGroups from '@/Pages/Institutions/Partials/Tabs/ManageInstitutionGroups';
+import { StudentGroupTreeViewModel } from '@/types/ViewModels/student-group-tree.view-model';
 
 export default function Manage({
   auth,
   institution,
   activeTab,
-}: PageProps<{ institution: InstitutionViewModel; activeTab: string }>) {
+  groups,
+}: PageProps<{
+  institution: InstitutionViewModel;
+  activeTab: string;
+  groups: StudentGroupTreeViewModel | null;
+}>) {
   let tabContent: JSX.Element;
   switch (activeTab.toLowerCase()) {
     case 'general': {
       tabContent = (
         <ManageInstitutionDetails user={auth.user} institution={institution} />
+      );
+      break;
+    }
+    case 'groups': {
+      tabContent = (
+        <ManageInstitutionGroups
+          user={auth.user}
+          institution={institution}
+          groups={groups}
+        />
       );
       break;
     }

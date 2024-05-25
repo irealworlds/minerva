@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Institutions;
 
-use App\Core\Models\Institution;
+use App\ApplicationServices\StudentGroups\TreeByInstitution\ListStudentGroupsByInstitutionQuery;
+use App\Core\Contracts\Cqrs\IQueryBus;
+use App\Core\Models\{
+    Institution,
+    StudentGroup};
 use App\Http\Controllers\Controller;
+use App\Http\ViewModels\{
+    StudentGroupTreeNodeViewModel,
+    StudentGroupTreeViewModel};
 use App\Http\ViewModels\ViewModels\InstitutionViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -29,7 +36,8 @@ final class InstitutionReadController extends Controller
     protected const DefaultTab = InstitutionReadPageTab::General;
 
     public function __construct(
-        private readonly Redirector $_redirector
+        private readonly Redirector $_redirector,
+        private readonly IQueryBus $_queryBus
     ) {
     }
 
@@ -50,7 +58,14 @@ final class InstitutionReadController extends Controller
         // Render the management view
         return Inertia::render('Institutions/Manage', [
             'institution' => static fn () => InstitutionViewModel::fromModel($institution),
-            'activeTab' => $tab
+            'activeTab' => $tab,
+            'groups' => Inertia::lazy(function () use ($institution) {
+                $groups = $this->_queryBus->dispatch(new ListStudentGroupsByInstitutionQuery(institution: $institution));
+
+                return new StudentGroupTreeViewModel(
+                    items: $groups->map(static fn (StudentGroup $studentGroup) => StudentGroupTreeNodeViewModel::fromModel($studentGroup))
+                );
+            })
         ]);
     }
 }

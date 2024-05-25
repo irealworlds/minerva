@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
-    HasMany};
+    HasMany,
+    MorphMany};
 use Illuminate\Support\Enumerable;
 use Spatie\MediaLibrary\{
     HasMedia,
@@ -64,5 +65,18 @@ class Institution extends Model implements HasMedia
     public function children(): HasMany
     {
         return $this->hasMany(Institution::class, 'parent_institution_id');
+    }
+
+    /**
+     * Get this institution's student groups.
+     *
+     * @return MorphMany<StudentGroup>
+     */
+    public function groups(): MorphMany
+    {
+        return $this->morphMany(
+            StudentGroup::class,
+            (new StudentGroup())->parent()->getRelationName()
+        );
     }
 }
