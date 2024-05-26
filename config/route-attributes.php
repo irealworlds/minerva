@@ -17,17 +17,17 @@ return [
      * Optionally, you can specify group configuration by using key/values
      */
     'directories' => [
-        app_path('Http/Controllers') => [
+        app_path('Http/Web/Controllers') => [
             'middleware' => 'web',
             // only register routes in files that match the patterns
             'patterns' => ['*Controller.php'],
         ],
-        app_path('Http/Endpoints') => [
+        app_path('Http/Api/Endpoints') => [
             'middleware' => 'api',
             'prefix' => 'api',
             'name' => 'api.',
             // only register routes in files that match the patterns
-            'patterns' => ['*.php'],
+            'patterns' => ['*Endpoint.php'],
         ]
         /*
         app_path('Http/Controllers/Api') => [

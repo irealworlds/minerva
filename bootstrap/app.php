@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Middleware\HandleInertiaRequestsMiddleware;
+use App\Http\Web\Middleware\HandleInertiaRequestsMiddleware;
 use Codestage\Authorization\Middleware\AuthorizationMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\{

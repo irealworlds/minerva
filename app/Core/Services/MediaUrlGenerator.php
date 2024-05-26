@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Services;
 
-use App\Http\Controllers\Media\MediaReadController;
+use App\Http\Web\Controllers\Media\MediaReadController;
 use DateTimeInterface;
 use Exception;
 use Illuminate\Contracts\Config\Repository;
