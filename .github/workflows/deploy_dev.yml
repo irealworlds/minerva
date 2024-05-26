@@ -26,8 +26,17 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: /tmp/composer-cache
+        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+        
     - name: Install Composer Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      uses: php-actions/composer@v6
+      with:
+        quiet: yes
+        args: --no-ansi --no-scripts --prefer-dist
       
     - name: Install Node Dependencies
       run: npm ci
@@ -57,6 +66,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.forge_ssh_private_key }}
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
