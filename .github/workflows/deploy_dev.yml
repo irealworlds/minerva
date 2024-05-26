@@ -35,7 +35,7 @@ jobs:
         quiet: no
         args: --no-ansi --no-scripts --prefer-dist
         php_version: "8.3"
-        php_extensions: pdo
+        php_extensions: pdo exif
       
     - name: Install Node Dependencies
       run: npm ci
