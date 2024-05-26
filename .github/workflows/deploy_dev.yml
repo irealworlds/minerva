@@ -32,7 +32,7 @@ jobs:
     - name: Install Composer Dependencies
       uses: php-actions/composer@v6
       with:
-        quiet: yes
+        quiet: no
         args: --no-ansi --no-scripts --prefer-dist
         php_version: "8.3"
         php_extensions: pdo
