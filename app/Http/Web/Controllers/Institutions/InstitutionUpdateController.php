@@ -34,7 +34,7 @@ final readonly class InstitutionUpdateController extends Controller
      * @throws Exception
      */
     #[Patch('/PublicProfile', name: 'institutions.update.public')]
-    public function updatePublicProfile(Institution $institution, InstitutionPublicProfileUpdateRequest $request): RedirectResponse
+    public function __invoke(Institution $institution, InstitutionPublicProfileUpdateRequest $request): RedirectResponse
     {
         $this->_commandBus->dispatch(new UpdateInstitutionDetailsCommand(
             institution: $institution,
@@ -50,6 +50,7 @@ final readonly class InstitutionUpdateController extends Controller
             ));
         }
 
-        return $this->_redirector->back();
+        return $this->_redirector->back()
+            ->with("success", [__("toasts.institutions.updated")]);
     }
 }

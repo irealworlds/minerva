@@ -3,8 +3,7 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
 import DangerButton from '@/Components/DangerButton';
-import { router } from '@inertiajs/react';
-import axios from 'axios';
+import { useForm } from '@inertiajs/react';
 
 export default function DeleteInstitutionForm({
   institution,
@@ -12,7 +11,7 @@ export default function DeleteInstitutionForm({
   institution: InstitutionViewModel;
 }) {
   const [nameConfirmation, setNameConfirmation] = useState('');
-  const [processing, setProcessing] = useState(false);
+  const { delete: destroy, processing } = useForm();
 
   function deleteInstitution(e: MouseEvent<unknown, unknown>): void {
     if (processing) {
@@ -21,23 +20,11 @@ export default function DeleteInstitutionForm({
 
     e.stopPropagation();
 
-    setProcessing(true);
-
-    axios
-      .delete(
-        route('api.institutions.delete', {
-          institution: institution.id,
-        })
-      )
-      .then(() => {
-        router.visit(route('institutions.index'));
+    destroy(
+      route('institutions.delete', {
+        institution: institution.id,
       })
-      .catch(() => {
-        // Error handling
-      })
-      .finally(() => {
-        setProcessing(false);
-      });
+    );
   }
 
   return (
@@ -84,8 +71,7 @@ export default function DeleteInstitutionForm({
             disabled={nameConfirmation !== institution.name || processing}
             onClick={e => {
               deleteInstitution(e);
-            }}
-          >
+            }}>
             {processing ? 'Deleting' : 'Delete'}
           </DangerButton>
         </div>

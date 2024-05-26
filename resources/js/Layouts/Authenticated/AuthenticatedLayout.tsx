@@ -7,8 +7,9 @@ import { AuthenticatedUserViewModel } from '@/types/authenticated-user.model';
 import { Permission } from '@/types/permission.enum';
 import { hasPermission } from '@/utils/access-control/has-permission.function';
 import { router } from '@inertiajs/react';
+import Root from '@/Root';
 
-export default function Authenticated({
+export default function AuthenticatedLayout({
   children,
   user,
 }: PropsWithChildren<{ user: AuthenticatedUserViewModel | null }>) {
@@ -46,7 +47,7 @@ export default function Authenticated({
     }));
 
   return (
-    <>
+    <Root>
       <MobileSidebarOverlay
         navigation={navigation}
         isOpen={sidebarOpen}
@@ -73,6 +74,6 @@ export default function Authenticated({
           </main>
         </div>
       </div>
-    </>
+    </Root>
   );
 }

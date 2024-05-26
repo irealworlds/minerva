@@ -96,6 +96,6 @@ final readonly class InstitutionCreateController extends Controller
         // Redirect to the institution details page
         return $this->_redirector->action(InstitutionReadController::class, [
             'institution' => $institution->getRouteKey()
-        ]);
+        ])->with("success", [__("toasts.institutions.created")]);
     }
 }

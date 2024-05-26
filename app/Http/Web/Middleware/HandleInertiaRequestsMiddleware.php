@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware as InertiaMiddleware;
 use Tighten\Ziggy\Ziggy;
 
-class HandleInertiaRequestsMiddleware extends InertiaMiddleware
+final class HandleInertiaRequestsMiddleware extends InertiaMiddleware
 {
     /**
      * The root template that is loaded on the first page visit.
@@ -48,6 +48,13 @@ class HandleInertiaRequestsMiddleware extends InertiaMiddleware
                     pictureUri: 'https://ui-avatars.com/api/?name=' . urlencode($user->email) . '&background=random&size=128',
                     permissions: $user->getPermissions()
                 ) : null,
+            ],
+            'toasts' => [
+                'info' => fn () => $request->session()->get('info', []),
+                'success' => fn () => $request->session()->get('success', []),
+                'warning' => fn () => $request->session()->get('warning', []),
+                'error' => fn () => $request->session()->get('error', []),
+                'default' => fn () => $request->session()->get('default', []),
             ],
             'ziggy' => static fn () => [
                 ...(new Ziggy())->toArray(),

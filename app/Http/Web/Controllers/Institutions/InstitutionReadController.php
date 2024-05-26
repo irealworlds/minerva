@@ -17,6 +17,7 @@ use App\Http\Web\ViewModels\{
     StudentGroupTreeViewModel};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Session\Store;
 use Inertia\{
     Inertia,
     Response as InertiaResponse};
@@ -38,7 +39,8 @@ final readonly class InstitutionReadController extends Controller
 
     public function __construct(
         private Redirector $_redirector,
-        private IQueryBus $_queryBus
+        private IQueryBus $_queryBus,
+        private Store $_session
     ) {
     }
 
@@ -50,6 +52,7 @@ final readonly class InstitutionReadController extends Controller
     {
         // Redirect to the default tab if no tab is specified
         if ($tab === null) {
+            $this->_session->reflash();
             return $this->_redirector->action(InstitutionReadController::class, [
                 'institution' => $institution,
                 'tab' => InstitutionReadController::DefaultTab

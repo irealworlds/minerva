@@ -8,4 +8,11 @@ export type PageProps<
     user: AuthenticatedUserViewModel;
   };
   ziggy: Config & { location: string };
+  toasts: {
+    info: string[];
+    success: string[];
+    warning: string[];
+    error: string[];
+    default: string[];
+  };
 };
