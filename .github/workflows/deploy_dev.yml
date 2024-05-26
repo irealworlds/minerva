@@ -56,9 +56,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - name: Invoke deployment hook
-        uses: distributhor/workflow-webhook@v3
+      - uses: shivammathur/setup-php@v2
         with:
-          webhook_type: 'form-urlencoded'
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          data: 'forge_deploy_branch=${{ github.ref }}&forge_deploy_commit=${{ github.sha }}&forge_deploy_author=${{ github.actor }}'
+          php-version: '8.3'
+      - name: Install Forge CLI
+        run: composer global require laravel/forge-cli
+      - name: Deploy via Forge CLI
+        run: |
+          forge server:switch ${{ env.DEPLOY_SERVER_NAME }}
+          forge deploy ${{ env.DEPLOY_SITE_NAME }}
+        env:
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
