@@ -19,6 +19,8 @@ jobs:
         php-version: '8.3'
         
     - uses: actions/setup-node@v4
+      with:
+        cache: 'npm'
         
     - uses: actions/checkout@v4
     
@@ -63,7 +65,8 @@ jobs:
         run: composer global require laravel/forge-cli
       - name: Deploy via Forge CLI
         run: |
+          set -e
           forge server:switch ${{ vars.DEPLOY_SERVER_NAME }} 
-          && forge deploy ${{ vars.DEPLOY_SITE_NAME }}
+          forge deploy ${{ vars.DEPLOY_SITE_NAME }}
         env:
           FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
