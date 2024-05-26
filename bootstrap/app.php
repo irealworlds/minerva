@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Cli\Commands\ControllerMakeCommand;
+use App\Cli\Commands\RequestMakeCommand;
 use App\Http\Web\Middleware\HandleInertiaRequestsMiddleware;
 use Codestage\Authorization\Middleware\AuthorizationMiddleware;
 use Illuminate\Foundation\Application;
@@ -13,7 +14,8 @@ use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withCommands([
-        ControllerMakeCommand::class
+        ControllerMakeCommand::class,
+        RequestMakeCommand::class,
     ])
     ->withRouting(
         health: '/up',
