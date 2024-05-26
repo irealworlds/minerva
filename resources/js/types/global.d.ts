@@ -6,5 +6,6 @@ declare global {
     axios: AxiosInstance;
   }
 
-  let route: typeof ziggyRoute;
+  // noinspection ES6ConvertVarToLetConst
+  var route: typeof ziggyRoute; // eslint-disable-line no-var
 }

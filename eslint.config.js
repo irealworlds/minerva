@@ -6,7 +6,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default tseslint.config({
   files: ['resources/js/**/*.{js,ts,jsx,tsx,html,vue}'],
-  ignores: ['resources/js/ssr.tsx', 'resources/js/app.tsx'],
+  ignores: ['resources/js/app.tsx'],
   languageOptions: {
     ecmaVersion: 'latest', // Use the latest ecmascript standard
     sourceType: 'module', // Allows using import/export statements
