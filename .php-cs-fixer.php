@@ -250,8 +250,8 @@ return $config
         'standardize_not_equals' => true,
         // Each statement must be indented.
         'statement_indentation' => true,
-        // Lambdas not (indirect) referencing `$this` must be declared `static`.
-        'static_lambda' => true,
+//        // Lambdas not (indirect) referencing `$this` must be declared `static`.
+//        'static_lambda' => true,
         // Comparisons should be strict.
         'strict_comparison' => true,
         // Functions should be used with `$strict` param set to `true`.

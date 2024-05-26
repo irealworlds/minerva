@@ -15,7 +15,7 @@ use RuntimeException;
 /**
  * @extends Factory<Identity>
  */
-class IdentityFactory extends Factory
+final class IdentityFactory extends Factory
 {
     /**
      * The current password being used by the factory.
@@ -39,7 +39,7 @@ class IdentityFactory extends Factory
         return [
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= $hasher->make(fake()->password()),
+            'password' => IdentityFactory::$password ??= $hasher->make(fake()->password()),
             'remember_token' => Str::random(10),
         ];
     }
@@ -47,9 +47,9 @@ class IdentityFactory extends Factory
     /**
      * Indicate that the model's email address should be unverified.
      */
-    public function unverified(): static
+    public function unverified(): IdentityFactory
     {
-        return $this->state(static fn (array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
