@@ -10,7 +10,10 @@ use App\{
 use App\Core\Contracts\Cqrs\{
     ICommandBus,
     IQueryBus};
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,40 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(IQueryBus::class, QueryBus::class);
         $this->app->singleton(ICommandBus::class, CommandBus::class);
+
+        Factory::guessFactoryNamesUsing(
+            /**
+             * @param class-string<Model> $modelName
+             */
+            function (string $modelName) {
+                $appNamespace = $this->app->getNamespace();
+
+                $modelName = Str::startsWith($modelName, $appNamespace.'Core\Models\\')
+                    ? Str::after($modelName, $appNamespace.'Core\Models\\')
+                    : Str::after($modelName, $appNamespace);
+
+                /** @var class-string<Factory<Model>> $result */
+                $result = Factory::$namespace.$modelName.'Factory';
+
+                return $result;
+            }
+        );
+        Factory::guessModelNamesUsing(function (Factory $factory) {
+            $namespacedFactoryBasename = Str::replaceLast(
+                'Factory', '', Str::replaceFirst(Factory::$namespace, '', get_class($factory))
+            );
+
+            $factoryBasename = Str::replaceLast('Factory', '', class_basename($factory));
+
+            $appNamespace = $this->app->getNamespace();
+
+            /** @var class-string<Model> $result */
+            $result = class_exists($appNamespace.'Core\\Models\\'.$namespacedFactoryBasename)
+                ? $appNamespace.'Core\\Models\\'.$namespacedFactoryBasename
+                : $appNamespace.$factoryBasename;
+
+            return $result;
+        });
     }
 
     /**
