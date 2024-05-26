@@ -15,10 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3'
-        
+    
     - uses: actions/setup-node@v4
       with:
         cache: 'npm'
@@ -37,6 +34,8 @@ jobs:
       with:
         quiet: yes
         args: --no-ansi --no-scripts --prefer-dist
+        php_version: "8.3"
+        php_extensions: pdo
       
     - name: Install Node Dependencies
       run: npm ci
