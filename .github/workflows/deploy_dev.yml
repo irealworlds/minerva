@@ -1,7 +1,7 @@
 name: Deployment (dev)
 
 concurrency:
-  group: production
+  group: development
   cancel-in-progress: true
   
 on:
@@ -54,9 +54,11 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
     steps:
       - name: Invoke deployment hook
         uses: distributhor/workflow-webhook@v3
         with:
+          webhook_type: 'form-urlencoded'
           webhook_url: ${{ secrets.WEBHOOK_URL }}
+          data: 'forge_deploy_branch=${{ github.ref }}&forge_deploy_commit=${{ github.sha }}&forge_deploy_author=${{ github.actor }}'
