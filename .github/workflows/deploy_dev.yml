@@ -63,7 +63,7 @@ jobs:
         run: composer global require laravel/forge-cli
       - name: Deploy via Forge CLI
         run: |
-          forge server:switch ${{ env.DEPLOY_SERVER_NAME }}
-          forge deploy ${{ env.DEPLOY_SITE_NAME }}
+          forge server:switch ${{ vars.DEPLOY_SERVER_NAME }} 
+          && forge deploy ${{ vars.DEPLOY_SITE_NAME }}
         env:
           FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
