@@ -17,8 +17,7 @@ export default function SecondaryButton({
         disabled ? 'opacity-25' : '',
         className
       )}
-      disabled={disabled}
-    >
+      disabled={disabled}>
       {children}
     </button>
   );

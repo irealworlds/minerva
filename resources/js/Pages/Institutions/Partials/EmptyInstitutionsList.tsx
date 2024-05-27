@@ -1,5 +1,5 @@
 import { PlusIcon } from '@heroicons/react/20/solid';
-import PrimaryButton from '@/Components/PrimaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { Link } from '@inertiajs/react';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 
@@ -15,8 +15,7 @@ export default function EmptyInstitutionsList({
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        aria-hidden="true"
-      >
+        aria-hidden="true">
         <path
           vectorEffect="non-scaling-stroke"
           strokeLinecap="round"

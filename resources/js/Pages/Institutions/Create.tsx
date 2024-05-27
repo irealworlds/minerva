@@ -2,11 +2,11 @@ import { PageProps } from '@/types';
 import AuthenticatedLayout from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import React, { FormEventHandler, useEffect, useRef, useState } from 'react';
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
-import SecondaryButton from '@/Components/SecondaryButton';
-import PrimaryButton from '@/Components/PrimaryButton';
+import InputLabel from '@/Components/Forms/InputLabel';
+import TextInput from '@/Components/Forms/Controls/TextInput';
+import InputError from '@/Components/Forms/InputError';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { BuildingLibraryIcon } from '@heroicons/react/24/outline';
 import {
   Combobox,
@@ -179,8 +179,7 @@ export default function Create({ auth }: PageProps) {
                       }}
                       onClose={() => {
                         setParentQuery('');
-                      }}
-                    >
+                      }}>
                       <Label className="block text-sm font-medium leading-6 text-gray-900">
                         Parent institution
                       </Label>
@@ -218,16 +217,14 @@ export default function Create({ auth }: PageProps) {
                                       ? 'bg-indigo-600 text-white'
                                       : 'text-gray-900'
                                   )
-                                }
-                              >
+                                }>
                                 {({ focus, selected }) => (
                                   <>
                                     <span
                                       className={combineClassNames(
                                         'block truncate',
                                         selected ? 'font-semibold' : ''
-                                      )}
-                                    >
+                                      )}>
                                       {parent.name}
                                     </span>
 
@@ -238,8 +235,7 @@ export default function Create({ auth }: PageProps) {
                                           focus
                                             ? 'text-white'
                                             : 'text-indigo-600'
-                                        )}
-                                      >
+                                        )}>
                                         <CheckIcon
                                           className="size-5"
                                           aria-hidden="true"
@@ -261,8 +257,7 @@ export default function Create({ auth }: PageProps) {
                   <div className="col-span-full">
                     <label
                       htmlFor="photo"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
+                      className="block text-sm font-medium leading-6 text-gray-900">
                       Picture
                     </label>
                     <input
@@ -288,8 +283,7 @@ export default function Create({ auth }: PageProps) {
                       ) : (
                         <div
                           className="size-12 bg-gray-800 flex items-center justify-center rounded-full text-white"
-                          aria-hidden="true"
-                        >
+                          aria-hidden="true">
                           <BuildingLibraryIcon className="size-8" />
                         </div>
                       )}
@@ -298,15 +292,13 @@ export default function Create({ auth }: PageProps) {
                           type="button"
                           onClick={() => {
                             updatePictureInputValue(null);
-                          }}
-                        >
+                          }}>
                           Clear
                         </SecondaryButton>
                       )}
                       <PrimaryButton
                         type="button"
-                        onClick={() => pictureInput.current?.click()}
-                      >
+                        onClick={() => pictureInput.current?.click()}>
                         Change
                       </PrimaryButton>
                     </div>

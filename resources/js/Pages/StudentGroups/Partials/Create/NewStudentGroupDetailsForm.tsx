@@ -1,9 +1,9 @@
-import SecondaryButton from '@/Components/SecondaryButton';
-import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/Forms/InputLabel';
+import TextInput from '@/Components/Forms/Controls/TextInput';
+import InputError from '@/Components/Forms/InputError';
 import React from 'react';
 import { GroupCreationFormData } from '@/Pages/StudentGroups/Create';
 

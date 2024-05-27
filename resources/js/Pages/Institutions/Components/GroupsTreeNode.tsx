@@ -5,7 +5,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { InstitutionsTreeContext } from '@/Pages/Institutions/Partials/Tabs/ManageInstitutionGroups';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import PrimaryButton from '@/Components/PrimaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { Link } from '@inertiajs/react';
 import { AuthenticatedContext } from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { Permission } from '@/types/permission.enum';

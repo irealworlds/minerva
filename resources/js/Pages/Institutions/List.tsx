@@ -5,7 +5,7 @@ import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model'
 import EmptyInstitutionsList from '@/Pages/Institutions/Partials/EmptyInstitutionsList';
 import InstitutionsTable from '@/Pages/Institutions/Partials/InstitutionsTable';
 import { PaginatedCollection } from '@/types/paginated-result.contract';
-import PrimaryButton from '@/Components/PrimaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import InstitutionFilters from '@/Pages/Institutions/Partials/InstitutionFilters';
 import React from 'react';
 

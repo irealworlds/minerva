@@ -1,5 +1,5 @@
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
+import InputLabel from '@/Components/Forms/InputLabel';
+import TextInput from '@/Components/Forms/Controls/TextInput';
 import GroupsTree from '@/Pages/Institutions/Components/GroupsTree';
 import React, { useContext, useMemo, useState } from 'react';
 import {

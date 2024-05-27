@@ -1,4 +1,4 @@
-import PrimaryButton from '@/Components/PrimaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { GroupCreationFormData } from '@/Pages/StudentGroups/Create';
 import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
 import React from 'react';
@@ -7,7 +7,7 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import { combineClassNames } from '@/utils/combine-class-names.function';
-import SecondaryButton from '@/Components/SecondaryButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 
 function buildStructurePreview(ancestors: { id: string; name: string }[]) {
   if (ancestors.length > 0) {

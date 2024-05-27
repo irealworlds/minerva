@@ -1,15 +1,15 @@
-import SecondaryButton from '@/Components/SecondaryButton';
-import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { GroupCreationFormData } from '@/Pages/StudentGroups/Create';
 import ButtonRadioInput from '@/Components/Forms/Controls/ButtonRadioInput';
 import ButtonRadioInputOption from '@/Components/Forms/Controls/ButtonRadioInputOption';
-import InputLabel from '@/Components/InputLabel';
+import InputLabel from '@/Components/Forms/InputLabel';
 import ParentInstitutionSelector from '@/Pages/StudentGroups/Components/ParentInstitutionSelector';
 import ParentGroupSelector from '@/Pages/StudentGroups/Components/ParentGroupSelector';
 import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
 import { StudentGroupViewModel } from '@/types/ViewModels/student-group.view-model';
-import InputError from '@/Components/InputError';
+import InputError from '@/Components/Forms/InputError';
 import React from 'react';
 
 export default function NewStudentGroupParentForm({

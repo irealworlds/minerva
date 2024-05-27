@@ -1,8 +1,8 @@
 import { MouseEvent, useState } from 'react';
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
+import InputLabel from '@/Components/Forms/InputLabel';
+import TextInput from '@/Components/Forms/Controls/TextInput';
 import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
-import DangerButton from '@/Components/DangerButton';
+import DangerButton from '@/Components/Buttons/DangerButton';
 import { useForm } from '@inertiajs/react';
 
 export default function DeleteInstitutionForm({

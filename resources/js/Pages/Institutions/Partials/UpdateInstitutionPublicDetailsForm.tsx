@@ -1,13 +1,13 @@
 import { useForm } from '@inertiajs/react';
 import React, { FormEventHandler, useEffect, useRef, useState } from 'react';
 import { clearFileInput } from '@/utils/clear-file-input.function';
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/Forms/InputLabel';
+import TextInput from '@/Components/Forms/Controls/TextInput';
+import InputError from '@/Components/Forms/InputError';
 import { BuildingLibraryIcon } from '@heroicons/react/24/outline';
-import SecondaryButton from '@/Components/SecondaryButton';
-import DangerButton from '@/Components/DangerButton';
-import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import DangerButton from '@/Components/Buttons/DangerButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
 
 export default function UpdateInstitutionPublicDetailsForm({
@@ -129,8 +129,7 @@ export default function UpdateInstitutionPublicDetailsForm({
             <div className="col-span-full">
               <label
                 htmlFor="photo"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+                className="block text-sm font-medium leading-6 text-gray-900">
                 Picture
               </label>
               <input
@@ -154,8 +153,7 @@ export default function UpdateInstitutionPublicDetailsForm({
                 ) : (
                   <div
                     className="size-12 bg-gray-800 flex items-center justify-center rounded-full text-white"
-                    aria-hidden="true"
-                  >
+                    aria-hidden="true">
                     <BuildingLibraryIcon className="size-8" />
                   </div>
                 )}
@@ -164,8 +162,7 @@ export default function UpdateInstitutionPublicDetailsForm({
                     type="button"
                     onClick={() => {
                       updatePictureInputValue(undefined);
-                    }}
-                  >
+                    }}>
                     Discard changes
                   </SecondaryButton>
                 )}
@@ -174,15 +171,13 @@ export default function UpdateInstitutionPublicDetailsForm({
                     type="button"
                     onClick={() => {
                       updatePictureInputValue(null);
-                    }}
-                  >
+                    }}>
                     Clear
                   </DangerButton>
                 )}
                 <PrimaryButton
                   type="button"
-                  onClick={() => pictureInput.current?.click()}
-                >
+                  onClick={() => pictureInput.current?.click()}>
                   Change
                 </PrimaryButton>
               </div>
@@ -197,8 +192,7 @@ export default function UpdateInstitutionPublicDetailsForm({
               onClick={() => {
                 reset();
               }}
-              disabled={processing}
-            >
+              disabled={processing}>
               Reset
             </SecondaryButton>
           )}

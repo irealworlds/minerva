@@ -1,6 +1,6 @@
 import { PaginatedCollection } from '@/types/paginated-result.contract';
 import { Link } from '@inertiajs/react';
-import SecondaryButton from '@/Components/SecondaryButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 
 export default function Paginator<TItemType>({
   collection,
@@ -21,16 +21,14 @@ export default function Paginator<TItemType>({
         <Link href={collection.prev_page_url ?? '#'}>
           <SecondaryButton
             type="button"
-            disabled={collection.current_page <= 1}
-          >
+            disabled={collection.current_page <= 1}>
             Previous
           </SecondaryButton>
         </Link>
         <Link href={collection.next_page_url ?? '#'}>
           <SecondaryButton
             type="button"
-            disabled={collection.current_page === collection.last_page}
-          >
+            disabled={collection.current_page === collection.last_page}>
             Next
           </SecondaryButton>
         </Link>

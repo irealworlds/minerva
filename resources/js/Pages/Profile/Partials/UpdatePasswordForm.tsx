@@ -1,8 +1,8 @@
 import { FormEventHandler, useRef } from 'react';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/Forms/InputError';
+import InputLabel from '@/Components/Forms/InputLabel';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
+import TextInput from '@/Components/Forms/Controls/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
@@ -120,8 +120,7 @@ export default function UpdatePasswordForm({
             enter="transition ease-in-out"
             enterFrom="opacity-0"
             leave="transition ease-in-out"
-            leaveTo="opacity-0"
-          >
+            leaveTo="opacity-0">
             <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
           </Transition>
         </div>

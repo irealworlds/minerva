@@ -1,10 +1,10 @@
 import React, { FormEvent, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
-import SecondaryButton from '@/Components/SecondaryButton';
-import PrimaryButton from '@/Components/PrimaryButton';
+import InputLabel from '@/Components/Forms/InputLabel';
+import TextInput from '@/Components/Forms/Controls/TextInput';
+import InputError from '@/Components/Forms/InputError';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 
 interface InstitutionFiltersProps {
   filters: {
@@ -77,16 +77,14 @@ export default function InstitutionFilters({
                 onClick={() => {
                   reset();
                 }}
-                disabled={processing}
-              >
+                disabled={processing}>
                 Clear
               </SecondaryButton>
             )}
             <PrimaryButton
               className="grow justify-center"
               type="submit"
-              disabled={processing}
-            >
+              disabled={processing}>
               Update results
             </PrimaryButton>
           </div>
