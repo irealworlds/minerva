@@ -23,6 +23,7 @@ final class RequestMakeCommand extends BaseRequestMakeCommand
 
     /**
      * @inheritDoc
+     *
      * @return array<int, array<int, string|int>>
      */
     #[Override]

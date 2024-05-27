@@ -6,14 +6,17 @@ namespace App\Infrastructure\Providers;
 
 use App\{
     CommandBus,
+    Core\Contracts\Services\IInertiaService,
+    Core\Services\InertiaService,
     QueryBus};
 use App\Core\Contracts\Cqrs\{
     ICommandBus,
     IQueryBus};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Illuminate\Support\{
+    ServiceProvider,
+    Str};
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -22,9 +25,14 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Bind application services
+        $this->app->bind(IInertiaService::class, InertiaService::class);
+
+        // Setup CQRS
         $this->app->singleton(IQueryBus::class, QueryBus::class);
         $this->app->singleton(ICommandBus::class, CommandBus::class);
 
+        // Configure custom application namespaces
         Factory::guessFactoryNamesUsing(
             /**
              * @param class-string<Model> $modelName
@@ -44,7 +52,9 @@ final class AppServiceProvider extends ServiceProvider
         );
         Factory::guessModelNamesUsing(function (Factory $factory) {
             $namespacedFactoryBasename = Str::replaceLast(
-                'Factory', '', Str::replaceFirst(Factory::$namespace, '', get_class($factory))
+                'Factory',
+                '',
+                Str::replaceFirst(Factory::$namespace, '', $factory::class)
             );
 
             $factoryBasename = Str::replaceLast('Factory', '', class_basename($factory));

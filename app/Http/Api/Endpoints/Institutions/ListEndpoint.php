@@ -8,7 +8,6 @@ use App\ApplicationServices\Institutions\ListFilteredPaginated\ListFilteredPagin
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\Institution;
 use App\Http\Api\Endpoints\Endpoint;
-use App\Http\Api\Requests\Institutions\InstitutionListRequest;
 use App\Http\Web\ViewModels\InstitutionViewModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -27,7 +26,7 @@ final readonly class ListEndpoint extends Endpoint
      * @throws ValidationException
      */
     #[Get('/Institutions', name: 'api.institutions.index')]
-    public function __invoke(InstitutionListRequest $request): JsonResponse
+    public function __invoke(ListEndpointRequest $request): JsonResponse
     {
         // Fetch the institutions via a query
         $institutions = $this->_queryBus->dispatch(new ListFilteredPaginatedInstitutionsQuery(

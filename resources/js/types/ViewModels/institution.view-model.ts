@@ -3,5 +3,8 @@ export interface InstitutionViewModel {
   name: string;
   website: string | null;
   pictureUri: string | null;
-  children: InstitutionViewModel[];
+  ancestors: {
+    id: string;
+    name: string;
+  }[];
 }

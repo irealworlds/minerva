@@ -51,6 +51,6 @@ final readonly class InstitutionUpdateController extends Controller
         }
 
         return $this->_redirector->back()
-            ->with("success", [__("toasts.institutions.updated")]);
+            ->with('success', [__('toasts.institutions.updated')]);
     }
 }

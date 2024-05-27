@@ -1,17 +1,28 @@
 import { AuthenticatedUserViewModel } from '@/types/authenticated-user.model';
 import { Permission } from '@/types/permission.enum';
 
-export function hasPermission(
+/**
+ * Check if the user has access to view content that is protected by permissions.
+ *
+ * Sets are chained by AND operations, while the items inside each set are chained by OR operations.
+ *
+ * @param user
+ * @param sets
+ */
+export function checkPermissionsForUser(
   user: AuthenticatedUserViewModel,
-  permissions: Permission | Permission[] | undefined
+  ...sets: Permission[] | Permission[][]
 ) {
-  if (permissions === undefined) {
-    return false;
-  }
+  for (let permissionSet of sets) {
+    if (!Array.isArray(permissionSet)) {
+      permissionSet = [permissionSet];
+    }
 
-  if (!Array.isArray(permissions)) {
-    permissions = [permissions];
+    // If no item in the permissionSet is included in the user's permissions,
+    // then fail the check
+    if (!user.permissions.some(p => permissionSet.includes(p))) {
+      return false;
+    }
   }
-
-  return user.permissions.some(p => permissions.includes(p));
+  return true;
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Requests\Institutions;
+namespace App\Http\Api\Endpoints\Institutions;
 
 use App\Core\Traits\Requests\WithOptionals;
 use Illuminate\Foundation\Http\FormRequest;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property string|null $search
  */
-final class InstitutionListRequest extends FormRequest
+final class ListEndpointRequest extends FormRequest
 {
     use WithOptionals;
 }

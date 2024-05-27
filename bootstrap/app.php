@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Cli\Commands\ControllerMakeCommand;
-use App\Cli\Commands\ModelMakeCommand;
-use App\Cli\Commands\RequestMakeCommand;
+use App\Cli\Commands\{
+    ControllerMakeCommand,
+    ModelMakeCommand,
+    RequestMakeCommand};
 use App\Http\Web\Middleware\HandleInertiaRequestsMiddleware;
 use Codestage\Authorization\Middleware\AuthorizationMiddleware;
 use Illuminate\Foundation\Application;
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Configuration\{
     Middleware};
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
-return Application::configure(basePath: dirname(__DIR__))
+return Application::configure(basePath: \dirname(__DIR__))
     ->withCommands([
         // Override default make commands to work with the custom application namespaces
         ControllerMakeCommand::class,

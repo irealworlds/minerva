@@ -69,7 +69,7 @@ final readonly class AuthenticatedSessionController extends Controller
 
         return $this->_redirector->intended(
             default: $this->_urlGenerator->route('dashboard', absolute: false)
-        )->with("success", [__("toasts.login.success")]);
+        )->with('success', [__('toasts.login.success')]);
     }
 
     /**
@@ -90,6 +90,6 @@ final readonly class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return $this->_redirector->to('/')->with("success", [__("toasts.logout.success")]);
+        return $this->_redirector->to('/')->with('success', [__('toasts.logout.success')]);
     }
 }

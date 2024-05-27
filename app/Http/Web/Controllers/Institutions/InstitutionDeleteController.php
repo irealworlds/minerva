@@ -15,7 +15,8 @@ use Illuminate\Routing\Redirector;
 use ReflectionException;
 use Spatie\RouteAttributes\Attributes\Delete;
 
-final readonly class InstitutionDeleteController {
+final readonly class InstitutionDeleteController
+{
     public function __construct(
         private ICommandBus $_commandBus,
         private Redirector $_redirector
@@ -26,13 +27,13 @@ final readonly class InstitutionDeleteController {
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    #[Delete("/Institutions/{institution}", name: "institutions.delete")]
+    #[Delete('/Institutions/{institution}', name: 'institutions.delete')]
     #[Authorize(permissions: Permission::InstitutionDelete)]
     public function __invoke(Institution $institution): RedirectResponse
     {
         $this->_commandBus->dispatch(new DeleteInstitutionCommand($institution));
 
         return $this->_redirector->action(InstitutionListController::class)
-            ->with("success", [__("toasts.institutions.deleted")]);
+            ->with('success', [__('toasts.institutions.deleted')]);
     }
 }

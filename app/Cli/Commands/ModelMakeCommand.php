@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Cli\Commands;
 
+use const DIRECTORY_SEPARATOR;
 
-final class ModelMakeCommand extends \Illuminate\Foundation\Console\ModelMakeCommand {
+final class ModelMakeCommand extends \Illuminate\Foundation\Console\ModelMakeCommand
+{
     /** @inheritDoc */
     protected function getDefaultNamespace($rootNamespace): string
     {

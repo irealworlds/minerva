@@ -9,6 +9,8 @@ use Illuminate\Routing\Console\ControllerMakeCommand as BaseControllerMakeComman
 use Illuminate\Support\Str;
 use Override;
 
+use const DIRECTORY_SEPARATOR;
+
 final class ControllerMakeCommand extends BaseControllerMakeCommand
 {
     /** @inheritDoc  */
@@ -26,14 +28,15 @@ final class ControllerMakeCommand extends BaseControllerMakeCommand
      * @param class-string<Model> $modelClass
      * @param string $storeRequestClass
      * @param string $updateRequestClass
+     *
      * @return array{0: string, 1: string}
      */
     #[Override]
     protected function generateFormRequests($modelClass, $storeRequestClass, $updateRequestClass): array
     {
         $creationOptions = [];
-        if ($this->option("api")) {
-            $creationOptions["--api"] = true;
+        if ($this->option('api')) {
+            $creationOptions['--api'] = true;
         }
 
         $storeRequestClass = class_basename($modelClass).'StoreRequest';
@@ -54,6 +57,7 @@ final class ControllerMakeCommand extends BaseControllerMakeCommand
     /**
      * @param array<string, string> $replace
      * @param class-string<Model> $modelClass
+     *
      * @return array<string, string>
      */
     #[Override]
@@ -64,7 +68,7 @@ final class ControllerMakeCommand extends BaseControllerMakeCommand
 
         return array_map(function (string $replacedValue) {
             if (Str::startsWith($replacedValue, 'App\\Http\\Requests')) {
-                $replacedValue = Str::replace('App\\Http\\Requests', $this->option("api") ? 'App\\Http\\Api\\Requests' : 'App\\Http\\Web\\Requests', $replacedValue);
+                $replacedValue = Str::replace('App\\Http\\Requests', $this->option('api') ? 'App\\Http\\Api\\Requests' : 'App\\Http\\Web\\Requests', $replacedValue);
             }
             return $replacedValue;
         }, $baseReplacements);
