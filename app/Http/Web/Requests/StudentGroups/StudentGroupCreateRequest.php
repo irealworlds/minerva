@@ -23,11 +23,15 @@ final class StudentGroupCreateRequest extends FormRequest
     {
         return [
             // Parent
-            'parentType' => ['required', 'string', new In(['institution', 'studentGroup'])],
+            'parentType' => [
+                'required',
+                'string',
+                new In(['institution', 'studentGroup']),
+            ],
             'parentId' => ['required', 'string'],
 
             // Details
-            'name' => ['required', 'string', 'max:64']
+            'name' => ['required', 'string', 'max:64'],
         ];
     }
 }

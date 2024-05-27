@@ -19,7 +19,7 @@ final readonly class EmailVerificationNotificationController extends Controller
     public function __construct(
         private Redirector $_redirector,
         private UrlGenerator $_urlGenerator,
-        private AuthManager $_authManager
+        private AuthManager $_authManager,
     ) {
     }
 
@@ -28,7 +28,13 @@ final readonly class EmailVerificationNotificationController extends Controller
      *
      * @throws InvalidArgumentException
      */
-    #[Post('/Email/Verification-Notification', name: 'verification.send', middleware: 'throttle:6,1')]
+    #[
+        Post(
+            '/Email/Verification-Notification',
+            name: 'verification.send',
+            middleware: 'throttle:6,1',
+        ),
+    ]
     #[Authorize]
     public function store(): RedirectResponse
     {
@@ -37,12 +43,17 @@ final readonly class EmailVerificationNotificationController extends Controller
 
         if ($user->hasVerifiedEmail()) {
             return $this->_redirector->intended(
-                default: $this->_urlGenerator->route('dashboard', absolute: false)
+                default: $this->_urlGenerator->route(
+                    'dashboard',
+                    absolute: false,
+                ),
             );
         }
 
         $user->sendEmailVerificationNotification();
 
-        return $this->_redirector->back()->with('status', 'verification-link-sent');
+        return $this->_redirector
+            ->back()
+            ->with('status', 'verification-link-sent');
     }
 }

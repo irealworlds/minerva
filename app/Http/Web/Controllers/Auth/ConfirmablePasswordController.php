@@ -28,7 +28,7 @@ final readonly class ConfirmablePasswordController extends Controller
     public function __construct(
         private AuthManager $_authManager,
         private Redirector $_redirector,
-        private UrlGenerator $_urlGenerator
+        private UrlGenerator $_urlGenerator,
     ) {
     }
 
@@ -58,10 +58,12 @@ final readonly class ConfirmablePasswordController extends Controller
         /** @var Identity $user */
         $user = $this->_authManager->guard();
 
-        if (! $this->_authManager->guard('web')->validate([
-            'email' => $user->email,
-            'password' => $request->string('password'),
-        ])) {
+        if (
+            !$this->_authManager->guard('web')->validate([
+                'email' => $user->email,
+                'password' => $request->string('password'),
+            ])
+        ) {
             throw ValidationException::withMessages([
                 'password' => __('auth.password'),
             ]);
@@ -70,7 +72,7 @@ final readonly class ConfirmablePasswordController extends Controller
         $request->session()->put('auth.password_confirmed_at', time());
 
         return $this->_redirector->intended(
-            default: $this->_urlGenerator->route('dashboard', absolute: false)
+            default: $this->_urlGenerator->route('dashboard', absolute: false),
         );
     }
 }

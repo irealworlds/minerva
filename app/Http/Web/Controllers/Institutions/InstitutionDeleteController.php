@@ -19,7 +19,7 @@ final readonly class InstitutionDeleteController
 {
     public function __construct(
         private ICommandBus $_commandBus,
-        private Redirector $_redirector
+        private Redirector $_redirector,
     ) {
     }
 
@@ -31,9 +31,12 @@ final readonly class InstitutionDeleteController
     #[Authorize(permissions: Permission::InstitutionDelete)]
     public function __invoke(Institution $institution): RedirectResponse
     {
-        $this->_commandBus->dispatch(new DeleteInstitutionCommand($institution));
+        $this->_commandBus->dispatch(
+            new DeleteInstitutionCommand($institution),
+        );
 
-        return $this->_redirector->action(InstitutionListController::class)
+        return $this->_redirector
+            ->action(InstitutionListController::class)
             ->with('success', [__('toasts.institutions.deleted')]);
     }
 }

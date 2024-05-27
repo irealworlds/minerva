@@ -35,7 +35,7 @@ final readonly class AuthenticatedSessionController extends Controller
         private Factory $_authManager,
         private Redirector $_redirector,
         private UrlGenerator $_urlGenerator,
-        private SessionManager $_sessionManager
+        private SessionManager $_sessionManager,
     ) {
     }
 
@@ -67,9 +67,14 @@ final readonly class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return $this->_redirector->intended(
-            default: $this->_urlGenerator->route('dashboard', absolute: false)
-        )->with('success', [__('toasts.login.success')]);
+        return $this->_redirector
+            ->intended(
+                default: $this->_urlGenerator->route(
+                    'dashboard',
+                    absolute: false,
+                ),
+            )
+            ->with('success', [__('toasts.login.success')]);
     }
 
     /**
@@ -90,6 +95,8 @@ final readonly class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return $this->_redirector->to('/')->with('success', [__('toasts.logout.success')]);
+        return $this->_redirector
+            ->to('/')
+            ->with('success', [__('toasts.logout.success')]);
     }
 }

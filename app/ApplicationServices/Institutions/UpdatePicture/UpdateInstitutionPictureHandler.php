@@ -22,15 +22,20 @@ final readonly class UpdateInstitutionPictureHandler implements ICommandHandler
     public function __invoke(mixed $command): void
     {
         if ($command->newPicture === null) {
-            $command->institution->clearMediaCollection(Institution::EmblemPictureMediaCollection);
+            $command->institution->clearMediaCollection(
+                Institution::EmblemPictureMediaCollection,
+            );
         } else {
             try {
                 /** @throws FileCannotBeAdded  */
-                $command->institution->addMedia($command->newPicture)
-                    ->toMediaCollection(Institution::EmblemPictureMediaCollection);
+                $command->institution
+                    ->addMedia($command->newPicture)
+                    ->toMediaCollection(
+                        Institution::EmblemPictureMediaCollection,
+                    );
             } catch (FileCannotBeAdded $e) {
                 throw ValidationException::withMessages([
-                    'newPicture' => $e->getMessage()
+                    'newPicture' => $e->getMessage(),
                 ]);
             }
         }

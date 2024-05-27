@@ -28,7 +28,11 @@ class InstitutionCreateRequest extends FormRequest
             'name' => ['required', 'string', 'max:128'],
             'website' => ['sometimes', 'nullable', 'string', 'url', 'max:64'],
             'picture' => ['sometimes', 'nullable', 'image', 'max:1024'],
-            'parentInstitutionId' => ['sometimes', 'nullable', new ExistsRouteKey(Institution::class)],
+            'parentInstitutionId' => [
+                'sometimes',
+                'nullable',
+                new ExistsRouteKey(Institution::class),
+            ],
         ];
     }
 }

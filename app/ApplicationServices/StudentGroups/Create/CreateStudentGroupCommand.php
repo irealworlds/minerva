@@ -12,7 +12,7 @@ final readonly class CreateStudentGroupCommand implements ICommand
     public function __construct(
         public string $id,
         public string $name,
-        public Model $parent
+        public Model $parent,
     ) {
     }
 }

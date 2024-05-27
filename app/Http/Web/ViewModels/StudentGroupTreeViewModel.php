@@ -9,8 +9,7 @@ final readonly class StudentGroupTreeViewModel
     /**
      * @param iterable<StudentGroupTreeNodeViewModel> $items
      */
-    public function __construct(
-        public iterable $items
-    ) {
+    public function __construct(public iterable $items)
+    {
     }
 }

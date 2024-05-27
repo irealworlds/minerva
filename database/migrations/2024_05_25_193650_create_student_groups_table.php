@@ -14,7 +14,9 @@ return new class() extends Migration {
      */
     public function up(): void
     {
-        Schema::create('student_groups', static function (Blueprint $table): void {
+        Schema::create('student_groups', static function (
+            Blueprint $table,
+        ): void {
             $table->uuid('id');
             $table->primary('id');
 

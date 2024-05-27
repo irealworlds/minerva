@@ -15,9 +15,9 @@ final class RequestMakeCommand extends BaseRequestMakeCommand
     protected function getDefaultNamespace($rootNamespace): string
     {
         if ($this->option('api')) {
-            return $rootNamespace.'\Http\Api\Requests';
+            return $rootNamespace . '\Http\Api\Requests';
         } else {
-            return $rootNamespace.'\Http\Web\Requests';
+            return $rootNamespace . '\Http\Web\Requests';
         }
     }
 
@@ -34,7 +34,12 @@ final class RequestMakeCommand extends BaseRequestMakeCommand
 
         return [
             ...$parentOptions,
-            ['api', '', InputOption::VALUE_NONE, 'Create the request for API endpoints.'],
+            [
+                'api',
+                '',
+                InputOption::VALUE_NONE,
+                'Create the request for API endpoints.',
+            ],
         ];
     }
 }

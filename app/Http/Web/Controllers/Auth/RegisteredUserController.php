@@ -33,7 +33,7 @@ final readonly class RegisteredUserController extends Controller
         private Dispatcher $_eventDispatcher,
         private Factory $_authManager,
         private Redirector $_redirector,
-        private Hasher $_hasher
+        private Hasher $_hasher,
     ) {
     }
 
@@ -57,14 +57,18 @@ final readonly class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'email' => 'required|string|lowercase|email|max:255|unique:'.Identity::class,
+            'email' =>
+                'required|string|lowercase|email|max:255|unique:' .
+                Identity::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         /** @var Identity $identity */
         $identity = Identity::query()->create([
             'email' => $request->string('email'),
-            'password' => $this->_hasher->make($request->string('password')->toString()),
+            'password' => $this->_hasher->make(
+                $request->string('password')->toString(),
+            ),
         ]);
 
         $this->_eventDispatcher->dispatch(new Registered($identity));

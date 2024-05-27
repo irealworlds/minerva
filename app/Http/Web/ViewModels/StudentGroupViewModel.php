@@ -18,7 +18,7 @@ readonly class StudentGroupViewModel
     public function __construct(
         public mixed $id,
         public string $name,
-        public iterable $ancestors
+        public iterable $ancestors,
     ) {
     }
 
@@ -31,27 +31,41 @@ readonly class StudentGroupViewModel
     {
         /** @return iterable<object{id: string, type: 'institution'|'studentGroup', name: string}> */
         $getAncestors = function (Model $model) use (&$getAncestors): iterable {
-            if (!($model instanceof Institution || $model instanceof StudentGroup)) {
-                throw new InvalidArgumentException('Received of type [' . $model::class . '] and could not determine parents.');
+            if (
+                !(
+                    $model instanceof Institution ||
+                    $model instanceof StudentGroup
+                )
+            ) {
+                throw new InvalidArgumentException(
+                    'Received of type [' .
+                        $model::class .
+                        '] and could not determine parents.',
+                );
             }
 
             if ($model->parent === null) {
                 return [];
             }
 
-            return [...$getAncestors($model->parent), (object) [
-                'id' => $model->parent->getRouteKey(),
-                'type' => $model->parent instanceof Institution
-                    ? 'institution'
-                    : ($model->parent instanceof StudentGroup
-                        ? 'studentGroup'
-                        : 'unknown'),
-                'name' => $model->parent instanceof Institution
-                    ? $model->parent->name
-                    : ($model->parent instanceof StudentGroup
-                        ? $model->parent->name
-                        : $model::class)
-            ]];
+            return [
+                ...$getAncestors($model->parent),
+                (object) [
+                    'id' => $model->parent->getRouteKey(),
+                    'type' =>
+                        $model->parent instanceof Institution
+                            ? 'institution'
+                            : ($model->parent instanceof StudentGroup
+                                ? 'studentGroup'
+                                : 'unknown'),
+                    'name' =>
+                        $model->parent instanceof Institution
+                            ? $model->parent->name
+                            : ($model->parent instanceof StudentGroup
+                                ? $model->parent->name
+                                : $model::class),
+                ],
+            ];
         };
 
         /** @var iterable<object{id: string, type: 'institution'|'studentGroup', name: string}> $ancestors */
@@ -60,7 +74,7 @@ readonly class StudentGroupViewModel
         return new StudentGroupViewModel(
             id: $model->getRouteKey(),
             name: $model->name,
-            ancestors: $ancestors
+            ancestors: $ancestors,
         );
     }
 }

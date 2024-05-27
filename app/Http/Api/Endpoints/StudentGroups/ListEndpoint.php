@@ -19,9 +19,8 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ListEndpoint extends Endpoint
 {
-    public function __construct(
-        private IQueryBus $_queryBus
-    ) {
+    public function __construct(private IQueryBus $_queryBus)
+    {
     }
 
     /**
@@ -35,13 +34,25 @@ final readonly class ListEndpoint extends Endpoint
     {
         // Parse the parent type from the request
         if ($request->optionalString('parentType')->hasValue()) {
-            if (!strcasecmp($request->string('parentType')->toString(), 'institution')) {
+            if (
+                !strcasecmp(
+                    $request->string('parentType')->toString(),
+                    'institution',
+                )
+            ) {
                 $parentType = Optional::of(Institution::class);
-            } else if (!strcasecmp($request->string('parentType')->toString(), 'studentGroup')) {
+            } elseif (
+                !strcasecmp(
+                    $request->string('parentType')->toString(),
+                    'studentGroup',
+                )
+            ) {
                 $parentType = Optional::of(StudentGroup::class);
             } else {
                 throw ValidationException::withMessages([
-                    'parentType' => __('validation.in', ['attribute' => 'parent type'])
+                    'parentType' => __('validation.in', [
+                        'attribute' => 'parent type',
+                    ]),
                 ]);
             }
         } else {
@@ -49,18 +60,25 @@ final readonly class ListEndpoint extends Endpoint
         }
 
         // Fetch the groups via a query
-        $studentGroups = $this->_queryBus->dispatch(new ListFilteredPaginatedStudentGroupsQuery(
-            page: $request->integer('page', 1),
-            pageSize: $request->integer('pageSize', 10),
-            parentType: $parentType,
-            parentId: $request->optionalString('parentId'),
-            searchQuery: $request->optionalString('search', false)
-        ));
+        $studentGroups = $this->_queryBus->dispatch(
+            new ListFilteredPaginatedStudentGroupsQuery(
+                page: $request->integer('page', 1),
+                pageSize: $request->integer('pageSize', 10),
+                parentType: $parentType,
+                parentId: $request->optionalString('parentId'),
+                searchQuery: $request->optionalString('search', false),
+            ),
+        );
 
         // Map results to view models
         $studentGroups->setCollection(
-            $studentGroups->getCollection()
-                ->map(static fn (StudentGroup $group) => StudentGroupViewModel::fromModel($group))
+            $studentGroups
+                ->getCollection()
+                ->map(
+                    static fn (
+                        StudentGroup $group,
+                    ) => StudentGroupViewModel::fromModel($group),
+                ),
         );
 
         $studentGroups = $studentGroups->withQueryString();

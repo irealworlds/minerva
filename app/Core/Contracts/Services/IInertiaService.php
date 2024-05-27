@@ -9,5 +9,8 @@ interface IInertiaService
     /**
      * Add a new toast to be displayed on renders made as response to the current request.
      */
-    public function addToastToCurrentRequest(string $type, string $message): void;
+    public function addToastToCurrentRequest(
+        string $type,
+        string $message,
+    ): void;
 }

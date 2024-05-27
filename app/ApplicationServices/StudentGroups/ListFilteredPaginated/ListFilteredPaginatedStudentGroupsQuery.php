@@ -25,7 +25,7 @@ final readonly class ListFilteredPaginatedStudentGroupsQuery implements IQuery
         public int $pageSize,
         public Optional $parentType,
         public Optional $parentId,
-        public Optional $searchQuery
+        public Optional $searchQuery,
     ) {
     }
 }

@@ -39,7 +39,9 @@ final class IdentityFactory extends Factory
         return [
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => IdentityFactory::$password ??= $hasher->make(fake()->password()),
+            'password' => (IdentityFactory::$password ??= $hasher->make(
+                fake()->password(),
+            )),
             'remember_token' => Str::random(10),
         ];
     }
@@ -49,8 +51,10 @@ final class IdentityFactory extends Factory
      */
     public function unverified(): IdentityFactory
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(
+            fn (array $attributes) => [
+                'email_verified_at' => null,
+            ],
+        );
     }
 }

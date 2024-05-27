@@ -17,7 +17,7 @@ final readonly class UpdateInstitutionDetailsCommand implements ICommand
     public function __construct(
         public Institution $institution,
         public Optional $name,
-        public Optional $website
+        public Optional $website,
     ) {
     }
 }

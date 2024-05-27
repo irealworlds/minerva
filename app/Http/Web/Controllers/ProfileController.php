@@ -30,7 +30,7 @@ final readonly class ProfileController extends Controller
     public function __construct(
         private SessionManager $_sessionManager,
         private Redirector $_redirector,
-        private ICommandBus $_commandBus
+        private ICommandBus $_commandBus,
     ) {
     }
 
@@ -63,7 +63,10 @@ final readonly class ProfileController extends Controller
         /** @var Identity $identity */
         $identity = $request->user();
 
-        $command = new UpdateIdentityCommand($identity, $request->string('email')->toString());
+        $command = new UpdateIdentityCommand(
+            $identity,
+            $request->string('email')->toString(),
+        );
         $this->_commandBus->dispatch($command);
 
         return $this->_redirector->route('profile.edit');

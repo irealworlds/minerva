@@ -15,11 +15,11 @@ use Illuminate\Pagination\AbstractPaginator;
 /**
  * @implements IQueryHandler<ListFilteredPaginatedInstitutionsQuery, LengthAwarePaginator<Institution> & AbstractPaginator<Institution>>
  */
-final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryHandler
+final readonly class ListFilteredPaginatedInstitutionsHandler implements
+    IQueryHandler
 {
-    public function __construct(
-        private DatabaseManager $_db
-    ) {
+    public function __construct(private DatabaseManager $_db)
+    {
     }
 
     /**
@@ -27,28 +27,30 @@ final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryH
      *
      * @throws Exception
      */
-    public function __invoke(mixed $query): AbstractPaginator&LengthAwarePaginator
-    {
+    public function __invoke(
+        mixed $query,
+    ): AbstractPaginator&LengthAwarePaginator {
         $queryBuilder = Institution::query();
 
         // Add the parent id filter
         if ($query->parentId->hasValue()) {
             $queryBuilder = $queryBuilder->where(
                 (new Institution())->parent()->getForeignKeyName(),
-                $query->parentId->value
+                $query->parentId->value,
             );
         }
 
         // Add the search query filter
         if ($query->searchQuery->hasValue()) {
             if ($search = $query->searchQuery->value) {
-                $queryBuilder = $queryBuilder->where(function (Builder $searchQueryBuilder) use ($search): void {
-                    $searchQueryBuilder
-                        ->where(
-                            $this->_db->raw('LOWER(name)'),
-                            'like',
-                            '%' . mb_strtolower($search, 'UTF-8') . '%'
-                        );
+                $queryBuilder = $queryBuilder->where(function (
+                    Builder $searchQueryBuilder,
+                ) use ($search): void {
+                    $searchQueryBuilder->where(
+                        $this->_db->raw('LOWER(name)'),
+                        'like',
+                        '%' . mb_strtolower($search, 'UTF-8') . '%',
+                    );
                 });
             }
         }
@@ -56,9 +58,6 @@ final readonly class ListFilteredPaginatedInstitutionsHandler implements IQueryH
         return $queryBuilder
             ->with(['parent', 'children'])
             ->latest()
-            ->paginate(
-                perPage: $query->pageSize,
-                page: $query->page
-            );
+            ->paginate(perPage: $query->pageSize, page: $query->page);
     }
 }

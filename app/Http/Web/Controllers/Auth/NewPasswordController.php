@@ -25,7 +25,8 @@ use RuntimeException;
 use Spatie\RouteAttributes\Attributes\{
     Get,
     Post};
-use function is_string;
+
+    use function is_string;
 
 final readonly class NewPasswordController extends Controller
 {
@@ -33,7 +34,7 @@ final readonly class NewPasswordController extends Controller
         private Dispatcher $_eventDispatcher,
         private Redirector $_redirector,
         private Hasher $_hasher,
-        private PasswordBroker $_passwordBroker
+        private PasswordBroker $_passwordBroker,
     ) {
     }
 
@@ -42,7 +43,13 @@ final readonly class NewPasswordController extends Controller
      *
      * @throws RuntimeException
      */
-    #[Get('/Reset-Password/{token}', name: 'password.reset', middleware: 'guest')]
+    #[
+        Get(
+            '/Reset-Password/{token}',
+            name: 'password.reset',
+            middleware: 'guest',
+        ),
+    ]
     public function create(Request $request): Response
     {
         return Inertia::render('Auth/ResetPassword', [
@@ -69,22 +76,32 @@ final readonly class NewPasswordController extends Controller
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
         $status = $this->_passwordBroker->reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $request->only(
+                'email',
+                'password',
+                'password_confirmation',
+                'token',
+            ),
             function (Identity $user) use ($request): void {
-                $user->forceFill([
-                    'password' => $this->_hasher->make($request->string('password')->toString()),
-                    'remember_token' => Str::random(60),
-                ])->save();
+                $user
+                    ->forceFill([
+                        'password' => $this->_hasher->make(
+                            $request->string('password')->toString(),
+                        ),
+                        'remember_token' => Str::random(60),
+                    ])
+                    ->save();
 
                 $this->_eventDispatcher->dispatch(new PasswordReset($user));
-            }
+            },
         );
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         if ($status === PasswordBroker::PASSWORD_RESET) {
-            return $this->_redirector->route('login')
+            return $this->_redirector
+                ->route('login')
                 ->with('status', trans($status));
         }
 

@@ -23,7 +23,7 @@ final readonly class ListFilteredPaginatedInstitutionsQuery implements IQuery
         public int $page,
         public int $pageSize,
         public Optional $parentId,
-        public Optional $searchQuery
+        public Optional $searchQuery,
     ) {
     }
 }

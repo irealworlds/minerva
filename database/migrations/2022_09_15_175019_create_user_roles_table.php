@@ -12,7 +12,8 @@ return new class() extends Migration {
     {
         Schema::create('user_roles', static function (Blueprint $table): void {
             $table->morphs('user');
-            $table->foreignUuid('role_id')
+            $table
+                ->foreignUuid('role_id')
                 ->references('id')
                 ->on('roles')
                 ->cascadeOnUpdate()

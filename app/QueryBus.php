@@ -11,13 +11,13 @@ use Illuminate\Contracts\Container\{
     BindingResolutionException,
     Container};
 use ReflectionClass;
+
 use function is_callable;
 
 final readonly class QueryBus implements IQueryBus
 {
-    public function __construct(
-        private Container $_container
-    ) {
+    public function __construct(private Container $_container)
+    {
     }
 
     /**
@@ -29,12 +29,22 @@ final readonly class QueryBus implements IQueryBus
     {
         // resolve handler
         $reflection = new ReflectionClass($query);
-        $handlerName = str_replace('Query', 'Handler', $reflection->getShortName());
-        $handlerName = str_replace($reflection->getShortName(), $handlerName, $reflection->getName());
+        $handlerName = str_replace(
+            'Query',
+            'Handler',
+            $reflection->getShortName(),
+        );
+        $handlerName = str_replace(
+            $reflection->getShortName(),
+            $handlerName,
+            $reflection->getName(),
+        );
         $handler = $this->_container->make($handlerName);
 
         if (!is_callable($handler)) {
-            throw new BindingResolutionException("Could not resolve [$handlerName] to a callable type.");
+            throw new BindingResolutionException(
+                "Could not resolve [$handlerName] to a callable type.",
+            );
         }
 
         // invoke handler

@@ -9,9 +9,7 @@ use App\Core\Models\Identity;
 
 final readonly class UpdateIdentityCommand implements ICommand
 {
-    public function __construct(
-        public Identity $identity,
-        public string $email
-    ) {
+    public function __construct(public Identity $identity, public string $email)
+    {
     }
 }

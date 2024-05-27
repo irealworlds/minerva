@@ -10,8 +10,11 @@ return new class() extends Migration {
     /** @throws RuntimeException */
     public function up(): void
     {
-        Schema::create('role_permissions', static function (Blueprint $table): void {
-            $table->foreignUuid('role_id')
+        Schema::create('role_permissions', static function (
+            Blueprint $table,
+        ): void {
+            $table
+                ->foreignUuid('role_id')
                 ->references('id')
                 ->on('roles')
                 ->cascadeOnUpdate()

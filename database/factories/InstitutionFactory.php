@@ -22,7 +22,7 @@ final class InstitutionFactory extends Factory
         return [
             'name' => 'University of ' . fake()->city(),
             'website' => fake()->optional()->url(),
-            'parent_institution_id' => Institution::factory()
+            'parent_institution_id' => Institution::factory(),
         ];
     }
 }

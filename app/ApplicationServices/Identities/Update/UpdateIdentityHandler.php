@@ -20,9 +20,14 @@ class UpdateIdentityHandler implements ICommandHandler
      */
     public function __invoke(mixed $command): void
     {
-        if (Identity::query()->whereNot((new Identity())->getKeyName())->where('email', $command->email)->exists()) {
+        if (
+            Identity::query()
+                ->whereNot((new Identity())->getKeyName())
+                ->where('email', $command->email)
+                ->exists()
+        ) {
             throw ValidationException::withMessages([
-                'email' => __('validation.unique', ['attribute' => 'email'])
+                'email' => __('validation.unique', ['attribute' => 'email']),
             ]);
         }
 

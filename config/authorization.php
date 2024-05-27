@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Core\Enums\Permission;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Permissions Enum

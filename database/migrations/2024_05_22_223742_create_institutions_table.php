@@ -10,24 +10,23 @@ return new class() extends Migration {
     /** @throws RuntimeException */
     public function up(): void
     {
-        Schema::create('institutions', static function (Blueprint $table): void {
+        Schema::create('institutions', static function (
+            Blueprint $table,
+        ): void {
             $table->uuid('id');
             $table->primary('id');
 
             $table->string('name');
 
-            $table->uuid('parent_institution_id')
-                ->nullable()
-                ->default(null);
-            $table->foreign('parent_institution_id')
+            $table->uuid('parent_institution_id')->nullable()->default(null);
+            $table
+                ->foreign('parent_institution_id')
                 ->references('id')
                 ->on('institutions')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->string('website', 64)
-                ->nullable()
-                ->default(null);
+            $table->string('website', 64)->nullable()->default(null);
 
             $table->timestamps();
         });

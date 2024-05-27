@@ -11,15 +11,14 @@ use Illuminate\Support\Enumerable;
 /**
  * @implements IQueryHandler<ListStudentGroupsByInstitutionQuery, Enumerable<int, StudentGroup>>
  */
-final readonly class ListStudentGroupsByInstitutionHandler implements IQueryHandler
+final readonly class ListStudentGroupsByInstitutionHandler implements
+    IQueryHandler
 {
     /**
      * @inheritDoc
      */
     public function __invoke(mixed $query): Enumerable
     {
-        return $query->institution->groups()
-            ->with('childGroups')
-            ->get();
+        return $query->institution->groups()->with('childGroups')->get();
     }
 }

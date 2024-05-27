@@ -7,6 +7,7 @@ namespace App\Core\Traits\Requests;
 use App\Core\Optional;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
+
 use function is_string;
 
 trait WithOptionals
@@ -25,7 +26,7 @@ trait WithOptionals
 
             if ($value === null && !$nullable) {
                 throw ValidationException::withMessages([
-                    $key => __('validation.required', ['attribute' => $key])
+                    $key => __('validation.required', ['attribute' => $key]),
                 ]);
             }
 
@@ -33,7 +34,7 @@ trait WithOptionals
                 return Optional::of($value);
             } else {
                 throw ValidationException::withMessages([
-                    $key => __('validation.string', ['attribute' => $key])
+                    $key => __('validation.string', ['attribute' => $key]),
                 ]);
             }
         } else {
@@ -55,7 +56,7 @@ trait WithOptionals
 
             if ($value === null && !$nullable) {
                 throw ValidationException::withMessages([
-                    $key => __('validation.required', ['attribute' => $key])
+                    $key => __('validation.required', ['attribute' => $key]),
                 ]);
             }
 
@@ -63,7 +64,7 @@ trait WithOptionals
                 return Optional::of($value);
             } else {
                 throw ValidationException::withMessages([
-                    $key => __('validation.file', ['attribute' => $key])
+                    $key => __('validation.file', ['attribute' => $key]),
                 ]);
             }
         } else {

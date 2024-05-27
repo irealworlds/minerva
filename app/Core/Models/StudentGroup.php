@@ -23,11 +23,7 @@ class StudentGroup extends Model
 {
     use HasUuids;
 
-    protected $fillable = [
-        'name',
-        'parent_type',
-        'parent_id'
-    ];
+    protected $fillable = ['name', 'parent_type', 'parent_id'];
 
     /**
      * Get this student group's parent.
@@ -48,7 +44,7 @@ class StudentGroup extends Model
     {
         return $this->morphMany(
             StudentGroup::class,
-            (new StudentGroup())->parent()->getRelationName()
+            (new StudentGroup())->parent()->getRelationName(),
         );
     }
 }

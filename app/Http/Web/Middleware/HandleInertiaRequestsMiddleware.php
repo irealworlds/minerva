@@ -41,13 +41,17 @@ final class HandleInertiaRequestsMiddleware extends InertiaMiddleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $user ? new AuthenticatedUserViewModel(
-                    id: $user->getKey(),
-                    email: $user->email,
-                    emailVerified: $user->hasVerifiedEmail(),
-                    pictureUri: 'https://ui-avatars.com/api/?name=' . urlencode($user->email) . '&background=random&size=128',
-                    permissions: $user->getPermissions()
-                ) : null,
+                'user' => $user
+                    ? new AuthenticatedUserViewModel(
+                        id: $user->getKey(),
+                        email: $user->email,
+                        emailVerified: $user->hasVerifiedEmail(),
+                        pictureUri: 'https://ui-avatars.com/api/?name=' .
+                            urlencode($user->email) .
+                            '&background=random&size=128',
+                        permissions: $user->getPermissions(),
+                    )
+                    : null,
             ],
             'toasts' => [
                 'info' => fn () => $request->session()->get('info', []),

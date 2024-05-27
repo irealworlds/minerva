@@ -27,8 +27,7 @@ export default function Navbar({
         <button
           type="button"
           className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-          onClick={onSidebarOpen}
-        >
+          onClick={onSidebarOpen}>
           <span className="sr-only">Open sidebar</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
@@ -56,8 +55,7 @@ export default function Navbar({
           <div className="flex items-center gap-x-4 lg:gap-x-6">
             <button
               type="button"
-              className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-            >
+              className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
               <span className="sr-only">View notifications</span>
               <BellIcon className="size-6" aria-hidden="true" />
             </button>
@@ -80,8 +78,7 @@ export default function Navbar({
                 <span className="hidden lg:flex lg:items-center">
                   <span
                     className="ml-4 text-sm font-semibold leading-6 text-gray-900"
-                    aria-hidden="true"
-                  >
+                    aria-hidden="true">
                     {user.email}
                   </span>
                   <ChevronDownIcon
@@ -97,8 +94,7 @@ export default function Navbar({
                 enterTo="transform opacity-100 scale-100"
                 leave="transition ease-in duration-75"
                 leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
+                leaveTo="transform opacity-0 scale-95">
                 <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                   {userNavigation.map(item => (
                     <Menu.Item key={item.name}>
@@ -108,8 +104,7 @@ export default function Navbar({
                           className={combineClassNames(
                             active ? 'bg-gray-50' : '',
                             'block px-3 py-1 text-sm leading-6 text-gray-900'
-                          )}
-                        >
+                          )}>
                           {item.name}
                         </Link>
                       )}

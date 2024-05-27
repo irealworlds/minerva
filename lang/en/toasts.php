@@ -12,5 +12,5 @@ return [
     ],
     'studentGroups' => [
         'created' => 'Student group created successfully.',
-    ]
+    ],
 ];

@@ -15,22 +15,26 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
         mixed $id,
         string $name,
         iterable $ancestors,
-        public StudentGroupTreeViewModel $children = new StudentGroupTreeViewModel([])
+        public StudentGroupTreeViewModel $children = new StudentGroupTreeViewModel(
+            [],
+        ),
     ) {
         parent::__construct($id, $name, $ancestors);
     }
 
-    public static function fromModel(StudentGroup $model): StudentGroupTreeNodeViewModel
-    {
-        $children = $model->childGroups
-            ->map(static fn (StudentGroup $child) => self::fromModel($child));
+    public static function fromModel(
+        StudentGroup $model,
+    ): StudentGroupTreeNodeViewModel {
+        $children = $model->childGroups->map(
+            static fn (StudentGroup $child) => self::fromModel($child),
+        );
 
         $parentResult = parent::fromModel($model);
         return new self(
             id: $parentResult->id,
             name: $parentResult->name,
             ancestors: $parentResult->ancestors,
-            children: new StudentGroupTreeViewModel($children)
+            children: new StudentGroupTreeViewModel($children),
         );
     }
 }

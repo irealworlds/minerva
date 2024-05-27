@@ -25,7 +25,7 @@ final readonly class PasswordResetLinkController extends Controller
     public function __construct(
         private Redirector $_redirector,
         private SessionManager $_sessionManager,
-        private PasswordBroker $_passwordBroker
+        private PasswordBroker $_passwordBroker,
     ) {
     }
 
@@ -58,7 +58,7 @@ final readonly class PasswordResetLinkController extends Controller
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
         $status = $this->_passwordBroker->sendResetLink(
-            $request->only('email')
+            $request->only('email'),
         );
 
         if ($status === PasswordBroker::RESET_LINK_SENT) {

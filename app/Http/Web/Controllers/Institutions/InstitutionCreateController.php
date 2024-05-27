@@ -34,7 +34,7 @@ final readonly class InstitutionCreateController extends Controller
 {
     public function __construct(
         private Redirector $_redirector,
-        private ICommandBus $_commandBus
+        private ICommandBus $_commandBus,
     ) {
     }
 
@@ -58,12 +58,14 @@ final readonly class InstitutionCreateController extends Controller
     {
         // Create a new institution
         $id = Str::uuid();
-        $this->_commandBus->dispatch(new CreateInstitutionCommand(
-            id: $id->toString(),
-            name: $request->name,
-            website: $request->website,
-            parentId: $request->parentInstitutionId
-        ));
+        $this->_commandBus->dispatch(
+            new CreateInstitutionCommand(
+                id: $id->toString(),
+                name: $request->name,
+                website: $request->website,
+                parentId: $request->parentInstitutionId,
+            ),
+        );
 
         /** @var Institution $institution */
         $institution = Institution::query()->findOrFail($id);
@@ -73,10 +75,12 @@ final readonly class InstitutionCreateController extends Controller
             if ($request->picture) {
                 try {
                     /** @throws ValidationException */
-                    $this->_commandBus->dispatch(new UpdateInstitutionPictureCommand(
-                        institution: $institution,
-                        newPicture: $request->picture
-                    ));
+                    $this->_commandBus->dispatch(
+                        new UpdateInstitutionPictureCommand(
+                            institution: $institution,
+                            newPicture: $request->picture,
+                        ),
+                    );
                 } catch (ValidationException $e) {
                     $errors = $e->errors();
 
@@ -94,8 +98,10 @@ final readonly class InstitutionCreateController extends Controller
         }
 
         // Redirect to the institution details page
-        return $this->_redirector->action(InstitutionReadController::class, [
-            'institution' => $institution->getRouteKey()
-        ])->with('success', [__('toasts.institutions.created')]);
+        return $this->_redirector
+            ->action(InstitutionReadController::class, [
+                'institution' => $institution->getRouteKey(),
+            ])
+            ->with('success', [__('toasts.institutions.created')]);
     }
 }

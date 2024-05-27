@@ -20,7 +20,7 @@ final readonly class PasswordController extends Controller
     public function __construct(
         private Redirector $_redirector,
         private Hasher $_hasher,
-        private AuthManager $_authManager
+        private AuthManager $_authManager,
     ) {
     }
 

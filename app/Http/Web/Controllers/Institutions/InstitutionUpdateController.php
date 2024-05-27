@@ -24,7 +24,7 @@ final readonly class InstitutionUpdateController extends Controller
 {
     public function __construct(
         private ICommandBus $_commandBus,
-        private Redirector $_redirector
+        private Redirector $_redirector,
     ) {
     }
 
@@ -34,23 +34,30 @@ final readonly class InstitutionUpdateController extends Controller
      * @throws Exception
      */
     #[Patch('/PublicProfile', name: 'institutions.update.public')]
-    public function __invoke(Institution $institution, InstitutionPublicProfileUpdateRequest $request): RedirectResponse
-    {
-        $this->_commandBus->dispatch(new UpdateInstitutionDetailsCommand(
-            institution: $institution,
-            name: $request->optionalString('name', false),
-            website: $request->optionalString('website')
-        ));
+    public function __invoke(
+        Institution $institution,
+        InstitutionPublicProfileUpdateRequest $request,
+    ): RedirectResponse {
+        $this->_commandBus->dispatch(
+            new UpdateInstitutionDetailsCommand(
+                institution: $institution,
+                name: $request->optionalString('name', false),
+                website: $request->optionalString('website'),
+            ),
+        );
 
         $picture = $request->optionalFile('picture');
         if ($picture->hasValue()) {
-            $this->_commandBus->dispatch(new UpdateInstitutionPictureCommand(
-                institution: $institution,
-                newPicture: $picture->value
-            ));
+            $this->_commandBus->dispatch(
+                new UpdateInstitutionPictureCommand(
+                    institution: $institution,
+                    newPicture: $picture->value,
+                ),
+            );
         }
 
-        return $this->_redirector->back()
+        return $this->_redirector
+            ->back()
             ->with('success', [__('toasts.institutions.updated')]);
     }
 }

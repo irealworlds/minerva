@@ -15,44 +15,49 @@ use InvalidArgumentException;
 /**
  * @implements IQueryHandler<ListFilteredPaginatedStudentGroupsQuery, LengthAwarePaginator<StudentGroup> & AbstractPaginator<StudentGroup>>
  */
-final readonly class ListFilteredPaginatedStudentGroupsHandler implements IQueryHandler
+final readonly class ListFilteredPaginatedStudentGroupsHandler implements
+    IQueryHandler
 {
-    public function __construct(
-        private DatabaseManager $_db
-    ) {
+    public function __construct(private DatabaseManager $_db)
+    {
     }
 
     /**
      * @inheritDoc
      * @throws InvalidArgumentException
      */
-    public function __invoke(mixed $query): AbstractPaginator&LengthAwarePaginator
-    {
+    public function __invoke(
+        mixed $query,
+    ): AbstractPaginator&LengthAwarePaginator {
         $queryBuilder = StudentGroup::query();
 
         // Add the parent type filter
         if ($query->parentType->hasValue()) {
-            $queryBuilder = $queryBuilder->where('parent_type', $query->parentType->value);
+            $queryBuilder = $queryBuilder->where(
+                'parent_type',
+                $query->parentType->value,
+            );
         }
 
         // Add the parent id filter
         if ($query->parentId->hasValue()) {
             $queryBuilder = $queryBuilder->where(
                 (new StudentGroup())->parent()->getForeignKeyName(),
-                $query->parentId->value
+                $query->parentId->value,
             );
         }
 
         // Add the search query filter
         if ($query->searchQuery->hasValue()) {
             if ($search = $query->searchQuery->value) {
-                $queryBuilder = $queryBuilder->where(function (Builder $searchQueryBuilder) use ($search): void {
-                    $searchQueryBuilder
-                        ->where(
-                            $this->_db->raw('LOWER(name)'),
-                            'like',
-                            '%' . mb_strtolower($search, 'UTF-8') . '%'
-                        );
+                $queryBuilder = $queryBuilder->where(function (
+                    Builder $searchQueryBuilder,
+                ) use ($search): void {
+                    $searchQueryBuilder->where(
+                        $this->_db->raw('LOWER(name)'),
+                        'like',
+                        '%' . mb_strtolower($search, 'UTF-8') . '%',
+                    );
                 });
             }
         }
@@ -60,9 +65,6 @@ final readonly class ListFilteredPaginatedStudentGroupsHandler implements IQuery
         return $queryBuilder
             ->with(['parent', 'childGroups'])
             ->latest()
-            ->paginate(
-                perPage: $query->pageSize,
-                page: $query->page
-            );
+            ->paginate(perPage: $query->pageSize, page: $query->page);
     }
 }

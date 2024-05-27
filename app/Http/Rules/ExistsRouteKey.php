@@ -19,7 +19,7 @@ final class ExistsRouteKey extends Exists
     {
         parent::__construct(
             (new $model())->getTable(),
-            (new $model())->getRouteKeyName()
+            (new $model())->getRouteKeyName(),
         );
     }
 }

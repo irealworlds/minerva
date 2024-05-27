@@ -12,7 +12,7 @@ final readonly class UpdateInstitutionPictureCommand implements ICommand
 {
     public function __construct(
         public Institution $institution,
-        public UploadedFile|null $newPicture
+        public UploadedFile|null $newPicture,
     ) {
     }
 }

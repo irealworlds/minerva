@@ -19,7 +19,9 @@ return new class() extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('password_reset_tokens', static function (Blueprint $table): void {
+        Schema::create('password_reset_tokens', static function (
+            Blueprint $table,
+        ): void {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();

@@ -18,9 +18,9 @@ final class ControllerMakeCommand extends BaseControllerMakeCommand
     protected function getDefaultNamespace($rootNamespace): string
     {
         if ($this->option('api')) {
-            return $rootNamespace.'\Http\Api\Endpoints';
+            return $rootNamespace . '\Http\Api\Endpoints';
         } else {
-            return $rootNamespace.'\Http\Web\Controllers';
+            return $rootNamespace . '\Http\Web\Controllers';
         }
     }
 
@@ -32,24 +32,39 @@ final class ControllerMakeCommand extends BaseControllerMakeCommand
      * @return array{0: string, 1: string}
      */
     #[Override]
-    protected function generateFormRequests($modelClass, $storeRequestClass, $updateRequestClass): array
-    {
+    protected function generateFormRequests(
+        $modelClass,
+        $storeRequestClass,
+        $updateRequestClass,
+    ): array {
         $creationOptions = [];
         if ($this->option('api')) {
             $creationOptions['--api'] = true;
         }
 
-        $storeRequestClass = class_basename($modelClass).'StoreRequest';
+        $storeRequestClass = class_basename($modelClass) . 'StoreRequest';
 
-        $this->call(RequestMakeCommand::class, array_merge([
-            'name' => $storeRequestClass,
-        ], $creationOptions));
+        $this->call(
+            RequestMakeCommand::class,
+            array_merge(
+                [
+                    'name' => $storeRequestClass,
+                ],
+                $creationOptions,
+            ),
+        );
 
-        $updateRequestClass = class_basename($modelClass).'UpdateRequest';
+        $updateRequestClass = class_basename($modelClass) . 'UpdateRequest';
 
-        $this->call(RequestMakeCommand::class, array_merge([
-            'name' => $updateRequestClass,
-        ], $creationOptions));
+        $this->call(
+            RequestMakeCommand::class,
+            array_merge(
+                [
+                    'name' => $updateRequestClass,
+                ],
+                $creationOptions,
+            ),
+        );
 
         return [$storeRequestClass, $updateRequestClass];
     }
@@ -61,14 +76,25 @@ final class ControllerMakeCommand extends BaseControllerMakeCommand
      * @return array<string, string>
      */
     #[Override]
-    protected function buildFormRequestReplacements(array $replace, $modelClass): array
-    {
+    protected function buildFormRequestReplacements(
+        array $replace,
+        $modelClass,
+    ): array {
         /** @var array<string, string> $baseReplacements */
-        $baseReplacements = parent::buildFormRequestReplacements($replace, $modelClass);
+        $baseReplacements = parent::buildFormRequestReplacements(
+            $replace,
+            $modelClass,
+        );
 
         return array_map(function (string $replacedValue) {
             if (Str::startsWith($replacedValue, 'App\\Http\\Requests')) {
-                $replacedValue = Str::replace('App\\Http\\Requests', $this->option('api') ? 'App\\Http\\Api\\Requests' : 'App\\Http\\Web\\Requests', $replacedValue);
+                $replacedValue = Str::replace(
+                    'App\\Http\\Requests',
+                    $this->option('api')
+                        ? 'App\\Http\\Api\\Requests'
+                        : 'App\\Http\\Web\\Requests',
+                    $replacedValue,
+                );
             }
             return $replacedValue;
         }, $baseReplacements);

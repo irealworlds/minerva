@@ -35,16 +35,13 @@ class Institution extends Model implements HasMedia
 
     public const EmblemPictureMediaCollection = 'emblem_picture';
 
-    protected $fillable = [
-        'name',
-        'website',
-        'parent_institution_id'
-    ];
+    protected $fillable = ['name', 'website', 'parent_institution_id'];
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(self::EmblemPictureMediaCollection)
-            ->singleFile();
+        $this->addMediaCollection(
+            self::EmblemPictureMediaCollection,
+        )->singleFile();
     }
 
     /**
@@ -76,7 +73,7 @@ class Institution extends Model implements HasMedia
     {
         return $this->morphMany(
             StudentGroup::class,
-            (new StudentGroup())->parent()->getRelationName()
+            (new StudentGroup())->parent()->getRelationName(),
         );
     }
 }

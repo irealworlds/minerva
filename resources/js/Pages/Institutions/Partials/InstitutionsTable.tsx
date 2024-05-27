@@ -45,8 +45,7 @@ export default function InstitutionsTable({
                     ) : (
                       <div
                         className="size-12 bg-gray-800 flex items-center justify-center rounded-full text-white"
-                        aria-hidden="true"
-                      >
+                        aria-hidden="true">
                         <BuildingLibraryIcon className="size-8" />
                       </div>
                     )}

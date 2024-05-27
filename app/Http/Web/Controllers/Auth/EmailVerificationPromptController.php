@@ -25,7 +25,7 @@ final readonly class EmailVerificationPromptController extends Controller
     public function __construct(
         private Redirector $_redirector,
         private UrlGenerator $_urlGenerator,
-        private AuthManager $_authManager
+        private AuthManager $_authManager,
     ) {
     }
 
@@ -44,8 +44,13 @@ final readonly class EmailVerificationPromptController extends Controller
 
         return $user->hasVerifiedEmail()
             ? $this->_redirector->intended(
-                default: $this->_urlGenerator->route('dashboard', absolute: false)
+                default: $this->_urlGenerator->route(
+                    'dashboard',
+                    absolute: false,
+                ),
             )
-            : Inertia::render('Auth/VerifyEmail', ['status' => session('status')]);
+            : Inertia::render('Auth/VerifyEmail', [
+                'status' => session('status'),
+            ]);
     }
 }

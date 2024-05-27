@@ -8,7 +8,7 @@ use App\{
     CommandBus,
     Core\Contracts\Services\IInertiaService,
     Core\Services\InertiaService,
-    QueryBus};
+    QueryBus,};
 use App\Core\Contracts\Cqrs\{
     ICommandBus,
     IQueryBus};
@@ -40,31 +40,40 @@ final class AppServiceProvider extends ServiceProvider
             function (string $modelName) {
                 $appNamespace = $this->app->getNamespace();
 
-                $modelName = Str::startsWith($modelName, $appNamespace.'Core\Models\\')
-                    ? Str::after($modelName, $appNamespace.'Core\Models\\')
+                $modelName = Str::startsWith(
+                    $modelName,
+                    $appNamespace . 'Core\Models\\',
+                )
+                    ? Str::after($modelName, $appNamespace . 'Core\Models\\')
                     : Str::after($modelName, $appNamespace);
 
                 /** @var class-string<Factory<Model>> $result */
-                $result = Factory::$namespace.$modelName.'Factory';
+                $result = Factory::$namespace . $modelName . 'Factory';
 
                 return $result;
-            }
+            },
         );
         Factory::guessModelNamesUsing(function (Factory $factory) {
             $namespacedFactoryBasename = Str::replaceLast(
                 'Factory',
                 '',
-                Str::replaceFirst(Factory::$namespace, '', $factory::class)
+                Str::replaceFirst(Factory::$namespace, '', $factory::class),
             );
 
-            $factoryBasename = Str::replaceLast('Factory', '', class_basename($factory));
+            $factoryBasename = Str::replaceLast(
+                'Factory',
+                '',
+                class_basename($factory),
+            );
 
             $appNamespace = $this->app->getNamespace();
 
             /** @var class-string<Model> $result */
-            $result = class_exists($appNamespace.'Core\\Models\\'.$namespacedFactoryBasename)
-                ? $appNamespace.'Core\\Models\\'.$namespacedFactoryBasename
-                : $appNamespace.$factoryBasename;
+            $result = class_exists(
+                $appNamespace . 'Core\\Models\\' . $namespacedFactoryBasename,
+            )
+                ? $appNamespace . 'Core\\Models\\' . $namespacedFactoryBasename
+                : $appNamespace . $factoryBasename;
 
             return $result;
         });

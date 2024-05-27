@@ -9,8 +9,7 @@ use App\Core\Models\Institution;
 
 final readonly class DeleteInstitutionCommand implements ICommand
 {
-    public function __construct(
-        public Institution $institution
-    ) {
+    public function __construct(public Institution $institution)
+    {
     }
 }

@@ -15,8 +15,7 @@ use Illuminate\Support\Enumerable;
  */
 final readonly class ListStudentGroupsByInstitutionQuery implements IQuery
 {
-    public function __construct(
-        public Institution $institution
-    ) {
+    public function __construct(public Institution $institution)
+    {
     }
 }

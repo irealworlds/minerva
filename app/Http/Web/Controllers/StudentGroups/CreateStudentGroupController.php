@@ -42,9 +42,8 @@ final readonly class CreateStudentGroupController
         private IInertiaService $_inertiaService,
         private ResponseFactory $_inertia,
         private Redirector $_redirector,
-        private UrlGenerator $_urlGenerator
+        private UrlGenerator $_urlGenerator,
     ) {
-
     }
 
     /**
@@ -58,41 +57,66 @@ final readonly class CreateStudentGroupController
     {
         // Determine the parent for the new group
         $parent = null;
-        if ($request->query->has('parentId') || $request->query->has('parentType')) {
+        if (
+            $request->query->has('parentId') ||
+            $request->query->has('parentType')
+        ) {
             try {
-                if (!strcasecmp($request->query->getString('parentType'), 'institution')) {
-                    $parent = Institution::query()->where(
-                        (new Institution())->getRouteKeyName(),
-                        $request->query->getString('parentId')
-                    )->firstOrFail();
-                } else if (!strcasecmp($request->query->getString('parentType'), 'studentGroup')) {
-                    $parent = StudentGroup::query()->where(
-                        (new StudentGroup())->getRouteKeyName(),
-                        $request->query->getString('parentId')
-                    )->firstOrFail();
+                if (
+                    !strcasecmp(
+                        $request->query->getString('parentType'),
+                        'institution',
+                    )
+                ) {
+                    $parent = Institution::query()
+                        ->where(
+                            (new Institution())->getRouteKeyName(),
+                            $request->query->getString('parentId'),
+                        )
+                        ->firstOrFail();
+                } elseif (
+                    !strcasecmp(
+                        $request->query->getString('parentType'),
+                        'studentGroup',
+                    )
+                ) {
+                    $parent = StudentGroup::query()
+                        ->where(
+                            (new StudentGroup())->getRouteKeyName(),
+                            $request->query->getString('parentId'),
+                        )
+                        ->firstOrFail();
                 } else {
                     throw new ModelNotFoundException();
                 }
             } catch (ModelNotFoundException) {
-                $warningMessage = __('Could not automatically determine parent.');
+                $warningMessage = __(
+                    'Could not automatically determine parent.',
+                );
                 if (is_iterable($warningMessage)) {
-                    $warningMessage = 'Could not automatically determine parent.';
+                    $warningMessage =
+                        'Could not automatically determine parent.';
                 }
-                $this->_inertiaService->addToastToCurrentRequest('warning', $warningMessage);
+                $this->_inertiaService->addToastToCurrentRequest(
+                    'warning',
+                    $warningMessage,
+                );
             }
         }
 
         return $this->_inertia->render('StudentGroups/Create', [
-            'initialParentType' => $parent instanceof Institution
-                ? 'institution'
-                : ($parent instanceof StudentGroup
-                    ? 'studentGroup'
-                    : null),
-            'initialParent' => $parent instanceof Institution
-                ? InstitutionViewModel::fromModel($parent)
-                : ($parent instanceof StudentGroup
-                    ? StudentGroupViewModel::fromModel($parent)
-                    : null),
+            'initialParentType' =>
+                $parent instanceof Institution
+                    ? 'institution'
+                    : ($parent instanceof StudentGroup
+                        ? 'studentGroup'
+                        : null),
+            'initialParent' =>
+                $parent instanceof Institution
+                    ? InstitutionViewModel::fromModel($parent)
+                    : ($parent instanceof StudentGroup
+                        ? StudentGroupViewModel::fromModel($parent)
+                        : null),
         ]);
     }
 
@@ -111,25 +135,31 @@ final readonly class CreateStudentGroupController
         // Validate and extract the parent from the request
         try {
             if (!strcasecmp($request->parentType, 'institution')) {
-                $parent = Institution::query()->where(
-                    (new Institution())->getRouteKeyName(),
-                    $request->parentId
-                )->firstOrFail();
-            } else if (!strcasecmp($request->parentType, 'studentGroup')) {
-                $parent = StudentGroup::query()->where(
-                    (new StudentGroup())->getRouteKeyName(),
-                    $request->parentId
-                )->firstOrFail();
+                $parent = Institution::query()
+                    ->where(
+                        (new Institution())->getRouteKeyName(),
+                        $request->parentId,
+                    )
+                    ->firstOrFail();
+            } elseif (!strcasecmp($request->parentType, 'studentGroup')) {
+                $parent = StudentGroup::query()
+                    ->where(
+                        (new StudentGroup())->getRouteKeyName(),
+                        $request->parentId,
+                    )
+                    ->firstOrFail();
             } else {
                 throw new ModelNotFoundException();
             }
         } catch (ModelNotFoundException) {
-            $validationMessage = __('validation.exists', ['attribute' => 'parent id']);
+            $validationMessage = __('validation.exists', [
+                'attribute' => 'parent id',
+            ]);
             if (is_iterable($validationMessage)) {
                 $validationMessage = 'Parent id not found.';
             }
             throw ValidationException::withMessages([
-                'parentId' => $validationMessage
+                'parentId' => $validationMessage,
             ]);
         }
 
@@ -137,33 +167,51 @@ final readonly class CreateStudentGroupController
         $id = (new StudentGroup())->newUniqueId();
 
         // Create a new student group entity
-        $this->_commandBus->dispatch(new CreateStudentGroupCommand(
-            id: $id,
-            name: $request->name,
-            parent: $parent
-        ));
+        $this->_commandBus->dispatch(
+            new CreateStudentGroupCommand(
+                id: $id,
+                name: $request->name,
+                parent: $parent,
+            ),
+        );
 
         // Figure out where the user should be redirected
         if ($parent instanceof Institution) {
-            $redirectTo = $this->_urlGenerator->action(InstitutionReadController::class, [
-                'institution' => $parent
-            ]);
+            $redirectTo = $this->_urlGenerator->action(
+                InstitutionReadController::class,
+                [
+                    'institution' => $parent,
+                ],
+            );
         } else {
             $parentInstitution = $parent->parent;
-            while(!($parentInstitution instanceof Institution)) {
+            while (!($parentInstitution instanceof Institution)) {
                 if ($parentInstitution instanceof StudentGroup) {
                     $parentInstitution = $parentInstitution->parent;
                 } else {
-                    throw new RuntimeException('Unexpected parent of type [' . $parentInstitution::class . '] encountered in the parent tree of [' . $parent::class . '] with id [' . $parent->getKey() . '].');
+                    throw new RuntimeException(
+                        'Unexpected parent of type [' .
+                            $parentInstitution::class .
+                            '] encountered in the parent tree of [' .
+                            $parent::class .
+                            '] with id [' .
+                            $parent->getKey() .
+                            '].',
+                    );
                 }
             }
 
-            $redirectTo = $this->_urlGenerator->action(InstitutionReadController::class, [
-                'institution' => $parentInstitution
-            ]);
+            $redirectTo = $this->_urlGenerator->action(
+                InstitutionReadController::class,
+                [
+                    'institution' => $parentInstitution,
+                ],
+            );
         }
 
         // Redirect the user
-        return $this->_redirector->to($redirectTo)->with('success', [__('toasts.studentGroups.created')]);
+        return $this->_redirector
+            ->to($redirectTo)
+            ->with('success', [__('toasts.studentGroups.created')]);
     }
 }

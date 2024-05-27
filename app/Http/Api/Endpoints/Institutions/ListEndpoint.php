@@ -16,9 +16,8 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ListEndpoint extends Endpoint
 {
-    public function __construct(
-        private IQueryBus $_queryBus
-    ) {
+    public function __construct(private IQueryBus $_queryBus)
+    {
     }
 
     /**
@@ -29,17 +28,24 @@ final readonly class ListEndpoint extends Endpoint
     public function __invoke(ListEndpointRequest $request): JsonResponse
     {
         // Fetch the institutions via a query
-        $institutions = $this->_queryBus->dispatch(new ListFilteredPaginatedInstitutionsQuery(
-            page: $request->integer('page', 1),
-            pageSize: $request->integer('pageSize', 10),
-            parentId: $request->optionalString('parentId'),
-            searchQuery: $request->optionalString('search', false)
-        ));
+        $institutions = $this->_queryBus->dispatch(
+            new ListFilteredPaginatedInstitutionsQuery(
+                page: $request->integer('page', 1),
+                pageSize: $request->integer('pageSize', 10),
+                parentId: $request->optionalString('parentId'),
+                searchQuery: $request->optionalString('search', false),
+            ),
+        );
 
         // Map results to view models
         $institutions->setCollection(
-            $institutions->getCollection()
-                ->map(static fn (Institution $institution) => InstitutionViewModel::fromModel($institution))
+            $institutions
+                ->getCollection()
+                ->map(
+                    static fn (
+                        Institution $institution,
+                    ) => InstitutionViewModel::fromModel($institution),
+                ),
         );
 
         $institutions = $institutions->withQueryString();
@@ -48,8 +54,8 @@ final readonly class ListEndpoint extends Endpoint
         return new JsonResponse([
             'institutions' => $institutions,
             'filters' => [
-                'search' => $request->search
-            ]
+                'search' => $request->search,
+            ],
         ]);
     }
 }

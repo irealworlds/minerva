@@ -17,7 +17,7 @@ final readonly class AuthenticatedUserViewModel
         public string $email,
         public bool $emailVerified,
         public string $pictureUri,
-        public Enumerable $permissions
+        public Enumerable $permissions,
     ) {
     }
 }

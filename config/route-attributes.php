@@ -28,7 +28,7 @@ return [
             'name' => 'api.',
             // only register routes in files that match the patterns
             'patterns' => ['*Endpoint.php'],
-        ]
+        ],
         /*
         app_path('Http/Controllers/Api') => [
            'prefix' => 'api',
@@ -44,7 +44,5 @@ return [
     /**
      * This middleware will be applied to all routes.
      */
-    'middleware' => [
-        SubstituteBindings::class
-    ]
+    'middleware' => [SubstituteBindings::class],
 ];

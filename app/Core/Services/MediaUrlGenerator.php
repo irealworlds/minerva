@@ -34,7 +34,7 @@ final class MediaUrlGenerator implements UrlGenerator
     public function __construct(
         private readonly AppUrlGenerator $_applicationUrlGenerator,
         private readonly Repository $_configuration,
-        private readonly Router $_router
+        private readonly Router $_router,
     ) {
     }
 
@@ -47,18 +47,24 @@ final class MediaUrlGenerator implements UrlGenerator
     public function getUrl(): string
     {
         if ($this->media === null) {
-            throw new RuntimeException('Media entity not set on the generator.');
+            throw new RuntimeException(
+                'Media entity not set on the generator.',
+            );
         }
 
         $route = $this->getMediaReadRoute();
         $routeName = $route->getName();
 
         if ($routeName === null) {
-            throw new RuntimeException('No name set on the route for action [' . MediaReadController::class . '].');
+            throw new RuntimeException(
+                'No name set on the route for action [' .
+                    MediaReadController::class .
+                    '].',
+            );
         }
 
         $url = $this->_applicationUrlGenerator->signedRoute($routeName, [
-            'media' => $this->media
+            'media' => $this->media,
         ]);
 
         return $this->versionUrl($url);
@@ -101,22 +107,34 @@ final class MediaUrlGenerator implements UrlGenerator
      * @throws RouteNotFoundException
      */
     #[Override]
-    public function getTemporaryUrl(DateTimeInterface $expiration, array $options = []): string
-    {
+    public function getTemporaryUrl(
+        DateTimeInterface $expiration,
+        array $options = [],
+    ): string {
         if ($this->media === null) {
-            throw new RuntimeException('Media entity not set on the generator.');
+            throw new RuntimeException(
+                'Media entity not set on the generator.',
+            );
         }
 
         $route = $this->getMediaReadRoute();
         $routeName = $route->getName();
 
         if ($routeName === null) {
-            throw new RuntimeException('No name set on the route for action [' . MediaReadController::class . '].');
+            throw new RuntimeException(
+                'No name set on the route for action [' .
+                    MediaReadController::class .
+                    '].',
+            );
         }
 
-        $url = $this->_applicationUrlGenerator->temporarySignedRoute($routeName, $expiration, [
-            'media' => $this->media
-        ]);
+        $url = $this->_applicationUrlGenerator->temporarySignedRoute(
+            $routeName,
+            $expiration,
+            [
+                'media' => $this->media,
+            ],
+        );
 
         return $this->versionUrl($url);
     }
@@ -132,7 +150,7 @@ final class MediaUrlGenerator implements UrlGenerator
 
     protected function versionUrl(string $path = ''): string
     {
-        if (! $this->_configuration->get('media-library.version_urls')) {
+        if (!$this->_configuration->get('media-library.version_urls')) {
             return $path;
         }
 
@@ -146,19 +164,27 @@ final class MediaUrlGenerator implements UrlGenerator
     {
         $pathGenerator = $this->pathGenerator;
         if ($pathGenerator === null) {
-            throw new RuntimeException('Path generator not set on instance of [' . MediaUrlGenerator::class . '].');
+            throw new RuntimeException(
+                'Path generator not set on instance of [' .
+                    MediaUrlGenerator::class .
+                    '].',
+            );
         }
         $media = $this->media;
         if ($media === null) {
-            throw new RuntimeException('Media entity not set on instance of [' . MediaUrlGenerator::class . '].');
+            throw new RuntimeException(
+                'Media entity not set on instance of [' .
+                    MediaUrlGenerator::class .
+                    '].',
+            );
         }
 
         $conversion = $this->conversion;
         if ($conversion === null) {
-            return $pathGenerator->getPath($media) . ($media->file_name);
+            return $pathGenerator->getPath($media) . $media->file_name;
         } else {
-            return $pathGenerator->getPathForConversions($media)
-                . $conversion->getConversionFile($media);
+            return $pathGenerator->getPathForConversions($media) .
+                $conversion->getConversionFile($media);
         }
     }
 
@@ -185,11 +211,22 @@ final class MediaUrlGenerator implements UrlGenerator
      */
     protected function getMediaReadRoute(): Route
     {
-        $route = $this->_router->getRoutes()->getByAction(MediaReadController::class)
-            ?? throw new RouteNotFoundException('No route registered for action [' . MediaReadController::class . '].');
+        $route =
+            $this->_router
+                ->getRoutes()
+                ->getByAction(MediaReadController::class) ??
+            throw new RouteNotFoundException(
+                'No route registered for action [' .
+                    MediaReadController::class .
+                    '].',
+            );
 
         if (!$route->getName()) {
-            throw new RuntimeException('No name set on the route for action [' . MediaReadController::class . '].');
+            throw new RuntimeException(
+                'No name set on the route for action [' .
+                    MediaReadController::class .
+                    '].',
+            );
         }
 
         return $route;

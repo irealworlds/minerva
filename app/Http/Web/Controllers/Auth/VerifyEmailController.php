@@ -27,7 +27,7 @@ final readonly class VerifyEmailController extends Controller
         private Redirector $_redirector,
         private UrlGenerator $_urlGenerator,
         private Dispatcher $_eventDispatcher,
-        private AuthManager $_authManager
+        private AuthManager $_authManager,
     ) {
     }
 
@@ -38,10 +38,17 @@ final readonly class VerifyEmailController extends Controller
      * @throws UnexpectedValueException
      * @throws InvalidArgumentException
      */
-    #[Get('Verify-Email/{id}/{hash}', name: 'verification.verify', middleware: ['signed', 'throttle:6,1'])]
+    #[
+        Get(
+            'Verify-Email/{id}/{hash}',
+            name: 'verification.verify',
+            middleware: ['signed', 'throttle:6,1'],
+        ),
+    ]
     #[Authorize]
-    public function __invoke(EmailVerificationRequest $request): RedirectResponse
-    {
+    public function __invoke(
+        EmailVerificationRequest $request,
+    ): RedirectResponse {
         /** @var Identity|null $user */
         $user = $this->_authManager->guard()->user();
 
@@ -49,13 +56,20 @@ final readonly class VerifyEmailController extends Controller
             throw new AuthenticationException();
         }
 
-        if(!($user instanceof MustVerifyEmail)) {
-            throw new UnexpectedValueException('Identity class [' . $user::class . "] doesn't implement the [MustVerifyEmail] contract.");
+        if (!($user instanceof MustVerifyEmail)) {
+            throw new UnexpectedValueException(
+                'Identity class [' .
+                    $user::class .
+                    "] doesn't implement the [MustVerifyEmail] contract.",
+            );
         }
 
         if ($user->hasVerifiedEmail()) {
             return $this->_redirector->intended(
-                default: $this->_urlGenerator->route('dashboard', absolute: false).'?verified=1'
+                default: $this->_urlGenerator->route(
+                    'dashboard',
+                    absolute: false,
+                ) . '?verified=1',
             );
         }
 
@@ -64,7 +78,8 @@ final readonly class VerifyEmailController extends Controller
         }
 
         return $this->_redirector->intended(
-            default: $this->_urlGenerator->route('dashboard', absolute: false).'?verified=1'
+            default: $this->_urlGenerator->route('dashboard', absolute: false) .
+                '?verified=1',
         );
     }
 }
