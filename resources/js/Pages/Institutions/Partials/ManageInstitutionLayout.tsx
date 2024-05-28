@@ -6,31 +6,26 @@ import { minimizeNumber } from '@/utils/minimize-number.function';
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 
 const navigationItems = [
-    { name: 'General', tabName: 'General' },
-    { name: 'Group structure', tabName: 'Groups' },
-    { name: 'Educators', tabName: 'Educators', count: 12 },
-    { name: 'Student enrollments', tabName: 'Enrollments', count: 5000 },
+    { name: 'General', route: 'institutions.show.general' },
+    { name: 'Group structure', route: 'institutions.show.groups' },
 ];
 
 export default function ManageInstitutionLayout({
     children,
     institution,
-    activeTab,
 }: PropsWithChildren<{
     institution: InstitutionViewModel;
-    activeTab: string;
 }>) {
     const navigation = useMemo(
         () =>
             navigationItems.map(item => ({
                 ...item,
-                href: route('institutions.show', {
+                href: route(item.route, {
                     institution: institution.id,
-                    tab: item.tabName,
                 }),
-                current: item.tabName.toLowerCase() === activeTab.toLowerCase(),
+                current: route().current(item.route),
             })),
-        [activeTab, institution]
+        [institution]
     );
 
     return (
@@ -62,13 +57,15 @@ export default function ManageInstitutionLayout({
                                         'group flex gap-x-3 rounded-md p-2 pl-3 text-sm leading-6 font-semibold'
                                     )}>
                                     {item.name}
-                                    {item.count ? (
+                                    {'count' in item && (
                                         <span
                                             className="ml-auto w-9 min-w-max whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 text-center text-xs font-medium leading-5 text-gray-600 ring-1 ring-inset ring-gray-200"
                                             aria-hidden="true">
-                                            {minimizeNumber(item.count)}
+                                            {minimizeNumber(
+                                                item.count as number
+                                            )}
                                         </span>
-                                    ) : null}
+                                    )}
                                 </Link>
                             </li>
                         ))}

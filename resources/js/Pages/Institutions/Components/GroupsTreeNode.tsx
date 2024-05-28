@@ -3,12 +3,12 @@ import React, { useContext, useMemo } from 'react';
 import GroupsTree from '@/Pages/Institutions/Components/GroupsTree';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { combineClassNames } from '@/utils/combine-class-names.function';
-import { InstitutionGroupsManagementContext } from '@/Pages/Institutions/Partials/Tabs/ManageInstitutionGroups';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { Link } from '@inertiajs/react';
 import { AuthenticatedContext } from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { Permission } from '@/types/permission.enum';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import { InstitutionGroupsManagementContext } from '@/Pages/Institutions/ManageInstitutionGroups';
 
 export default function GroupsTreeNode({
     node,
