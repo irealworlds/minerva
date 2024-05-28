@@ -1,7 +1,7 @@
 import InputLabel from '@/Components/Forms/InputLabel';
 import TextInput from '@/Components/Forms/Controls/TextInput';
 import GroupsTree from '@/Pages/Institutions/Components/GroupsTree';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
     StudentGroupTreeNodeViewModel,
     StudentGroupTreeViewModel,
@@ -86,26 +86,33 @@ export default function FilteredGroupsList({
             return initialGroups;
         }
         if (searchQuery.length === 0) {
-            setExpandedNodeIds(new Set());
             return initialGroups;
         } else {
-            const filteredResults = filterStudentGroupTree(
-                initialGroups,
-                searchQuery
-            );
-            setExpandedNodeIds(new Set(getAllIdsFromTree(filteredResults)));
-            return filteredResults;
+            return filterStudentGroupTree(initialGroups, searchQuery);
         }
     }, [initialGroups, searchQuery]);
+
+    const hasInitialGroups = useMemo(
+        () => initialGroups !== null,
+        [initialGroups]
+    );
 
     const resultsCount = useMemo<number>(() => {
         if (!filteredGroups) return 0;
         return countItems(filteredGroups);
     }, [filteredGroups]);
 
+    useEffect(() => {
+        if (searchQuery.length === 0) {
+            setExpandedNodeIds(new Set());
+        } else if (filteredGroups) {
+            setExpandedNodeIds(new Set(getAllIdsFromTree(filteredGroups)));
+        }
+    }, [searchQuery, filteredGroups]);
+
     return (
         <>
-            {initialGroups !== null && (
+            {hasInitialGroups && (
                 <div className="mb-6">
                     <InputLabel htmlFor="search" value="Search" />
 
