@@ -9,11 +9,21 @@ return [
         'created' => 'Institution created successfully.',
         'updated' => 'Institution details updated.',
         'deleted' => 'Institution removed from the system.',
+        'discipline_associated' =>
+            'Discipline added to this institution\'s offer.',
+        'discipline_removed' => 'Discipline removed from the institution.',
     ],
     'studentGroups' => [
         'created' => 'Student group created successfully.',
         'updated' => 'Student group details updated.',
         'deleted' => 'Student group removed from the system.',
         'cannot_delete' => 'Cannot delete this student group.',
+    ],
+    'disciplines' => [
+        'created' => 'Discipline created successfully.',
+        'updated' => 'Discipline details updated.',
+        'deleted' => 'Discipline removed from the system.',
+        'cannot_suggest_institution' =>
+            'Cannot automatically determine institution for this discipline. Select associations manually.',
     ],
 ];

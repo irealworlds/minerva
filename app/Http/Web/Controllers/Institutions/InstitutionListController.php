@@ -13,9 +13,7 @@ use App\Http\Web\Requests\Institutions\InstitutionListRequest;
 use App\Http\Web\ViewModels\InstitutionViewModel;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Validation\ValidationException;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 

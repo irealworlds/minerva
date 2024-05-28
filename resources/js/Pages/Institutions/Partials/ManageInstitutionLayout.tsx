@@ -8,6 +8,7 @@ import { InstitutionViewModel } from '@/types/view-models/institution.view-model
 const navigationItems = [
     { name: 'General', route: 'institutions.show.general' },
     { name: 'Group structure', route: 'institutions.show.groups' },
+    { name: 'Disciplines', route: 'institutions.show.disciplines' },
 ];
 
 export default function ManageInstitutionLayout({

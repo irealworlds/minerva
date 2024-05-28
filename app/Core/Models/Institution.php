@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
+    BelongsToMany,
     HasMany,
-    MorphMany};
+    MorphMany,
+};
 use Illuminate\Support\Enumerable;
-use Spatie\MediaLibrary\{
-    HasMedia,
-    InteractsWithMedia};
+use Spatie\MediaLibrary\{HasMedia, InteractsWithMedia};
 
 /**
  * @property string $id
@@ -26,8 +26,9 @@ use Spatie\MediaLibrary\{
  * @property Carbon $updated_at
  * @property-read Institution|null $parent
  * @property-read Enumerable<Institution> $children
+ * @property-read Enumerable<int, Discipline> $disciplines Disciplines offered at this institution.
  */
-class Institution extends Model implements HasMedia
+final class Institution extends Model implements HasMedia
 {
     use HasUuids;
     use InteractsWithMedia;
@@ -75,5 +76,18 @@ class Institution extends Model implements HasMedia
             StudentGroup::class,
             (new StudentGroup())->parent()->getRelationName(),
         );
+    }
+
+    /**
+     * Get the disciplines offered at this institution.
+     *
+     * @return BelongsToMany<Discipline>
+     */
+    public function disciplines(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Discipline::class,
+            InstitutionDiscipline::class,
+        )->withTimestamps();
     }
 }

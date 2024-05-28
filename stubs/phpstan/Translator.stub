@@ -1,0 +1,15 @@
+<?php
+
+namespace Illuminate\Contracts\Translation;
+
+interface Translator
+{
+    /**
+     * Get the translation for a given key.
+     *
+     * @param  string  $key
+     * @param  string|null  $locale
+     * @return string|null
+     */
+    public function get($key, array $replace = [], $locale = null);
+}
