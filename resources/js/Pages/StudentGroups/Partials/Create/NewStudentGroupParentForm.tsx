@@ -57,7 +57,8 @@ export default function NewStudentGroupParentForm({
                                         setData(previous => ({
                                             ...previous,
                                             parent: null,
-                                            parentType: value,
+                                            parentType:
+                                                value as typeof data.parentType,
                                         }));
                                     }}>
                                     <ButtonRadioInputOption value="institution">
