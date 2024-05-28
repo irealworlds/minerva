@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Web\ViewModels;
 
-use App\Core\Models\{
-    Institution,
-    StudentGroup};
+use App\Core\Models\{Institution, StudentGroup};
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
@@ -14,11 +12,15 @@ readonly class StudentGroupViewModel
 {
     /**
      * @param iterable<object{id: string, type: 'institution'|'studentGroup', name: string}> $ancestors
+     * @param iterable<mixed> $childrenIds
      */
     public function __construct(
         public mixed $id,
         public string $name,
         public iterable $ancestors,
+        public iterable $childrenIds,
+        public string $createdAt,
+        public string $updatedAt,
     ) {
     }
 
@@ -75,6 +77,13 @@ readonly class StudentGroupViewModel
             id: $model->getRouteKey(),
             name: $model->name,
             ancestors: $ancestors,
+            childrenIds: $model
+                ->childGroups()
+                ->select((new StudentGroup())->getKeyName())
+                ->get()
+                ->map(fn (StudentGroup $child) => $child->getKey()),
+            createdAt: $model->created_at->toIso8601String(),
+            updatedAt: $model->updated_at->toIso8601String(),
         );
     }
 }

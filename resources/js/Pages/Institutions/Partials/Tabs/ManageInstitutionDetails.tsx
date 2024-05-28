@@ -1,4 +1,4 @@
-import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
+import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 import React from 'react';
 import UpdateInstitutionPublicDetailsForm from '@/Pages/Institutions/Partials/UpdateInstitutionPublicDetailsForm';
 import DeleteInstitutionForm from '@/Pages/Institutions/Partials/DeleteInstitutionForm';
@@ -7,20 +7,21 @@ import { Permission } from '@/types/permission.enum';
 import { AuthenticatedUserViewModel } from '@/types/authenticated-user.model';
 
 export default function ManageInstitutionDetails({
-  user,
-  institution,
+    user,
+    institution,
 }: {
-  user: AuthenticatedUserViewModel;
-  institution: InstitutionViewModel;
+    user: AuthenticatedUserViewModel;
+    institution: InstitutionViewModel;
 }) {
-  return (
-    <>
-      <div className="space-y-12">
-        <UpdateInstitutionPublicDetailsForm institution={institution} />
-        {checkPermissionsForUser(user, Permission.InstitutionsDelete) && (
-          <DeleteInstitutionForm institution={institution} />
-        )}
-      </div>
-    </>
-  );
+    return (
+        <>
+            <div className="space-y-12">
+                <UpdateInstitutionPublicDetailsForm institution={institution} />
+                {checkPermissionsForUser(
+                    user,
+                    Permission.InstitutionsDelete
+                ) && <DeleteInstitutionForm institution={institution} />}
+            </div>
+        </>
+    );
 }

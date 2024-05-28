@@ -17,6 +17,8 @@ final readonly class InstitutionViewModel
         public string|null $website,
         public string|null $pictureUri,
         public iterable $ancestors,
+        public string $createdAt,
+        public string $updatedAt,
     ) {
     }
 
@@ -60,6 +62,8 @@ final readonly class InstitutionViewModel
             website: $model->website,
             pictureUri: $pictureUri,
             ancestors: $ancestors,
+            createdAt: $model->created_at->toIso8601String(),
+            updatedAt: $model->updated_at->toIso8601String(),
         );
     }
 }

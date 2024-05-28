@@ -12,5 +12,8 @@ return [
     ],
     'studentGroups' => [
         'created' => 'Student group created successfully.',
+        'updated' => 'Student group details updated.',
+        'deleted' => 'Student group removed from the system.',
+        'cannot_delete' => 'Cannot delete this student group.',
     ],
 ];

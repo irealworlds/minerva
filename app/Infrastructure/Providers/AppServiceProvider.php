@@ -7,16 +7,15 @@ namespace App\Infrastructure\Providers;
 use App\{
     CommandBus,
     Core\Contracts\Services\IInertiaService,
+    Core\Contracts\Services\IStudentGroupService,
     Core\Services\InertiaService,
-    QueryBus,};
-use App\Core\Contracts\Cqrs\{
-    ICommandBus,
-    IQueryBus};
+    Core\Services\StudentGroupService,
+    QueryBus,
+};
+use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\{
-    ServiceProvider,
-    Str};
+use Illuminate\Support\{ServiceProvider, Str};
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +26,10 @@ final class AppServiceProvider extends ServiceProvider
     {
         // Bind application services
         $this->app->bind(IInertiaService::class, InertiaService::class);
+        $this->app->bind(
+            IStudentGroupService::class,
+            StudentGroupService::class,
+        );
 
         // Setup CQRS
         $this->app->singleton(IQueryBus::class, QueryBus::class);

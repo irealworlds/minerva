@@ -10,16 +10,27 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
 {
     /**
      * @param iterable<object{id: string, type: 'institution'|'studentGroup', name: string}> $ancestors
+     * @param iterable<mixed> $childrenIds
      */
     public function __construct(
         mixed $id,
         string $name,
         iterable $ancestors,
+        iterable $childrenIds,
+        string $createdAt,
+        string $updatedAt,
         public StudentGroupTreeViewModel $children = new StudentGroupTreeViewModel(
             [],
         ),
     ) {
-        parent::__construct($id, $name, $ancestors);
+        parent::__construct(
+            $id,
+            $name,
+            $ancestors,
+            $childrenIds,
+            $createdAt,
+            $updatedAt,
+        );
     }
 
     public static function fromModel(
@@ -34,6 +45,9 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
             id: $parentResult->id,
             name: $parentResult->name,
             ancestors: $parentResult->ancestors,
+            childrenIds: $parentResult->childrenIds,
+            createdAt: $parentResult->createdAt,
+            updatedAt: $parentResult->updatedAt,
             children: new StudentGroupTreeViewModel($children),
         );
     }

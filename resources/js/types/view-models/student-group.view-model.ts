@@ -6,4 +6,7 @@ export interface StudentGroupViewModel {
         type: 'institution' | 'studentGroup';
         name: string;
     }[];
+    childrenIds: string[];
+    createdAt: string;
+    updatedAt: string;
 }

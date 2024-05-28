@@ -3,7 +3,7 @@ import { combineClassNames } from '@/utils/combine-class-names.function';
 import { Link } from '@inertiajs/react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { minimizeNumber } from '@/utils/minimize-number.function';
-import { InstitutionViewModel } from '@/types/ViewModels/institution.view-model';
+import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 
 const navigationItems = [
     { name: 'General', tabName: 'General' },

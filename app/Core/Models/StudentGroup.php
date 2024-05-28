@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{
-    MorphMany,
-    MorphTo};
+use Illuminate\Database\Eloquent\Relations\{MorphMany, MorphTo};
 use Illuminate\Support\Enumerable;
 
 /**
@@ -16,6 +15,8 @@ use Illuminate\Support\Enumerable;
  * @property string $name
  * @property class-string $parent_type
  * @property mixed $parent_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property-read Model $parent
  * @property-read Enumerable<int, StudentGroup> $childGroups
  */
