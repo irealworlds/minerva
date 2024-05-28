@@ -5,121 +5,47 @@ import {
     Transition,
     TransitionChild,
 } from '@headlessui/react';
-import {
-    BuildingLibraryIcon,
-    PencilIcon,
-    UserGroupIcon,
-    XMarkIcon,
-} from '@heroicons/react/24/outline';
-import DangerButton from '@/Components/Buttons/DangerButton';
-import React, { useContext, useMemo } from 'react';
-import { AuthenticatedContext } from '@/Layouts/Authenticated/AuthenticatedLayout';
-import { Permission } from '@/types/permission.enum';
-import { combineClassNames } from '@/utils/combine-class-names.function';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import React, { useMemo, useState } from 'react';
 import { useForm } from '@inertiajs/react';
-
-function AncestorPicture({
-    ancestor,
-}: {
-    ancestor: {
-        id: string;
-        type: 'institution' | 'studentGroup';
-        name: string;
-    };
-}) {
-    if ('pictureUri' in ancestor && typeof ancestor.pictureUri === 'string') {
-        return (
-            <img
-                src={ancestor.pictureUri}
-                alt=""
-                className="size-8 rounded-full"
-            />
-        );
-    } else if (ancestor.type === 'institution') {
-        return (
-            <div
-                className="shrink-0 size-8 border border-current flex items-center justify-center rounded-full text-current"
-                aria-hidden="true">
-                <BuildingLibraryIcon className="size-6" />
-            </div>
-        );
-    } else {
-        return (
-            <div
-                className="shrink-0 size-8 border border-current flex items-center justify-center rounded-full text-current"
-                aria-hidden="true">
-                <UserGroupIcon className="size-6" />
-            </div>
-        );
-    }
-}
-
-function buildAncestorStructure(
-    ancestors: {
-        id: string;
-        type: 'institution' | 'studentGroup';
-        name: string;
-    }[]
-) {
-    if (ancestors.length > 0) {
-        return (
-            <ol>
-                <li
-                    key={ancestors[0].id}
-                    className={combineClassNames(
-                        'py-3 text-sm font-medium flex items-center',
-                        ancestors.length === 1
-                            ? 'font-bold bg-gray-100 px-4 rounded-lg text-indigo-600'
-                            : 'text-gray-900'
-                    )}>
-                    <AncestorPicture ancestor={ancestors[0]} />
-                    <p className="ml-4 text-sm font-medium">
-                        {ancestors[0].name}
-                    </p>
-                </li>
-                <li className="pl-5 border-l">
-                    {buildAncestorStructure(ancestors.slice(1))}
-                </li>
-            </ol>
-        );
-    } else {
-        return <></>;
-    }
-}
+import StudentGroupReadonlyDetails from '@/Pages/Institutions/Partials/StudentGroupReadonlyDetails';
+import StudentGroupUpdateInformation from '@/Pages/Institutions/Partials/StudentGroupUpdateInformation';
 
 interface StudentGroupDetailsOverlayProps {
     group: StudentGroupViewModel | null;
     open: boolean;
     onClose: () => void;
 }
-
 export default function StudentGroupDetailsOverlay({
     group,
     open,
     onClose,
 }: StudentGroupDetailsOverlayProps) {
-    const { hasPermissions } = useContext(AuthenticatedContext);
-
-    const { processing: deleting, delete: destroy } = useForm();
+    const [modifyingSection, setModifyingSection] = useState<
+        'information' | null
+    >(null);
+    const { processing: deleting } = useForm();
 
     const processing = useMemo(() => deleting, [deleting]);
-    const isDeletable = useMemo(() => !group?.childrenIds.length, [group]);
 
-    function deleteGroup(): void {
-        if (processing) {
-            throw new Error(
-                'Cannot start a delete operation while processing another operation.'
-            );
+    function renderSection(modifyingSection: 'information' | null) {
+        if (!group) throw new Error('Group not selected.');
+        switch (modifyingSection) {
+            case 'information':
+                return (
+                    <StudentGroupUpdateInformation
+                        group={group}
+                        setModifyingSection={setModifyingSection}
+                    />
+                );
+            default:
+                return (
+                    <StudentGroupReadonlyDetails
+                        group={group}
+                        setModifyingSection={setModifyingSection}
+                    />
+                );
         }
-
-        if (!group) {
-            throw new Error('Student group entity not set.');
-        }
-
-        destroy(route('student_groups.delete', { group: group.id }), {
-            preserveScroll: true,
-            preserveState: false,
-        });
     }
 
     return (
@@ -180,7 +106,7 @@ export default function StudentGroupDetailsOverlay({
                                         {/* Actual slide-over contents */}
                                         {group && (
                                             <div className="h-full overflow-y-auto bg-white p-8">
-                                                <div className="space-y-6 pb-16">
+                                                <div className="space-y-12 pb-16">
                                                     {/* Header */}
                                                     <div>
                                                         <div className="aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg">
@@ -207,127 +133,9 @@ export default function StudentGroupDetailsOverlay({
                                                         </div>
                                                     </div>
 
-                                                    {/* Information */}
-                                                    <div>
-                                                        <h3 className="font-medium text-gray-900">
-                                                            Information
-                                                        </h3>
-                                                        <dl className="mt-2 divide-y divide-gray-200 border-b border-t border-gray-200">
-                                                            {/* Name */}
-                                                            <div className="py-3 text-sm font-medium">
-                                                                <dt className="text-gray-500 flex items-center justify-between gap-2">
-                                                                    Name
-                                                                    {hasPermissions(
-                                                                        Permission.StudentGroupUpdate
-                                                                    ) && (
-                                                                        <button
-                                                                            type="button"
-                                                                            disabled={
-                                                                                processing
-                                                                            }
-                                                                            className="relative flex size-8 items-center justify-center rounded-full bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                                                            <span className="absolute -inset-1.5" />
-                                                                            <PencilIcon
-                                                                                className="h-5 w-5"
-                                                                                aria-hidden="true"
-                                                                            />
-                                                                            <span className="sr-only">
-                                                                                Change
-                                                                                name
-                                                                            </span>
-                                                                        </button>
-                                                                    )}
-                                                                </dt>
-                                                                <dd className="text-gray-900 mt-1">
-                                                                    {group.name}
-                                                                </dd>
-                                                            </div>
-
-                                                            {/* Created at */}
-                                                            <div className="flex justify-between py-3 text-sm font-medium">
-                                                                <dt className="text-gray-500">
-                                                                    Created
-                                                                </dt>
-                                                                <dd className="text-gray-900">
-                                                                    {new Date(
-                                                                        group.createdAt
-                                                                    ).toLocaleDateString(
-                                                                        undefined,
-                                                                        {
-                                                                            month: 'long',
-                                                                            day: 'numeric',
-                                                                            year: 'numeric',
-                                                                        }
-                                                                    )}
-                                                                </dd>
-                                                            </div>
-
-                                                            {/* Updated at */}
-                                                            <div className="flex justify-between py-3 text-sm font-medium">
-                                                                <dt className="text-gray-500">
-                                                                    Last
-                                                                    modified
-                                                                </dt>
-                                                                <dd className="text-gray-900">
-                                                                    {new Date(
-                                                                        group.updatedAt
-                                                                    ).toLocaleDateString(
-                                                                        undefined,
-                                                                        {
-                                                                            month: 'long',
-                                                                            day: 'numeric',
-                                                                            year: 'numeric',
-                                                                        }
-                                                                    )}
-                                                                </dd>
-                                                            </div>
-                                                        </dl>
-                                                    </div>
-
-                                                    {/* Structure */}
-                                                    <div>
-                                                        <h3 className="font-medium text-gray-900">
-                                                            Place in structure
-                                                        </h3>
-                                                        <div className="mt-2 border-t border-gray-200">
-                                                            {buildAncestorStructure(
-                                                                [
-                                                                    ...group.ancestors,
-                                                                    {
-                                                                        id: 'current',
-                                                                        name: group.name,
-                                                                        type: 'studentGroup',
-                                                                    },
-                                                                ]
-                                                            )}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Actions */}
-                                                    <div className="flex items-center gap-3">
-                                                        {/*<PrimaryButton*/}
-                                                        {/*    type="button"*/}
-                                                        {/*    disabled={processing}*/}
-                                                        {/*    className="grow justify-center">*/}
-                                                        {/*    Save changes*/}
-                                                        {/*</PrimaryButton>*/}
-                                                        {hasPermissions(
-                                                            Permission.StudentGroupDelete
-                                                        ) && (
-                                                            <DangerButton
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    deleteGroup();
-                                                                }}
-                                                                disabled={
-                                                                    processing ||
-                                                                    !isDeletable
-                                                                }
-                                                                className="grow justify-center">
-                                                                Delete
-                                                            </DangerButton>
-                                                        )}
-                                                    </div>
+                                                    {renderSection(
+                                                        modifyingSection
+                                                    )}
                                                 </div>
                                             </div>
                                         )}
