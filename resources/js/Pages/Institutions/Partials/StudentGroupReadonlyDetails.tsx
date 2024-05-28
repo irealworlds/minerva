@@ -189,12 +189,6 @@ export default function StudentGroupReadonlyDetails({
 
             {/* Actions */}
             <div className="flex items-center gap-3">
-                {/*<PrimaryButton*/}
-                {/*    type="button"*/}
-                {/*    disabled={processing}*/}
-                {/*    className="grow justify-center">*/}
-                {/*    Save changes*/}
-                {/*</PrimaryButton>*/}
                 {hasPermissions(Permission.StudentGroupDelete) && (
                     <DangerButton
                         type="button"

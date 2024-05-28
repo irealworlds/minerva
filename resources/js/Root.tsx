@@ -1,5 +1,5 @@
 import { Bounce, toast, ToastContainer, TypeOptions } from 'react-toastify';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
 
@@ -24,7 +24,9 @@ function displayPageToasts(toasts: { [type in TypeOptions]: string[] }) {
 
 export default function Root({ children }: PropsWithChildren) {
     const { toasts } = usePage<PageProps>().props;
-    displayPageToasts(toasts);
+    useEffect(() => {
+        displayPageToasts(toasts);
+    }, [toasts]);
 
     return (
         <>

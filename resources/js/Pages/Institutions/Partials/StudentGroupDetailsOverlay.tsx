@@ -6,7 +6,7 @@ import {
     TransitionChild,
 } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import StudentGroupReadonlyDetails from '@/Pages/Institutions/Partials/StudentGroupReadonlyDetails';
 import StudentGroupUpdateInformation from '@/Pages/Institutions/Partials/StudentGroupUpdateInformation';
@@ -27,6 +27,11 @@ export default function StudentGroupDetailsOverlay({
     const { processing: deleting } = useForm();
 
     const processing = useMemo(() => deleting, [deleting]);
+
+    // Reset modifying section when group changes
+    useEffect(() => {
+        setModifyingSection(null);
+    }, [group]);
 
     function renderSection(modifyingSection: 'information' | null) {
         if (!group) throw new Error('Group not selected.');
@@ -109,14 +114,7 @@ export default function StudentGroupDetailsOverlay({
                                                 <div className="space-y-12 pb-16">
                                                     {/* Header */}
                                                     <div>
-                                                        <div className="aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg">
-                                                            <img
-                                                                src="https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80"
-                                                                alt=""
-                                                                className="object-cover"
-                                                            />
-                                                        </div>
-                                                        <div className="mt-4 flex items-start justify-between">
+                                                        <div className="flex items-start justify-between">
                                                             <div>
                                                                 <h2 className="text-base font-semibold leading-6 text-gray-900">
                                                                     <span className="sr-only">
