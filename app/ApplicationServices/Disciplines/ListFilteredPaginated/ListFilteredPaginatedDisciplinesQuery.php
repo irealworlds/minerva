@@ -17,13 +17,19 @@ final readonly class ListFilteredPaginatedDisciplinesQuery implements IQuery
 {
     /**
      * @param Optional<string> $searchQuery
+     * @param Optional<iterable<mixed>> $associatedToInstitutionIds
      * @param Optional<iterable<mixed>> $notAssociatedToInstitutionIds
+     * @param Optional<iterable<mixed>> $associatedToStudentGroupIds
+     * @param Optional<iterable<mixed>> $notAssociatedToStudentGroupIds
      */
     public function __construct(
         public int $page,
         public int $pageSize,
         public Optional $searchQuery,
+        public Optional $associatedToInstitutionIds,
         public Optional $notAssociatedToInstitutionIds,
+        public Optional $associatedToStudentGroupIds,
+        public Optional $notAssociatedToStudentGroupIds,
     ) {
     }
 }

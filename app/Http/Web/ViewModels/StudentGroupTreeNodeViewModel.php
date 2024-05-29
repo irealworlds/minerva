@@ -11,12 +11,14 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
     /**
      * @param iterable<object{id: string, type: 'institution'|'studentGroup', name: string}> $ancestors
      * @param iterable<mixed> $childrenIds
+     * @param iterable<StudentGroupDisciplineViewModel> $disciplines
      */
     public function __construct(
         mixed $id,
         string $name,
         iterable $ancestors,
         iterable $childrenIds,
+        iterable $disciplines,
         string $createdAt,
         string $updatedAt,
         public StudentGroupTreeViewModel $children = new StudentGroupTreeViewModel(
@@ -28,6 +30,7 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
             $name,
             $ancestors,
             $childrenIds,
+            $disciplines,
             $createdAt,
             $updatedAt,
         );
@@ -46,6 +49,7 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
             name: $parentResult->name,
             ancestors: $parentResult->ancestors,
             childrenIds: $parentResult->childrenIds,
+            disciplines: $parentResult->disciplines,
             createdAt: $parentResult->createdAt,
             updatedAt: $parentResult->updatedAt,
             children: new StudentGroupTreeViewModel($children),

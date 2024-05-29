@@ -8,8 +8,9 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from '@inertiajs/react';
-import StudentGroupReadonlyDetails from '@/Pages/Institutions/Partials/StudentGroupReadonlyDetails';
-import StudentGroupUpdateInformation from '@/Pages/Institutions/Partials/StudentGroupUpdateInformation';
+import StudentGroupReadonlyDetails from '@/Pages/Institutions/Partials/Manage/Groups/StudentGroupReadonlyDetails';
+import StudentGroupUpdateInformation from '@/Pages/Institutions/Partials/Manage/Groups/StudentGroupUpdateInformation';
+import StudentGroupAddDiscipline from '@/Pages/Institutions/Partials/Manage/Groups/StudentGroupAddDiscipline';
 
 interface StudentGroupDetailsOverlayProps {
     group: StudentGroupViewModel | null;
@@ -22,7 +23,7 @@ export default function StudentGroupDetailsOverlay({
     onClose,
 }: StudentGroupDetailsOverlayProps) {
     const [modifyingSection, setModifyingSection] = useState<
-        'information' | null
+        'information' | 'addDiscipline' | null
     >(null);
     const { processing: deleting } = useForm();
 
@@ -33,12 +34,21 @@ export default function StudentGroupDetailsOverlay({
         setModifyingSection(null);
     }, [group]);
 
-    function renderSection(modifyingSection: 'information' | null) {
+    function renderSection(
+        modifyingSection: 'information' | 'addDiscipline' | null
+    ) {
         if (!group) throw new Error('Group not selected.');
         switch (modifyingSection) {
             case 'information':
                 return (
                     <StudentGroupUpdateInformation
+                        group={group}
+                        setModifyingSection={setModifyingSection}
+                    />
+                );
+            case 'addDiscipline':
+                return (
+                    <StudentGroupAddDiscipline
                         group={group}
                         setModifyingSection={setModifyingSection}
                     />

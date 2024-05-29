@@ -2,7 +2,7 @@ import { combineClassNames } from '@/utils/combine-class-names.function';
 
 interface SpinnerProps {
     strokeWidth?: number;
-    className: string;
+    className?: string;
 }
 
 export default function Spinner({ strokeWidth, className }: SpinnerProps) {

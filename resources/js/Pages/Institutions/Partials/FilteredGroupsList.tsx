@@ -6,7 +6,7 @@ import {
     StudentGroupTreeNodeViewModel,
     StudentGroupTreeViewModel,
 } from '@/types/view-models/student-group-tree.view-model';
-import NoGroups from '@/Pages/Institutions/Partials/NoGroups';
+import NoGroups from '@/Pages/Institutions/Partials/Manage/Groups/NoGroups';
 import { InstitutionGroupsManagementContext } from '@/Pages/Institutions/ManageInstitutionGroups';
 
 function countItems(filteredGroups: StudentGroupTreeViewModel): number {

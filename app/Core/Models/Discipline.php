@@ -16,8 +16,9 @@ use Illuminate\Support\Enumerable;
  * @property string|null $abbreviation
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property InstitutionDiscipline|null $pivot The pivot used for getting the institution in this query.
+ * @property InstitutionDiscipline|StudentGroupDiscipline|null $pivot The pivot used for getting the institution in this query.
  * @property-read Enumerable<int, Institution> $institutions Institutions that offer this discipline.
+ * @property-read Enumerable<int, StudentGroup> $studentGroup Student groups that study this discipline.
  */
 final class Discipline extends Model
 {
@@ -26,7 +27,7 @@ final class Discipline extends Model
     protected $fillable = ['name', 'abbreviation'];
 
     /**
-     * Get the disciplines offered at this institution.
+     * Get the institutions that offer this discipline.
      *
      * @return BelongsToMany<Institution>
      */
@@ -35,6 +36,19 @@ final class Discipline extends Model
         return $this->belongsToMany(
             Institution::class,
             InstitutionDiscipline::class,
+        )->withTimestamps();
+    }
+
+    /**
+     * Get the student groups that study this discipline.
+     *
+     * @return BelongsToMany<StudentGroup>
+     */
+    public function studentGroups(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            StudentGroup::class,
+            StudentGroupDiscipline::class,
         )->withTimestamps();
     }
 }

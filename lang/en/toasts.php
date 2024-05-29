@@ -18,6 +18,9 @@ return [
         'updated' => 'Student group details updated.',
         'deleted' => 'Student group removed from the system.',
         'cannot_delete' => 'Cannot delete this student group.',
+        'discipline_associated' =>
+            'Discipline added to this student group\'s curriculum.',
+        'discipline_removed' => 'Discipline removed from the student group.',
     ],
     'disciplines' => [
         'created' => 'Discipline created successfully.',

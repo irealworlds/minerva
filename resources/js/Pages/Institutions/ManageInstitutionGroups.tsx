@@ -1,10 +1,10 @@
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 import { StudentGroupTreeViewModel } from '@/types/view-models/student-group-tree.view-model';
 import { Head, Link } from '@inertiajs/react';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 import FilteredGroupsList from '@/Pages/Institutions/Partials/FilteredGroupsList';
 import { StudentGroupViewModel } from '@/types/view-models/student-group.view-model';
-import StudentGroupDetailsOverlay from '@/Pages/Institutions/Partials/StudentGroupDetailsOverlay';
+import StudentGroupDetailsOverlay from '@/Pages/Institutions/Partials/Manage/Groups/StudentGroupDetailsOverlay';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { PageProps } from '@/types';
 import AuthenticatedLayout from '@/Layouts/Authenticated/AuthenticatedLayout';
@@ -33,14 +33,46 @@ export default function ManageInstitutionGroups({
     groups: StudentGroupTreeViewModel;
 }>) {
     const [expandedNodeIds, setExpandedNodeIds] = useState(new Set<string>());
-    const [selectedGroup, setSelectedGroup] =
-        useState<StudentGroupViewModel | null>(null);
+    const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
 
     function openGroupManagement(group: StudentGroupViewModel) {
-        setSelectedGroup(group);
+        setSelectedGroupId(group.id);
         setOpen(true);
     }
+
+    // Get the selected group's details
+    const selectedGroup = useMemo<StudentGroupViewModel | null>(() => {
+        function findGroupByIdInTree(
+            tree: StudentGroupTreeViewModel
+        ): StudentGroupViewModel | null {
+            const foundOnThisLevel = tree.items.find(
+                item => item.id === selectedGroupId
+            );
+
+            if (foundOnThisLevel) {
+                return foundOnThisLevel;
+            }
+
+            for (const child of tree.items) {
+                const foundInChildren = findGroupByIdInTree(child.children);
+                if (foundInChildren) {
+                    return foundInChildren;
+                }
+            }
+
+            return null;
+        }
+
+        return findGroupByIdInTree(groups);
+    }, [groups, selectedGroupId]);
+
+    // Close the overlay if the selected group is removed
+    useEffect(() => {
+        if (!selectedGroup) {
+            setOpen(false);
+        }
+    }, [selectedGroup]);
 
     return (
         <AuthenticatedLayout user={auth.user}>

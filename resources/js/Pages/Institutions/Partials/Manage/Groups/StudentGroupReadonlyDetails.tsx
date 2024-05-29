@@ -10,6 +10,7 @@ import { StudentGroupViewModel } from '@/types/view-models/student-group.view-mo
 import { AuthenticatedContext } from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { useForm } from '@inertiajs/react';
 import { combineClassNames } from '@/utils/combine-class-names.function';
+import StudentGroupDisciplinesList from '@/Pages/Institutions/Partials/Manage/Groups/StudentGroupDisciplinesList';
 
 function AncestorPicture({
     ancestor,
@@ -82,7 +83,9 @@ function buildAncestorStructure(
 
 interface StudentGroupReadonlyDetailsProps {
     group: StudentGroupViewModel;
-    setModifyingSection: (section: 'information' | null) => void;
+    setModifyingSection: (
+        section: 'information' | 'addDiscipline' | null
+    ) => void;
 }
 
 export default function StudentGroupReadonlyDetails({
@@ -169,6 +172,12 @@ export default function StudentGroupReadonlyDetails({
                     </div>
                 </dl>
             </div>
+
+            {/* Disciplines */}
+            <StudentGroupDisciplinesList
+                group={group}
+                setModifyingSection={setModifyingSection}
+            />
 
             {/* Structure */}
             <div>

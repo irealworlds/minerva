@@ -7,7 +7,7 @@ namespace App\Core\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{MorphMany, MorphTo};
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, MorphMany, MorphTo};
 use Illuminate\Support\Enumerable;
 
 /**
@@ -19,6 +19,7 @@ use Illuminate\Support\Enumerable;
  * @property Carbon $updated_at
  * @property-read Model $parent
  * @property-read Enumerable<int, StudentGroup> $childGroups
+ * @property-read Enumerable<int, Discipline> $disciplines Disciplines studied by this student group.
  */
 class StudentGroup extends Model
 {
@@ -37,7 +38,7 @@ class StudentGroup extends Model
     }
 
     /**
-     * Get this institution's student groups.
+     * Get the groups subordinated to this student group.
      *
      * @return MorphMany<StudentGroup>
      */
@@ -47,5 +48,18 @@ class StudentGroup extends Model
             StudentGroup::class,
             (new StudentGroup())->parent()->getRelationName(),
         );
+    }
+
+    /**
+     * Get the disciplines studied by this student group.
+     *
+     * @return BelongsToMany<Discipline>
+     */
+    public function disciplines(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Discipline::class,
+            StudentGroupDiscipline::class,
+        )->withTimestamps();
     }
 }

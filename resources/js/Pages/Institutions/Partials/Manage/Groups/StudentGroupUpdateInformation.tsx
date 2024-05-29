@@ -10,7 +10,7 @@ import InputLabel from '@/Components/Forms/InputLabel';
 
 interface StudentGroupUpdateInformationProps {
     group: StudentGroupViewModel;
-    setModifyingSection: (section: 'information' | null) => void;
+    setModifyingSection: (section: null) => void;
 }
 
 export default function StudentGroupUpdateInformation({

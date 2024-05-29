@@ -8,32 +8,22 @@ use App\ApplicationServices\StudentGroups\Create\CreateStudentGroupCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Contracts\Services\IInertiaService;
 use App\Core\Enums\Permission;
-use App\Core\Models\{
-    Institution,
-    StudentGroup};
+use App\Core\Models\{Institution, StudentGroup};
 use App\Http\Web\Controllers\Institutions\InstitutionReadController;
 use App\Http\Web\Requests\StudentGroups\StudentGroupCreateRequest;
-use App\Http\Web\ViewModels\{
-    InstitutionViewModel,
-    StudentGroupViewModel};
+use App\Http\Web\ViewModels\{InstitutionViewModel, StudentGroupViewModel};
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\{
-    RedirectResponse,
-    Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidationException;
-use Inertia\{
-    Response as InertiaResponse,
-    ResponseFactory};
+use Inertia\{Response as InertiaResponse, ResponseFactory};
 use InvalidArgumentException;
 use ReflectionException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{
-    Get,
-    Post};
+use Spatie\RouteAttributes\Attributes\{Get, Post};
 
 final readonly class CreateStudentGroupController
 {

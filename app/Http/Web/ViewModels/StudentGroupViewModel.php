@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Web\ViewModels;
 
-use App\Core\Models\{Institution, StudentGroup};
+use App\Core\Models\{Discipline, Institution, StudentGroup};
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
@@ -12,6 +12,7 @@ readonly class StudentGroupViewModel
 {
     /**
      * @param iterable<object{id: string, type: 'institution'|'studentGroup', name: string}> $ancestors
+     * @param iterable<StudentGroupDisciplineViewModel> $disciplines
      * @param iterable<mixed> $childrenIds
      */
     public function __construct(
@@ -19,6 +20,7 @@ readonly class StudentGroupViewModel
         public string $name,
         public iterable $ancestors,
         public iterable $childrenIds,
+        public iterable $disciplines,
         public string $createdAt,
         public string $updatedAt,
     ) {
@@ -82,6 +84,11 @@ readonly class StudentGroupViewModel
                 ->select((new StudentGroup())->getKeyName())
                 ->get()
                 ->map(fn (StudentGroup $child) => $child->getKey()),
+            disciplines: $model->disciplines->map(
+                static fn (
+                    Discipline $discipline,
+                ) => StudentGroupDisciplineViewModel::fromModel($discipline),
+            ),
             createdAt: $model->created_at->toIso8601String(),
             updatedAt: $model->updated_at->toIso8601String(),
         );

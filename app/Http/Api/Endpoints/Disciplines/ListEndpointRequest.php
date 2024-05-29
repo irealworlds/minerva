@@ -9,7 +9,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property string|null $search
+ * @property string|null $associatedToInstitutionIds
  * @property string|null $notAssociatedToInstitutionIds
+ * @property string|null $associatedToStudentGroupIds
+ * @property string|null $notAssociatedToStudentGroupIds
  */
 final class ListEndpointRequest extends FormRequest
 {
