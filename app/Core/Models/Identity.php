@@ -9,6 +9,7 @@ use App\Core\Enums\Permission;
 use Carbon\Carbon;
 use Codestage\Authorization\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -20,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $remember_token
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read Educator|null $educator The educator profile record associated with this identity.
  */
 class Identity extends Authenticatable
 {
@@ -54,5 +56,15 @@ class Identity extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the educator profile record associated with this identity.
+     *
+     * @return HasOne<Educator>
+     */
+    public function educatorProfile(): HasOne
+    {
+        return $this->hasOne(Educator::class);
     }
 }

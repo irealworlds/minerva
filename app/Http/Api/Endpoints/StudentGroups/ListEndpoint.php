@@ -6,9 +6,7 @@ namespace App\Http\Api\Endpoints\StudentGroups;
 
 use App\ApplicationServices\StudentGroups\ListFilteredPaginated\ListFilteredPaginatedStudentGroupsQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
-use App\Core\Models\{
-    Institution,
-    StudentGroup};
+use App\Core\Models\{Institution, StudentGroup};
 use App\Core\Optional;
 use App\Http\Api\Endpoints\Endpoint;
 use App\Http\Web\ViewModels\StudentGroupViewModel;

@@ -27,6 +27,7 @@ use Spatie\MediaLibrary\{HasMedia, InteractsWithMedia};
  * @property-read Institution|null $parent
  * @property-read Enumerable<Institution> $children
  * @property-read Enumerable<int, Discipline> $disciplines Disciplines offered at this institution.
+ * @property-read Enumerable<int, Educator> $educators Educators registered at this institution.
  */
 final class Institution extends Model implements HasMedia
 {
@@ -89,5 +90,28 @@ final class Institution extends Model implements HasMedia
             Discipline::class,
             InstitutionDiscipline::class,
         )->withTimestamps();
+    }
+
+    /**
+     * Get the educators registered at this institution.
+     *
+     * @return BelongsToMany<Educator>
+     */
+    public function educators(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Educator::class,
+            InstitutionEducator::class,
+        )->withTimestamps();
+    }
+
+    /**
+     * Get the invitations sent to educators to join this institution.
+     *
+     * @return HasMany<EducatorInvitation>
+     */
+    public function educatorInvitations(): HasMany
+    {
+        return $this->hasMany(EducatorInvitation::class);
     }
 }

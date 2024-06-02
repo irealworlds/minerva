@@ -11,19 +11,13 @@ use App\Http\Web\Requests\ProfileUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\{
-    RedirectResponse,
-    Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Session\SessionManager;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use ReflectionException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{
-    Get,
-    Patch};
+use Spatie\RouteAttributes\Attributes\{Get, Patch};
 
 final readonly class ProfileController extends Controller
 {

@@ -1,4 +1,4 @@
-import { PropsWithChildren, useMemo } from 'react';
+import { createContext, PropsWithChildren, useMemo } from 'react';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { Link } from '@inertiajs/react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
@@ -9,7 +9,12 @@ const navigationItems = [
     { name: 'General', route: 'institutions.show.general' },
     { name: 'Group structure', route: 'institutions.show.groups' },
     { name: 'Disciplines', route: 'institutions.show.disciplines' },
+    { name: 'Educators', route: 'institutions.show.educators' },
 ];
+
+export const InstitutionManagementContext = createContext<{
+    institution?: InstitutionViewModel;
+}>({});
 
 export default function ManageInstitutionLayout({
     children,
@@ -73,7 +78,11 @@ export default function ManageInstitutionLayout({
                     </ul>
                 </nav>
             </div>
-            <div className="xl:col-span-2 2xl:col-span-5">{children}</div>
+            <div className="xl:col-span-2 2xl:col-span-5">
+                <InstitutionManagementContext.Provider value={{ institution }}>
+                    {children}
+                </InstitutionManagementContext.Provider>
+            </div>
         </div>
     );
 }

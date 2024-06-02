@@ -59,7 +59,7 @@ final readonly class ListFilteredPaginatedDisciplinesHandler implements
                 $queryBuilder = $queryBuilder->whereHas(
                     'institutions',
                     function (Builder $q) use ($ids): void {
-                        $q->where((new Institution())->getKeyName(), $ids);
+                        $q->whereIn((new Institution())->getKeyName(), $ids);
                     },
                 );
             }
@@ -72,7 +72,7 @@ final readonly class ListFilteredPaginatedDisciplinesHandler implements
                 $queryBuilder = $queryBuilder->whereDoesntHave(
                     'institutions',
                     function (Builder $q) use ($ids): void {
-                        $q->where((new Institution())->getKeyName(), $ids);
+                        $q->whereIn((new Institution())->getKeyName(), $ids);
                     },
                 );
             }
@@ -85,7 +85,7 @@ final readonly class ListFilteredPaginatedDisciplinesHandler implements
                 $queryBuilder = $queryBuilder->whereHas(
                     'studentGroups',
                     function (Builder $q) use ($ids): void {
-                        $q->where((new StudentGroup())->getKeyName(), $ids);
+                        $q->whereIn((new StudentGroup())->getKeyName(), $ids);
                     },
                 );
             }
@@ -98,7 +98,7 @@ final readonly class ListFilteredPaginatedDisciplinesHandler implements
                 $queryBuilder = $queryBuilder->whereDoesntHave(
                     'studentGroups',
                     function (Builder $q) use ($ids): void {
-                        $q->where((new StudentGroup())->getKeyName(), $ids);
+                        $q->whereIn((new StudentGroup())->getKeyName(), $ids);
                     },
                 );
             }

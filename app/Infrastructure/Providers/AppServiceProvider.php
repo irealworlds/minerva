@@ -6,9 +6,13 @@ namespace App\Infrastructure\Providers;
 
 use App\{
     CommandBus,
+    Core\Contracts\Services\IEducatorInvitationService,
     Core\Contracts\Services\IInertiaService,
+    Core\Contracts\Services\ISignedUrlGenerator,
     Core\Contracts\Services\IStudentGroupService,
+    Core\Services\EducatorInvitationService,
     Core\Services\InertiaService,
+    Core\Services\SignedUrlGenerator,
     Core\Services\StudentGroupService,
     QueryBus,
 };
@@ -27,9 +31,14 @@ final class AppServiceProvider extends ServiceProvider
         // Bind application services
         $this->app->bind(IInertiaService::class, InertiaService::class);
         $this->app->bind(
+            IEducatorInvitationService::class,
+            EducatorInvitationService::class,
+        );
+        $this->app->bind(
             IStudentGroupService::class,
             StudentGroupService::class,
         );
+        $this->app->bind(ISignedUrlGenerator::class, SignedUrlGenerator::class);
 
         // Setup CQRS
         $this->app->singleton(IQueryBus::class, QueryBus::class);

@@ -12,6 +12,15 @@ return [
         'discipline_associated' =>
             'Discipline added to this institution\'s offer.',
         'discipline_removed' => 'Discipline removed from the institution.',
+
+        'educators' => [
+            'roles' => [
+                'created' => 'Role :role added to educator.',
+                'deleted' => 'Role :role removed from educator.',
+            ],
+            'created' => 'Educator added to institution.',
+            'deleted' => 'Educator removed from institution.',
+        ],
     ],
     'studentGroups' => [
         'created' => 'Student group created successfully.',
@@ -28,5 +37,13 @@ return [
         'deleted' => 'Discipline removed from the system.',
         'cannot_suggest_institution' =>
             'Cannot automatically determine institution for this discipline. Select associations manually.',
+    ],
+    'educatorInvitations' => [
+        'created' => 'Invitation sent successfully.',
+        'deleted' => 'Invitation revoked successfully.',
+        'response_failed' =>
+            'Failed to respond to the invitation. Please try again!',
+        'accepted' => 'Invitation accepted successfully.',
+        'declined' => 'Invitation declined successfully.',
     ],
 ];

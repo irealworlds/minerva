@@ -7,15 +7,18 @@ namespace App\Http\Web\Controllers\Institutions\Management;
 use App\ApplicationServices\Institutions\AddDiscipline\AddDisciplineToInstitutionCommand;
 use App\ApplicationServices\Institutions\RemoveDiscipline\RemoveDisciplineFromInstitutionCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
+use App\Core\Models\{Discipline, Institution};
 use App\Http\Web\Controllers\Controller;
+use App\Http\Web\ViewModels\{
+    InstitutionDisciplineViewModel,
+    InstitutionViewModel,
+};
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Inertia\{Inertia, Response as InertiaResponse};
 use ReflectionException;
 use RuntimeException;
-use Inertia\{Inertia, Response as InertiaResponse};
-use App\Core\Models\{Discipline, Institution};
-use App\Http\Web\ViewModels\{InstitutionDisciplineViewModel, InstitutionViewModel};
 use Spatie\RouteAttributes\Attributes\{Delete, Get, Group, Post};
 
 #[Group(prefix: '/Institutions/Manage/{institution}/Disciplines')]
