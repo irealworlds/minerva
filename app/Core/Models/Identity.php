@@ -25,6 +25,7 @@ use Illuminate\Notifications\Notifiable;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Educator|null $educator The educator profile record associated with this identity.
+ * @property-read StudentRegistration|null $studentRegistration The student registration record associated with this identity.
  */
 class Identity extends Authenticatable
 {
@@ -78,5 +79,15 @@ class Identity extends Authenticatable
     public function educatorProfile(): HasOne
     {
         return $this->hasOne(Educator::class);
+    }
+
+    /**
+     * Get the educator profile record associated with this identity.
+     *
+     * @return HasOne<StudentRegistration>
+     */
+    public function studentRegistration(): HasOne
+    {
+        return $this->hasOne(StudentRegistration::class, 'identity_id');
     }
 }
