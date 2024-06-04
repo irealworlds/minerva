@@ -14,12 +14,17 @@ use App\{
     Core\Services\InertiaService,
     Core\Services\SignedUrlGenerator,
     Core\Services\StudentGroupService,
+    Http\RouteValidators\CaseInsensitiveUriValidator,
     QueryBus,
 };
 use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Routing\Matching\UriValidator;
+use Illuminate\Routing\Route;
 use Illuminate\Support\{ServiceProvider, Str};
+
+use function is_object;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -89,6 +94,15 @@ final class AppServiceProvider extends ServiceProvider
 
             return $result;
         });
+
+        // Replace the default URL Validator with the case-insensitive one
+        $validators = Route::getValidators();
+        $validators[] = new CaseInsensitiveUriValidator();
+        Route::$validators = array_filter(
+            $validators,
+            fn ($validator) => is_object($validator) &&
+                $validator::class !== UriValidator::class,
+        );
     }
 
     /**
