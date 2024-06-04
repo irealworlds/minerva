@@ -20,6 +20,7 @@ final readonly class AssociateDisciplinesToStudentGroupHandler implements
 
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

@@ -23,6 +23,7 @@ final readonly class AcceptEducatorInvitationHandler implements ICommandHandler
 
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

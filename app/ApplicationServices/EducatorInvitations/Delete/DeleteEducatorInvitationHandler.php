@@ -15,6 +15,7 @@ final readonly class DeleteEducatorInvitationHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
+     *
      * @throws InvalidOperationException
      * @throws Throwable
      */

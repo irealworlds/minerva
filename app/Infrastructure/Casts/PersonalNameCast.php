@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Casts;
 
 use App\Core\Dtos\PersonalNameDto;
@@ -27,6 +29,7 @@ final readonly class PersonalNameCast implements CastsAttributes
      * Cast the given value.
      *
      * @param array<string, mixed> $attributes
+     *
      * @throws InvalidArgumentException
      * @throws BindingResolutionException
      */
@@ -95,6 +98,7 @@ final readonly class PersonalNameCast implements CastsAttributes
      * Prepare the given value for storage.
      *
      * @param array<string, mixed> $attributes
+     *
      * @return array{
      *     name_prefix: null|string,
      *     first_name: string,
@@ -102,6 +106,7 @@ final readonly class PersonalNameCast implements CastsAttributes
      *     last_name: string,
      *     name_suffix: null|string
      * }
+     *
      * @throws InvalidArgumentException
      * @throws JsonException
      */

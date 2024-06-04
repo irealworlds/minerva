@@ -21,6 +21,7 @@ use function is_callable;
 
 /**
  * @todo remove this once Laravel adds support for this feature
+ *
  * @see https://github.com/laravel/framework/discussions/51668
  */
 final readonly class SignedUrlGenerator implements ISignedUrlGenerator
@@ -71,6 +72,7 @@ final readonly class SignedUrlGenerator implements ISignedUrlGenerator
 
     /**
      * @return callable(): (array{0: string}|string)
+     *
      * @throws RuntimeException
      */
     protected function getKeyResolver(): callable
@@ -99,6 +101,7 @@ final readonly class SignedUrlGenerator implements ISignedUrlGenerator
      * Ensure the given signed route parameters are not reserved.
      *
      * @param array<string, mixed> $parameters
+     *
      * @throws InvalidArgumentException
      */
     protected function ensureSignedRouteParametersAreNotReserved(

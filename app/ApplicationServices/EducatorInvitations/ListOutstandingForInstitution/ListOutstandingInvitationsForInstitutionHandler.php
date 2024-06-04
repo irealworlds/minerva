@@ -18,6 +18,7 @@ final readonly class ListOutstandingInvitationsForInstitutionHandler implements
 {
     /**
      * @inheritDoc
+     *
      * @throws InvalidFormatException
      */
     public function __invoke(mixed $query): Enumerable

@@ -22,6 +22,7 @@ final readonly class RemoveEducatorRolesFromInstitutionHandler implements
 
     /**
      * @inheritDoc
+     *
      * @throws ModelNotFoundException
      * @throws Throwable
      */

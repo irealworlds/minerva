@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Core\Contracts\Cqrs\{
-    IQuery,
-    IQueryBus};
-use Illuminate\Contracts\Container\{
-    BindingResolutionException,
-    Container};
+use App\Core\Contracts\Cqrs\{IQuery, IQueryBus};
+use Illuminate\Contracts\Container\{BindingResolutionException, Container};
 use ReflectionClass;
 
 use function is_callable;

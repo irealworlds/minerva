@@ -21,6 +21,7 @@ final readonly class AssociateEducatorToInstitutionHandler implements
 
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

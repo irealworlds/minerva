@@ -15,6 +15,7 @@ final readonly class CreateStudentGroupHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

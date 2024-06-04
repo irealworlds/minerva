@@ -24,6 +24,7 @@ final readonly class ListFilteredPaginatedEducatorsHandler implements
 
     /**
      * @inheritDoc
+     *
      * @throws InvalidArgumentException
      */
     public function __invoke(

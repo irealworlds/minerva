@@ -14,6 +14,7 @@ final readonly class UpdateStudentGroupDetailsHandler implements ICommandHandler
 {
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

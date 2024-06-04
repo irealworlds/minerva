@@ -14,6 +14,7 @@ interface ISignedUrlGenerator
     /**
      * @param string[]|string $action
      * @param array<string, mixed> $parameters
+     *
      * @throws RuntimeException
      * @throws InvalidArgumentException
      */

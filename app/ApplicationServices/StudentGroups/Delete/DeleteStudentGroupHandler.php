@@ -14,12 +14,14 @@ use Throwable;
  */
 final readonly class DeleteStudentGroupHandler implements ICommandHandler
 {
-    public function __construct(private IStudentGroupService $_studentGroupService)
-    {
+    public function __construct(
+        private IStudentGroupService $_studentGroupService,
+    ) {
     }
 
     /**
      * @inheritDoc
+     *
      * @throws InvalidOperationException
      * @throws Throwable
      */

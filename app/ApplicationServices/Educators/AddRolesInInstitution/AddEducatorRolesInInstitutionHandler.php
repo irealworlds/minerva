@@ -22,6 +22,7 @@ final readonly class AddEducatorRolesInInstitutionHandler implements
 
     /**
      * @inheritDoc
+     *
      * @throws ModelNotFoundException
      * @throws Throwable
      */

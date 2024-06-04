@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Web\Controllers\StudentGroups;
 
 use App\ApplicationServices\StudentGroups\Delete\DeleteStudentGroupCommand;

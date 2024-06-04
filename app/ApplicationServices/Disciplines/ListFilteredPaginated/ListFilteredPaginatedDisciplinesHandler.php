@@ -24,6 +24,7 @@ final readonly class ListFilteredPaginatedDisciplinesHandler implements
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
     public function __invoke(
