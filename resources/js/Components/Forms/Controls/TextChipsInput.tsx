@@ -18,14 +18,16 @@ export default forwardRef(function TextChipsInput(
             // Do nothing
         },
         value = [],
+        required = false,
         ...props
     }: Omit<
         InputHTMLAttributes<HTMLInputElement>,
-        'onChange' | 'onChangeCapture' | 'string'
+        'onChange' | 'onChangeCapture' | 'string' | 'required'
     > & {
         value?: string[];
         isFocused?: boolean;
         separator?: string;
+        required?: boolean | undefined;
         onChange?: (newValue: string[]) => void;
     },
     ref
@@ -81,6 +83,7 @@ export default forwardRef(function TextChipsInput(
             <input
                 {...props}
                 type={type}
+                required={required && value.length === 0}
                 className="!border-0 !ring-0 !outline-0 !p-0 grow"
                 onBlur={e => {
                     if (e.target.value.trim().length > 0) {

@@ -7,9 +7,7 @@ namespace App\Http\Web\Controllers;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 use const PHP_VERSION;

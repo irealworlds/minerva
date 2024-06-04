@@ -9,9 +9,7 @@ use App\Http\Web\Controllers\Controller;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Contracts\Auth\{
-    Factory as AuthManager,
-    MustVerifyEmail};
+use Illuminate\Contracts\Auth\{Factory as AuthManager, MustVerifyEmail};
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;

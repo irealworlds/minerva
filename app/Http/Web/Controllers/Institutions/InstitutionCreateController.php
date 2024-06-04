@@ -17,15 +17,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Inertia\{
-    Inertia,
-    Response as InertiaResponse};
+use Inertia\{Inertia, Response as InertiaResponse};
 use ReflectionException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{
-    Get,
-    Post,
-    Prefix};
+use Spatie\RouteAttributes\Attributes\{Get, Post, Prefix};
 use Throwable;
 
 #[Prefix('/Institutions/Create')]

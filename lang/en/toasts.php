@@ -5,6 +5,9 @@ declare(strict_types=1);
 return [
     'login.success' => 'You have signed into your account.',
     'logout.success' => 'You have signed out of your account.',
+    'profile' => [
+        'updated' => 'Changes saved successfully.',
+    ],
     'institutions' => [
         'created' => 'Institution created successfully.',
         'updated' => 'Institution details updated.',

@@ -9,7 +9,8 @@ use App\ApplicationServices\Institutions\FindById\FindInstitutionsByRouteKeysQue
 use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
 use App\Core\Contracts\Services\IInertiaService;
 use App\Core\Models\Institution;
-use App\Http\Web\Controllers\{Controller, DashboardController};
+use App\Http\Web\Controllers\{Controller};
+use App\Http\Web\Controllers\DashboardController;
 use App\Http\Web\Controllers\Institutions\Management\ManageInstitutionDisciplinesController;
 use App\Http\Web\Requests\Disciplines\DisciplineCreateRequest;
 use App\Http\Web\ViewModels\InstitutionViewModel;

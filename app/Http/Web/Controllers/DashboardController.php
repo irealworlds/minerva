@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Web\Controllers;
 
 use Codestage\Authorization\Attributes\Authorize;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 

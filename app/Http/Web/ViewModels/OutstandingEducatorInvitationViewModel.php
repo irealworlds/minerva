@@ -26,7 +26,7 @@ final readonly class OutstandingEducatorInvitationViewModel
     ): OutstandingEducatorInvitationViewModel {
         return new OutstandingEducatorInvitationViewModel(
             id: $model->getRouteKey(),
-            name: $model->invitedEducator->identity->email, // todo replace with name
+            name: $model->invitedEducator->identity->name->getFullName(),
             email: $model->invitedEducator->identity->email,
             pictureUri: 'https://ui-avatars.com/api/?name=' .
                 urlencode($model->invitedEducator->identity->email) .

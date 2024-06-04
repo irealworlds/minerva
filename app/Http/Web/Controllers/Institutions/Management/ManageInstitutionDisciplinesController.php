@@ -9,10 +9,8 @@ use App\ApplicationServices\Institutions\RemoveDiscipline\RemoveDisciplineFromIn
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\{Discipline, Institution};
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\ViewModels\{
-    InstitutionDisciplineViewModel,
-    InstitutionViewModel,
-};
+use App\Http\Web\ViewModels\{InstitutionDisciplineViewModel};
+use App\Http\Web\ViewModels\InstitutionViewModel;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;

@@ -15,9 +15,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use ReflectionException;
-use Spatie\RouteAttributes\Attributes\{
-    Patch,
-    Prefix};
+use Spatie\RouteAttributes\Attributes\{Patch, Prefix};
 
 #[Prefix('/Institutions/{institution}')]
 final readonly class InstitutionUpdateController extends Controller

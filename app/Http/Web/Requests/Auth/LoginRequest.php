@@ -6,9 +6,7 @@ namespace App\Http\Web\Requests\Auth;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\{
-    Auth,
-    RateLimiter};
+use Illuminate\Support\Facades\{Auth, RateLimiter};
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;

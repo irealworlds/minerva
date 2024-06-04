@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Core\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Core\Dtos\PersonalNameDto;
 use App\Core\Enums\Permission;
+use App\Infrastructure\Casts\PersonalNameCast;
 use Carbon\Carbon;
 use Codestage\Authorization\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $id
+ * @property PersonalNameDto $name
  * @property string $email
  * @property Carbon|null $email_verified_at
  * @property string $password
@@ -36,7 +39,15 @@ class Identity extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['email', 'password'];
+    protected $fillable = [
+        'name_prefix',
+        'first_name',
+        'middle_names',
+        'last_name',
+        'name_suffix',
+        'email',
+        'password',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,6 +66,7 @@ class Identity extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'name' => PersonalNameCast::class,
         ];
     }
 

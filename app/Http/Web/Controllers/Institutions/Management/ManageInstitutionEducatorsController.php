@@ -17,9 +17,9 @@ use App\Core\Models\{
 };
 use App\Core\Optional;
 use App\Http\Web\Controllers\Controller;
+use App\Http\Web\ViewModels\{InstitutionEducatorViewModel};
 use App\Http\Web\ViewModels\{
     EducatorSuggestionViewModel,
-    InstitutionEducatorViewModel,
     InstitutionViewModel,
     OutstandingEducatorInvitationViewModel,
 };

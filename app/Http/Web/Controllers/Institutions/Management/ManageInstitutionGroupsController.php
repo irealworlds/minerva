@@ -8,10 +8,10 @@ use App\ApplicationServices\StudentGroups\TreeByInstitution\ListStudentGroupsByI
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\{Institution, StudentGroup};
 use App\Http\Web\Controllers\Controller;
+use App\Http\Web\ViewModels\{StudentGroupTreeViewModel};
 use App\Http\Web\ViewModels\{
     InstitutionViewModel,
     StudentGroupTreeNodeViewModel,
-    StudentGroupTreeViewModel,
 };
 use Inertia\{Inertia, Response as InertiaResponse};
 use RuntimeException;

@@ -12,7 +12,7 @@ use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
-use Spatie\RouteAttributes\Attributes\Get;
+use Spatie\RouteAttributes\Attributes\Put;
 use Throwable;
 
 final readonly class PasswordController extends Controller
@@ -29,7 +29,7 @@ final readonly class PasswordController extends Controller
      *
      * @throws Throwable
      */
-    #[Get('/Password', name: 'password.update')]
+    #[Put('/Password', name: 'password.update')]
     #[Authorize]
     public function update(PasswordUpdateRequest $request): RedirectResponse
     {

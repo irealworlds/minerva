@@ -44,6 +44,7 @@ final class HandleInertiaRequestsMiddleware extends InertiaMiddleware
                 'user' => $user
                     ? new AuthenticatedUserViewModel(
                         id: $user->getKey(),
+                        name: $user->name,
                         email: $user->email,
                         emailVerified: $user->hasVerifiedEmail(),
                         pictureUri: 'https://ui-avatars.com/api/?name=' .

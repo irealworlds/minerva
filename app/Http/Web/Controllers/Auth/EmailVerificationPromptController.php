@@ -9,13 +9,9 @@ use App\Http\Web\Controllers\Controller;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Http\{
-    RedirectResponse,
-    Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use InvalidArgumentException;
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;

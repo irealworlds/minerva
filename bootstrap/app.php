@@ -5,13 +5,12 @@ declare(strict_types=1);
 use App\Cli\Commands\{
     ControllerMakeCommand,
     ModelMakeCommand,
-    RequestMakeCommand,};
+    RequestMakeCommand,
+};
 use App\Http\Web\Middleware\HandleInertiaRequestsMiddleware;
 use Codestage\Authorization\Middleware\AuthorizationMiddleware;
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\{
-    Exceptions,
-    Middleware};
+use Illuminate\Foundation\Configuration\{Exceptions, Middleware};
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
 return Application::configure(basePath: \dirname(__DIR__))

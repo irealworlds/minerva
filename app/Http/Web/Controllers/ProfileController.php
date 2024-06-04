@@ -7,6 +7,7 @@ namespace App\Http\Web\Controllers;
 use App\ApplicationServices\Identities\Update\UpdateIdentityCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\Identity;
+use App\Core\Optional;
 use App\Http\Web\Requests\ProfileUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Session\SessionManager;
+use Illuminate\Validation\ValidationException;
 use Inertia\{Inertia, Response};
 use ReflectionException;
 use RuntimeException;
@@ -46,9 +48,9 @@ final readonly class ProfileController extends Controller
     /**
      * Update the user's profile information.
      *
-     *
      * @throws BindingResolutionException
      * @throws ReflectionException
+     * @throws ValidationException
      */
     #[Patch('/Profile', name: 'profile.update')]
     #[Authorize]
@@ -57,12 +59,24 @@ final readonly class ProfileController extends Controller
         /** @var Identity $identity */
         $identity = $request->user();
 
+        /** @var Optional<string[]> $middleNames */
+        $middleNames = $request->optionalArray('middleNames', false);
+
+        // Dispatch the update identity command
         $command = new UpdateIdentityCommand(
-            $identity,
-            $request->string('email')->toString(),
+            identity: $identity,
+            namePrefix: $request->optionalString('namePrefix'),
+            firstName: $request->optionalString('firstName', false),
+            middleNames: $middleNames,
+            lastName: $request->optionalString('lastName', false),
+            nameSuffix: $request->optionalString('nameSuffix'),
+            email: $request->optionalString('email', false),
         );
         $this->_commandBus->dispatch($command);
 
-        return $this->_redirector->route('profile.edit');
+        // Redirect back to the profile page
+        return $this->_redirector
+            ->action([ProfileController::class, 'edit'])
+            ->with('success', [__('toasts.profile.updated')]);
     }
 }

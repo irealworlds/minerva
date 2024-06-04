@@ -23,7 +23,7 @@ final readonly class InstitutionDisciplineViewModel
             id: $discipline->getRouteKey(),
             name: $discipline->name,
             abbreviation: $discipline->abbreviation,
-            // Todo do not use pivot directly
+            // todo do not use pivot directly
             addedAt: $discipline->pivot?->created_at?->toIso8601String(),
         );
     }

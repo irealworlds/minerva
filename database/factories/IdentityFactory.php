@@ -37,6 +37,11 @@ final class IdentityFactory extends Factory
         $hasher = app()->make(Hasher::class);
 
         return [
+            'name_prefix' => null,
+            'first_name' => fake()->firstName(),
+            'middle_names' => '[]',
+            'last_name' => fake()->lastName(),
+            'name_suffix' => null,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => (IdentityFactory::$password ??= $hasher->make(

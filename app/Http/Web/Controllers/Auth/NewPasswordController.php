@@ -10,23 +10,15 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Http\{
-    RedirectResponse,
-    Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
-use Illuminate\Validation\{
-    Rules,
-    ValidationException};
-use Inertia\{
-    Inertia,
-    Response};
+use Illuminate\Validation\{Rules, ValidationException};
+use Inertia\{Inertia, Response};
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{
-    Get,
-    Post};
+use Spatie\RouteAttributes\Attributes\{Get, Post};
 
-    use function is_string;
+use function is_string;
 
 final readonly class NewPasswordController extends Controller
 {

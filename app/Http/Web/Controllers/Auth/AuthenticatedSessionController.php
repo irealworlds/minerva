@@ -7,26 +7,16 @@ namespace App\Http\Web\Controllers\Auth;
 use App\Http\Web\Controllers\Controller;
 use App\Http\Web\Requests\Auth\LoginRequest;
 use Codestage\Authorization\Attributes\Authorize;
-use Illuminate\Contracts\Auth\{
-    Factory,
-    StatefulGuard};
+use Illuminate\Contracts\Auth\{Factory, StatefulGuard};
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Http\{
-    RedirectResponse,
-    Request};
-use Illuminate\Routing\{
-    Redirector,
-    Router};
+use Illuminate\Http\{RedirectResponse, Request};
+use Illuminate\Routing\{Redirector, Router};
 use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use InvalidArgumentException;
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{
-    Get,
-    Post};
+use Spatie\RouteAttributes\Attributes\{Get, Post};
 
 final readonly class AuthenticatedSessionController extends Controller
 {

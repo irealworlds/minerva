@@ -32,7 +32,7 @@ final readonly class EducatorInvitationService implements
         $invitation->expired_at = Carbon::now()->addMonth();
         $invitation->institution_id = $institution->getKey();
         $invitation->invited_educator_id = $educator->getKey();
-        $invitation->inviter_name = $inviter->email; // TODO replace with name
+        $invitation->inviter_name = $inviter->name->getFullName();
         $invitation->inviter_email = $inviter->email;
         $invitation->roles = $roles;
         $invitation->inviter_id = $inviter->getKey();

@@ -26,7 +26,7 @@ final readonly class InstitutionEducatorViewModel
     ): InstitutionEducatorViewModel {
         return new InstitutionEducatorViewModel(
             id: $model->educator->getRouteKey(),
-            name: $model->educator->identity->email, // todo use name
+            name: $model->educator->identity->name->getFullName(),
             email: $model->educator->identity->email,
             roles: $model->roles,
             pictureUri: 'https://ui-avatars.com/api/?name=' .

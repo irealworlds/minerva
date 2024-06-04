@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Web\ViewModels;
 
+use App\Core\Dtos\PersonalNameDto;
 use App\Core\Enums\Permission;
 use Illuminate\Support\Enumerable;
 
@@ -14,6 +15,7 @@ final readonly class AuthenticatedUserViewModel
      */
     public function __construct(
         public mixed $id,
+        public PersonalNameDto $name,
         public string $email,
         public bool $emailVerified,
         public string $pictureUri,

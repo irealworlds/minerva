@@ -23,7 +23,7 @@ final readonly class EducatorSuggestionViewModel
     ): EducatorSuggestionViewModel {
         return new EducatorSuggestionViewModel(
             id: $model->getRouteKey(),
-            name: $model->identity->email, // TODO use actual name
+            name: $model->identity->name->getFullName(),
             email: $model->identity->email,
             institutionsCount: $model->institutions()->count(),
             institutionName: $model->pivot?->name,

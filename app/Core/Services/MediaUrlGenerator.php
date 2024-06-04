@@ -10,9 +10,7 @@ use Exception;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Routing\UrlGenerator as AppUrlGenerator;
-use Illuminate\Routing\{
-    Route,
-    Router};
+use Illuminate\Routing\{Route, Router};
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use Override;
