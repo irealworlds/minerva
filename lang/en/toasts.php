@@ -25,6 +25,11 @@ return [
             'deleted' => 'Educator removed from institution.',
         ],
     ],
+    'studentEnrolments' => [
+        'cannot_suggest_institution' =>
+            'Cannot automatically determine institution for this discipline. Select associations manually.',
+        'created' => 'Student enroled successfully.',
+    ],
     'studentGroups' => [
         'created' => 'Student group created successfully.',
         'updated' => 'Student group details updated.',

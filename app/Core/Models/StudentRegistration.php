@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 /**
  * @property string $id
@@ -32,5 +32,18 @@ class StudentRegistration extends Model
     public function identity(): BelongsTo
     {
         return $this->belongsTo(Identity::class);
+    }
+
+    /**
+     * Get the student group enrolments for this student registration.
+     *
+     * @return HasMany<StudentGroupEnrolment>
+     */
+    public function studentGroupEnrolments(): HasMany
+    {
+        return $this->hasMany(
+            StudentGroupEnrolment::class,
+            'student_registration_id',
+        );
     }
 }

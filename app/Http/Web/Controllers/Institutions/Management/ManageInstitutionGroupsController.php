@@ -19,8 +19,6 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ManageInstitutionGroupsController extends Controller
 {
-    public const TabName = 'Groups';
-
     public function __construct(private IQueryBus $_queryBus)
     {
     }

@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Core\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+class StudentGroup extends Model
+{
+    /**
+     * @return Ancestors<StudentGroup|Institution>
+     */
+    public function ancestors(): Ancestors;
+}

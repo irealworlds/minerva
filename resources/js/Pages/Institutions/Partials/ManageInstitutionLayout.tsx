@@ -10,6 +10,7 @@ const navigationItems = [
     { name: 'Group structure', route: 'institutions.show.groups' },
     { name: 'Disciplines', route: 'institutions.show.disciplines' },
     { name: 'Educators', route: 'institutions.show.educators' },
+    { name: 'Student enrolments', route: 'institutions.show.students' },
 ];
 
 export const InstitutionManagementContext = createContext<{

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Endpoints\StudentGroups;
 
+use App\ApplicationServices\Institutions\FindById\FindInstitutionsByRouteKeysQuery;
 use App\ApplicationServices\StudentGroups\ListFilteredPaginated\ListFilteredPaginatedStudentGroupsQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\{Institution, StudentGroup};
@@ -57,6 +58,32 @@ final readonly class ListEndpoint extends Endpoint
             $parentType = Optional::empty();
         }
 
+        // Parse the descendant of institution IDs filter from the request
+        if (
+            $request->optionalString('descendantOfInstitutionIds')->hasValue()
+        ) {
+            $institutionRouteKeys = explode(
+                ',',
+                $request->string('descendantOfInstitutionIds')->toString(),
+            );
+            $descendantOfInstitutionIdsFilter = Optional::of(
+                $this->_queryBus
+                    ->dispatch(
+                        new FindInstitutionsByRouteKeysQuery(
+                            ...$institutionRouteKeys,
+                        ),
+                    )
+                    ->map(
+                        static fn (
+                            Institution $institution,
+                        ) => $institution->getKey(),
+                    )
+                    ->toArray(),
+            );
+        } else {
+            $descendantOfInstitutionIdsFilter = Optional::empty();
+        }
+
         // Fetch the groups via a query
         $studentGroups = $this->_queryBus->dispatch(
             new ListFilteredPaginatedStudentGroupsQuery(
@@ -65,6 +92,7 @@ final readonly class ListEndpoint extends Endpoint
                 parentType: $parentType,
                 parentId: $request->optionalString('parentId'),
                 searchQuery: $request->optionalString('search', false),
+                descendantOfInstitutionIds: $descendantOfInstitutionIdsFilter,
             ),
         );
 

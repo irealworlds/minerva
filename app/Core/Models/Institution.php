@@ -8,14 +8,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    BelongsToMany,
-    HasMany,
-    MorphMany,
-};
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany, MorphMany};
 use Illuminate\Support\Enumerable;
 use Spatie\MediaLibrary\{HasMedia, InteractsWithMedia};
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * @property string $id
@@ -34,6 +30,7 @@ final class Institution extends Model implements HasMedia
     use HasUuids;
     use InteractsWithMedia;
     use HasFactory;
+    use HasRecursiveRelationships;
 
     public const EmblemPictureMediaCollection = 'emblem_picture';
 
@@ -46,24 +43,10 @@ final class Institution extends Model implements HasMedia
         )->singleFile();
     }
 
-    /**
-     * Get the institution this entity is subordinated to.
-     *
-     * @return BelongsTo<Institution, Institution>
-     */
-    public function parent(): BelongsTo
+    /** @inheritDoc */
+    public function getParentKeyName(): string
     {
-        return $this->belongsTo(Institution::class, 'parent_institution_id');
-    }
-
-    /**
-     * Get this entity's child institutions.
-     *
-     * @return HasMany<Institution>
-     */
-    public function children(): HasMany
-    {
-        return $this->hasMany(Institution::class, 'parent_institution_id');
+        return 'parent_institution_id';
     }
 
     /**

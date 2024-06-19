@@ -11,6 +11,7 @@ use App\Core\Optional;
 use App\Http\Api\Dtos\DisciplineDto;
 use App\Http\Api\Endpoints\Endpoint;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use Spatie\RouteAttributes\Attributes\Get;
 
@@ -22,6 +23,7 @@ final readonly class ListEndpoint extends Endpoint
 
     /**
      * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     #[Get('/Disciplines', name: 'api.disciplines.index')]
     public function __invoke(ListEndpointRequest $request): JsonResponse
@@ -83,20 +85,12 @@ final readonly class ListEndpoint extends Endpoint
             );
         }
 
-        // Parse the search query filter
-        $searchFilter = Optional::empty();
-        if ($request->filled('search')) {
-            $searchFilter = Optional::of(
-                $request->string('search')->toString(),
-            );
-        }
-
         // Fetch the disciplines via a query
         $disciplines = $this->_queryBus->dispatch(
             new ListFilteredPaginatedDisciplinesQuery(
                 page: $request->integer('page', 1),
                 pageSize: $request->integer('pageSize', 10),
-                searchQuery: $searchFilter,
+                searchQuery: $request->optionalString('search', false),
                 associatedToInstitutionIds: $associatedToInstitutionIdsFilter,
                 notAssociatedToInstitutionIds: $notAssociatedToInstitutionIdsFilter,
                 associatedToStudentGroupIds: $associatedToStudentGroupIdsFilter,

@@ -6,9 +6,16 @@ namespace App\Core\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{BelongsToMany, MorphMany, MorphTo};
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsToMany,
+    HasMany,
+    MorphMany,
+    MorphTo,
+};
 use Illuminate\Support\Enumerable;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * @property string $id
@@ -23,7 +30,9 @@ use Illuminate\Support\Enumerable;
  */
 class StudentGroup extends Model
 {
+    use HasFactory;
     use HasUuids;
+    use HasRecursiveRelationships;
 
     protected $fillable = ['name', 'parent_type', 'parent_id'];
 
@@ -34,12 +43,24 @@ class StudentGroup extends Model
      */
     public function parent(): MorphTo
     {
-        return $this->morphTo('parent');
+        return $this->morphTo(type: 'parent_type', id: 'parent_id');
+    }
+
+    /**
+     * @return HasMany<StudentGroup>
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(StudentGroup::class, 'parent_id')->where(
+            'parent_type',
+            StudentGroup::class,
+        );
     }
 
     /**
      * Get the groups subordinated to this student group.
      *
+     * @deprecated Use {@link static::children()} instead.
      * @return MorphMany<StudentGroup>
      */
     public function childGroups(): MorphMany

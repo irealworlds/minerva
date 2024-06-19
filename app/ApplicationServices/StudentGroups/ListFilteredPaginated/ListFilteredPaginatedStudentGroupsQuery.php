@@ -19,6 +19,7 @@ final readonly class ListFilteredPaginatedStudentGroupsQuery implements IQuery
      * @param Optional<string|null> $parentType
      * @param Optional<string|null> $parentId
      * @param Optional<string> $searchQuery
+     * @param Optional<mixed[]> $descendantOfInstitutionIds
      */
     public function __construct(
         public int $page,
@@ -26,6 +27,7 @@ final readonly class ListFilteredPaginatedStudentGroupsQuery implements IQuery
         public Optional $parentType,
         public Optional $parentId,
         public Optional $searchQuery,
+        public Optional $descendantOfInstitutionIds,
     ) {
     }
 }
