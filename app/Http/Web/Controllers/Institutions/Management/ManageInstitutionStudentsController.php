@@ -8,7 +8,7 @@ use App\ApplicationServices\StudentGroupEnrolments\ListFilteredPaginatedByInstit
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\{Institution, StudentGroupEnrolment};
 use App\Core\Optional;
-use App\Http\Web\ViewModels\InstitutionViewModel;
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Illuminate\Http\Request;
 use Inertia\{Response as InertiaResponse, ResponseFactory};
 use Spatie\RouteAttributes\Attributes\{Get, Group};
@@ -19,6 +19,7 @@ final readonly class ManageInstitutionStudentsController
     public function __construct(
         private ResponseFactory $_inertia,
         private IQueryBus $_queryBus,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
     ) {
     }
 
@@ -52,7 +53,7 @@ final readonly class ManageInstitutionStudentsController
         return $this->_inertia->render(
             'Institutions/ManageInstitutionStudents',
             [
-                'institution' => static fn () => InstitutionViewModel::fromModel(
+                'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
                     $institution,
                 ),
                 'enrolments' => static fn () => $studentEnrolments,

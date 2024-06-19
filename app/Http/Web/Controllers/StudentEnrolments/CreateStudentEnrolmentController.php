@@ -8,7 +8,7 @@ use App\ApplicationServices\Institutions\FindById\FindInstitutionsByRouteKeysQue
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Contracts\Services\IInertiaService;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\ViewModels\InstitutionViewModel;
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Illuminate\Http\Request;
 use Inertia\{Response as InertiaResponse, ResponseFactory};
 use Spatie\RouteAttributes\Attributes\Get;
@@ -22,6 +22,7 @@ final readonly class CreateStudentEnrolmentController extends Controller
         private ResponseFactory $_inertia,
         private IQueryBus $_queryBus,
         private IInertiaService $_inertiaService,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
     ) {
     }
 
@@ -55,7 +56,9 @@ final readonly class CreateStudentEnrolmentController extends Controller
         // Render the inertia page
         return $this->_inertia->render('StudentEnrolments/Create', [
             'intendedInstitution' => $intendedInstitution
-                ? InstitutionViewModel::fromModel($intendedInstitution)
+                ? $this->_institutionViewModelAssembler->assemble(
+                    $intendedInstitution,
+                )
                 : null,
         ]);
     }

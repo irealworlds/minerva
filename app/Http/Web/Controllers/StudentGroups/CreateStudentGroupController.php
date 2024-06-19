@@ -11,8 +11,10 @@ use App\Core\Enums\Permission;
 use App\Core\Models\{Institution, StudentGroup};
 use App\Http\Web\Controllers\Institutions\InstitutionReadController;
 use App\Http\Web\Requests\StudentGroups\StudentGroupCreateRequest;
-use App\Http\Web\ViewModels\{StudentGroupViewModel};
-use App\Http\Web\ViewModels\InstitutionViewModel;
+use App\Http\Web\ViewModels\{
+    Assemblers\InstitutionViewModelAssembler,
+    StudentGroupViewModel,
+};
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -34,6 +36,7 @@ final readonly class CreateStudentGroupController
         private ResponseFactory $_inertia,
         private Redirector $_redirector,
         private UrlGenerator $_urlGenerator,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
     ) {
     }
 
@@ -104,7 +107,7 @@ final readonly class CreateStudentGroupController
                         : null),
             'initialParent' =>
                 $parent instanceof Institution
-                    ? InstitutionViewModel::fromModel($parent)
+                    ? $this->_institutionViewModelAssembler->assemble($parent)
                     : ($parent instanceof StudentGroup
                         ? StudentGroupViewModel::fromModel($parent)
                         : null),

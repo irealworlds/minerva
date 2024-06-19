@@ -19,8 +19,8 @@ use App\Core\Optional;
 use App\Http\Web\Controllers\Controller;
 use App\Http\Web\ViewModels\{InstitutionEducatorViewModel};
 use App\Http\Web\ViewModels\{
+    Assemblers\InstitutionViewModelAssembler,
     EducatorSuggestionViewModel,
-    InstitutionViewModel,
     OutstandingEducatorInvitationViewModel,
 };
 use Illuminate\Http\Request;
@@ -31,8 +31,10 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ManageInstitutionEducatorsController extends Controller
 {
-    public function __construct(private IQueryBus $_queryBus)
-    {
+    public function __construct(
+        private IQueryBus $_queryBus,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
+    ) {
     }
 
     /**
@@ -79,7 +81,7 @@ final readonly class ManageInstitutionEducatorsController extends Controller
 
         // Render the management view
         return Inertia::render('Institutions/ManageInstitutionEducators', [
-            'institution' => static fn () => InstitutionViewModel::fromModel(
+            'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
                 $institution,
             ),
             'educators' => static fn () => $educators,

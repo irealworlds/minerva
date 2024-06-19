@@ -10,7 +10,7 @@ use App\Core\Enums\Permission;
 use App\Core\Optional;
 use App\Http\Web\Controllers\Controller;
 use App\Http\Web\Requests\Institutions\InstitutionListRequest;
-use App\Http\Web\ViewModels\InstitutionViewModel;
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Validation\ValidationException;
 use Inertia\{Inertia, Response};
@@ -19,8 +19,10 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class InstitutionListController extends Controller
 {
-    public function __construct(private IQueryBus $_queryBus)
-    {
+    public function __construct(
+        private IQueryBus $_queryBus,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
+    ) {
     }
 
     /**
@@ -46,9 +48,11 @@ final readonly class InstitutionListController extends Controller
             $institutions
                 ->getCollection()
                 ->map(
-                    static fn (
+                    fn (
                         mixed $institution,
-                    ) => InstitutionViewModel::fromModel($institution),
+                    ) => $this->_institutionViewModelAssembler->assemble(
+                        $institution,
+                    ),
                 ),
         );
 

@@ -12,8 +12,16 @@ import { Head } from '@inertiajs/react';
 export default function ManageInstitutionDetails({
     auth,
     institution,
+    parentInstitutionId,
+    parentInstitutionName,
+    parentInstitutionPictureUri,
+    parentInstitutionAncestors,
 }: PageProps<{
     institution: InstitutionViewModel;
+    parentInstitutionId: string | null;
+    parentInstitutionName: string | null;
+    parentInstitutionPictureUri: string | null;
+    parentInstitutionAncestors: { id: string; name: string }[] | null;
 }>) {
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -23,6 +31,18 @@ export default function ManageInstitutionDetails({
                     {/* Public details */}
                     <UpdateInstitutionPublicDetailsForm
                         institution={institution}
+                        parent={
+                            parentInstitutionId !== null &&
+                            parentInstitutionName !== null &&
+                            parentInstitutionAncestors !== null
+                                ? {
+                                      id: parentInstitutionId,
+                                      name: parentInstitutionName,
+                                      pictureUri: parentInstitutionPictureUri,
+                                      ancestors: parentInstitutionAncestors,
+                                  }
+                                : null
+                        }
                     />
 
                     {/* Deletion */}

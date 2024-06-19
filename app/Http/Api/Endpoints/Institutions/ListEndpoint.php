@@ -8,7 +8,7 @@ use App\ApplicationServices\Institutions\ListFilteredPaginated\ListFilteredPagin
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\Institution;
 use App\Http\Api\Endpoints\Endpoint;
-use App\Http\Web\ViewModels\InstitutionViewModel;
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
@@ -16,8 +16,10 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ListEndpoint extends Endpoint
 {
-    public function __construct(private IQueryBus $_queryBus)
-    {
+    public function __construct(
+        private IQueryBus $_queryBus,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
+    ) {
     }
 
     /**
@@ -42,9 +44,11 @@ final readonly class ListEndpoint extends Endpoint
             $institutions
                 ->getCollection()
                 ->map(
-                    static fn (
+                    fn (
                         Institution $institution,
-                    ) => InstitutionViewModel::fromModel($institution),
+                    ) => $this->_institutionViewModelAssembler->assemble(
+                        $institution,
+                    ),
                 ),
         );
 

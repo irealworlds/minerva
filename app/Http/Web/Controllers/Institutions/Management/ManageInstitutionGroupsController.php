@@ -10,7 +10,7 @@ use App\Core\Models\{Institution, StudentGroup};
 use App\Http\Web\Controllers\Controller;
 use App\Http\Web\ViewModels\{StudentGroupTreeViewModel};
 use App\Http\Web\ViewModels\{
-    InstitutionViewModel,
+    Assemblers\InstitutionViewModelAssembler,
     StudentGroupTreeNodeViewModel,
 };
 use Inertia\{Inertia, Response as InertiaResponse};
@@ -19,8 +19,10 @@ use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ManageInstitutionGroupsController extends Controller
 {
-    public function __construct(private IQueryBus $_queryBus)
-    {
+    public function __construct(
+        private IQueryBus $_queryBus,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
+    ) {
     }
 
     /**
@@ -36,7 +38,7 @@ final readonly class ManageInstitutionGroupsController extends Controller
     {
         // Render the management view
         return Inertia::render('Institutions/ManageInstitutionGroups', [
-            'institution' => static fn () => InstitutionViewModel::fromModel(
+            'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
                 $institution,
             ),
             'groups' => function () use ($institution) {

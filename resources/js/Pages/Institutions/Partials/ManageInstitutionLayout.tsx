@@ -1,17 +1,15 @@
 import { createContext, PropsWithChildren, useMemo } from 'react';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { Link } from '@inertiajs/react';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { minimizeNumber } from '@/utils/minimize-number.function';
+import {
+    AcademicCapIcon,
+    AdjustmentsHorizontalIcon,
+    ArrowLeftIcon,
+    FolderIcon,
+    IdentificationIcon,
+    UserGroupIcon,
+} from '@heroicons/react/24/outline';
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
-
-const navigationItems = [
-    { name: 'General', route: 'institutions.show.general' },
-    { name: 'Group structure', route: 'institutions.show.groups' },
-    { name: 'Disciplines', route: 'institutions.show.disciplines' },
-    { name: 'Educators', route: 'institutions.show.educators' },
-    { name: 'Student enrolments', route: 'institutions.show.students' },
-];
 
 export const InstitutionManagementContext = createContext<{
     institution?: InstitutionViewModel;
@@ -25,12 +23,55 @@ export default function ManageInstitutionLayout({
 }>) {
     const navigation = useMemo(
         () =>
-            navigationItems.map(item => ({
+            [
+                {
+                    name: 'General',
+                    icon: AdjustmentsHorizontalIcon,
+                    route: 'institutions.show.general',
+                    count: undefined,
+                },
+                {
+                    name: 'Group structure',
+                    icon: UserGroupIcon,
+                    route: 'institutions.show.groups',
+                    count: undefined,
+                },
+                {
+                    name: 'Disciplines',
+                    icon: FolderIcon,
+                    route: 'institutions.show.disciplines',
+                    count: institution.disciplinesCount,
+                },
+                {
+                    name: 'Educators',
+                    icon: AcademicCapIcon,
+                    route: 'institutions.show.educators',
+                    count: institution.educatorsCount,
+                },
+                {
+                    name: 'Student enrolments',
+                    icon: IdentificationIcon,
+                    route: 'institutions.show.students',
+                    count: institution.studentsCount,
+                },
+            ].map(item => ({
                 ...item,
                 href: route(item.route, {
                     institution: institution.id,
                 }),
                 current: route().current(item.route),
+            })),
+        [institution]
+    );
+
+    const secondaryNavigation = useMemo(
+        () =>
+            institution.childInstitutions.map(child => ({
+                name: child.name,
+                href: route('institutions.show.general', {
+                    institution: child.id,
+                }),
+                initial: child.name.trim().charAt(0),
             })),
         [institution]
     );
@@ -52,30 +93,73 @@ export default function ManageInstitutionLayout({
                 <nav
                     className="flex flex-1 flex-col sticky top-20"
                     aria-label="Sidebar">
-                    <ul role="list" className="-mx-2 space-y-1">
-                        {navigation.map(item => (
-                            <li key={item.name}>
-                                <Link
-                                    href={item.href}
-                                    className={combineClassNames(
-                                        item.current
-                                            ? 'bg-gray-100 text-indigo-600'
-                                            : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
-                                        'group flex gap-x-3 rounded-md p-2 pl-3 text-sm leading-6 font-semibold'
-                                    )}>
-                                    {item.name}
-                                    {'count' in item && (
-                                        <span
-                                            className="ml-auto w-9 min-w-max whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 text-center text-xs font-medium leading-5 text-gray-600 ring-1 ring-inset ring-gray-200"
-                                            aria-hidden="true">
-                                            {minimizeNumber(
-                                                item.count as number
-                                            )}
-                                        </span>
-                                    )}
-                                </Link>
+                    <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                        <li>
+                            <ul role="list" className="-mx-2 space-y-1">
+                                {navigation.map(item => (
+                                    <li key={item.name}>
+                                        <Link
+                                            href={item.href}
+                                            className={combineClassNames(
+                                                item.current
+                                                    ? 'bg-gray-100 text-indigo-600'
+                                                    : 'text-gray-700 hover:bg-gray-100 hover:text-indigo-600',
+                                                'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
+                                            )}>
+                                            <item.icon
+                                                className={combineClassNames(
+                                                    item.current
+                                                        ? 'text-indigo-600'
+                                                        : 'text-gray-400 group-hover:text-indigo-600',
+                                                    'h-6 w-6 shrink-0'
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                            {item.name}
+                                            {item.count !== undefined ? (
+                                                <span
+                                                    className="ml-auto w-9 min-w-max whitespace-nowrap rounded-full bg-gray-50 px-2.5 py-0.5 text-center text-xs font-medium leading-5 text-gray-600 ring-1 ring-inset ring-gray-200"
+                                                    aria-hidden="true">
+                                                    {item.count}
+                                                </span>
+                                            ) : null}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </li>
+                        {secondaryNavigation.length > 0 && (
+                            <li>
+                                <div className="text-xs font-semibold leading-6 text-gray-400">
+                                    Associated institutions
+                                </div>
+                                <ul
+                                    role="list"
+                                    className="-mx-2 mt-2 space-y-1">
+                                    {secondaryNavigation.map(item => (
+                                        <li key={item.name}>
+                                            <Link
+                                                href={item.href}
+                                                className={combineClassNames(
+                                                    'text-gray-700 hover:bg-gray-100 hover:text-indigo-600',
+                                                    'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
+                                                )}>
+                                                <span
+                                                    className={combineClassNames(
+                                                        'border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                                        'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium'
+                                                    )}>
+                                                    {item.initial}
+                                                </span>
+                                                <span className="truncate">
+                                                    {item.name}
+                                                </span>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
                             </li>
-                        ))}
+                        )}
                     </ul>
                 </nav>
             </div>

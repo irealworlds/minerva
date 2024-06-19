@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import React, { FormEventHandler, useEffect, useRef, useState } from 'react';
 import { clearFileInput } from '@/utils/clear-file-input.function';
 import InputLabel from '@/Components/Forms/InputLabel';
@@ -9,12 +9,25 @@ import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import DangerButton from '@/Components/Buttons/DangerButton';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
+import InstitutionPicture from '@/Components/Institutions/InstitutionPicture';
+
+interface UpdatedInstitutionPublicDetailsFormProps {
+    institution: InstitutionViewModel;
+    parent: {
+        id: string;
+        name: string;
+        pictureUri: string | null;
+        ancestors: {
+            id: string;
+            name: string;
+        }[];
+    } | null;
+}
 
 export default function UpdateInstitutionPublicDetailsForm({
     institution,
-}: {
-    institution: InstitutionViewModel;
-}) {
+    parent,
+}: UpdatedInstitutionPublicDetailsFormProps) {
     const { setData, data, processing, errors, post, reset, isDirty } =
         useForm<{
             _method: 'PATCH';
@@ -194,6 +207,60 @@ export default function UpdateInstitutionPublicDetailsForm({
                                 </PrimaryButton>
                             </div>
                         </div>
+
+                        {/* Parent */}
+                        {parent && (
+                            <div className="col-span-full">
+                                <p className="block text-sm font-medium leading-6 text-gray-900">
+                                    Parent institution
+                                </p>
+
+                                <div className="mt-2">
+                                    <nav className="truncate text-gray-400">
+                                        <ol className="flex flex-wrap items-center gap-x-1">
+                                            {parent.ancestors.map(ancestor => (
+                                                <li
+                                                    key={ancestor.id}
+                                                    className="flex items-center">
+                                                    <Link
+                                                        href={route(
+                                                            'institutions.show.general',
+                                                            {
+                                                                institution:
+                                                                    ancestor.id,
+                                                            }
+                                                        )}
+                                                        className="mr-1 text-xs font-medium hover:text-gray-500">
+                                                        {ancestor.name}
+                                                    </Link>
+                                                    <svg
+                                                        className="size-3 flex-shrink-0"
+                                                        fill="currentColor"
+                                                        viewBox="0 0 20 20"
+                                                        aria-hidden="true">
+                                                        <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                                                    </svg>
+                                                </li>
+                                            ))}
+                                        </ol>
+                                    </nav>
+                                    <Link
+                                        href={route(
+                                            'institutions.show.general',
+                                            {
+                                                institution: parent.id,
+                                            }
+                                        )}
+                                        className="mt-2 text-sm leading-6 text-indigo-600 hover:text-indigo-500 flex items-center gap-2">
+                                        <InstitutionPicture
+                                            uri={parent.pictureUri}
+                                            className="size-8"
+                                        />
+                                        {parent.name}
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

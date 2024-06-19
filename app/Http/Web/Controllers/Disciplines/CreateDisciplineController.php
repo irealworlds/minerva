@@ -13,7 +13,7 @@ use App\Http\Web\Controllers\{Controller};
 use App\Http\Web\Controllers\DashboardController;
 use App\Http\Web\Controllers\Institutions\Management\ManageInstitutionDisciplinesController;
 use App\Http\Web\Requests\Disciplines\DisciplineCreateRequest;
-use App\Http\Web\ViewModels\InstitutionViewModel;
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\{RedirectResponse, Request};
@@ -34,6 +34,7 @@ final readonly class CreateDisciplineController extends Controller
         private UrlGenerator $_urlGenerator,
         private IQueryBus $_queryBus,
         private ICommandBus $_commandBus,
+        private InstitutionViewModelAssembler $_institutionViewModelAssembler,
     ) {
     }
 
@@ -65,9 +66,11 @@ final readonly class CreateDisciplineController extends Controller
         // Render the inertia page
         return $this->_inertiaResponse->render('Disciplines/Create', [
             'initialInstitutions' => fn () => $institutionSuggestions?->map(
-                static fn (
+                fn (
                     Institution $institution,
-                ) => InstitutionViewModel::fromModel($institution),
+                ) => $this->_institutionViewModelAssembler->assemble(
+                    $institution,
+                ),
             ) ?? [],
         ]);
     }
