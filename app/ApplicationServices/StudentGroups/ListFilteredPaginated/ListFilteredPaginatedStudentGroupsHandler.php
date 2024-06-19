@@ -80,7 +80,9 @@ final readonly class ListFilteredPaginatedStudentGroupsHandler implements
     /**
      * @param EloquentBuilder<StudentGroup> $queryBuilder
      * @param mixed[] $allowedInstitutionKeys
+     *
      * @return EloquentBuilder<StudentGroup>
+     *
      * @todo Maybe denormalize the institution keys to the student group enrolments table
      */
     private function addParentInstitutionKeyConstraint(

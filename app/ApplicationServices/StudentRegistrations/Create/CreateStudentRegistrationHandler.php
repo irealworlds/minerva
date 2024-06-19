@@ -20,6 +20,7 @@ final readonly class CreateStudentRegistrationHandler implements ICommandHandler
 
     /**
      * @inheritDoc
+     *
      * @throws Throwable
      */
     public function __invoke(mixed $command): void

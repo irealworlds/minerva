@@ -119,6 +119,7 @@ final readonly class StoreStudentEnrolmentController extends Controller
      * Extract the disciplines the student is enrolling to from the request.
      *
      * @return Enumerable<int, StudentEnrolmentDisciplineDto>
+     *
      * @throws ValidationException if any educator or discipline does not exist
      */
     public function extractStudiedDisciplines(

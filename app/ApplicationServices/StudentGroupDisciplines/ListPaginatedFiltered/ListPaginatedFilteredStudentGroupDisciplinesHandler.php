@@ -18,6 +18,7 @@ final readonly class ListPaginatedFilteredStudentGroupDisciplinesHandler impleme
 {
     /**
      * @inheritDoc
+     *
      * @throws InvalidArgumentException
      */
     public function __invoke(

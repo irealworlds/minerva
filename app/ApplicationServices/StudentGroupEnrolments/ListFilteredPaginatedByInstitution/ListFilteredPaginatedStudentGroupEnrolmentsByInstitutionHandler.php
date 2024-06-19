@@ -18,6 +18,7 @@ final readonly class ListFilteredPaginatedStudentGroupEnrolmentsByInstitutionHan
 {
     /**
      * @inheritDoc
+     *
      * @throws InvalidArgumentException
      */
     public function __invoke(
@@ -38,7 +39,9 @@ final readonly class ListFilteredPaginatedStudentGroupEnrolmentsByInstitutionHan
 
     /**
      * @param Builder<StudentGroupEnrolment> $queryBuilder
+     *
      * @return Builder<StudentGroupEnrolment>
+     *
      * @todo Maybe denormalize the institution keys to the student group enrolments table
      */
     private function addParentInstitutionKeyConstraint(

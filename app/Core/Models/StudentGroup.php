@@ -61,6 +61,7 @@ class StudentGroup extends Model
      * Get the groups subordinated to this student group.
      *
      * @deprecated Use {@link static::children()} instead.
+     *
      * @return MorphMany<StudentGroup>
      */
     public function childGroups(): MorphMany
