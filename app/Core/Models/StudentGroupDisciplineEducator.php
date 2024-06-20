@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, Pivot};
  * @property mixed $educator_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read StudentGroup $studentGroup
+ * @property-read Discipline $discipline
+ * @property-read Educator $educator
  */
 final class StudentGroupDisciplineEducator extends Pivot
 {

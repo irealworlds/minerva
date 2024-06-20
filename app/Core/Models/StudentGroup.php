@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
     BelongsToMany,
     HasMany,
     MorphMany,
@@ -22,13 +23,14 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
  * @property string $name
  * @property class-string $parent_type
  * @property mixed $parent_id
+ * @property-read mixed $parent_institution_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Model $parent
  * @property-read Enumerable<int, StudentGroup> $childGroups
  * @property-read Enumerable<int, Discipline> $disciplines Disciplines studied by this student group.
  */
-class StudentGroup extends Model
+final class StudentGroup extends Model
 {
     use HasFactory;
     use HasUuids;
@@ -83,5 +85,13 @@ class StudentGroup extends Model
             Discipline::class,
             StudentGroupDiscipline::class,
         )->withTimestamps();
+    }
+
+    /**
+     * @return BelongsTo<Institution, self>
+     */
+    public function parentInstitution(): BelongsTo
+    {
+        return $this->belongsTo(Institution::class, 'parent_institution_id');
     }
 }

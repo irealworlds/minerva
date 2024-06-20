@@ -54,4 +54,10 @@ return [
         'accepted' => 'Invitation accepted successfully.',
         'declined' => 'Invitation declined successfully.',
     ],
+    'educators' => [
+        'disciplines' => [
+            'created' => 'Educator added to discipline.',
+            'removed' => 'Educator removed from discipline.',
+        ],
+    ],
 ];

@@ -14,10 +14,14 @@ import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { InstitutionEducatorViewModel } from '@/types/view-models/institution-educator.view-model';
 import EducatorOverlayReadonlyDetails from '@/Pages/Institutions/Partials/Manage/Educators/EducatorOverlayReadonlyDetails';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { InstitutionManagementContext } from '@/Pages/Institutions/Partials/ManageInstitutionLayout';
 import { router } from '@inertiajs/react';
 import Spinner from '@/Components/Spinner';
+import EducatorOverlayAddDiscipline from '@/Pages/Institutions/Partials/Manage/Educators/EducatorOverlayAddDiscipline';
+import { PaginatedCollection } from '@/types/paginated-result.contract';
+import { EducatorTaughtDisciplineDto } from '@/types/dtos/educator-taught-discipline.dto';
+import { fetchAllPages } from '@/utils/pagination/get-all-pages.function';
 
 interface EducatorDetailsOverlayProps {
     open: boolean;
@@ -34,18 +38,41 @@ export default function EducatorDetailsOverlay({
     open,
     onClose,
 }: EducatorDetailsOverlayProps) {
-    const [currentSection] = useState<'readonly'>('readonly');
+    const [currentSection, setCurrentSection] = useState<
+        'readonly' | 'add-discipline'
+    >('readonly');
     const [deleting, setDeleting] = useState(false);
     const { institution } = useContext(InstitutionManagementContext);
+    const [taughtDisciplines, setTaughtDisciplines] = useState<
+        EducatorTaughtDisciplineDto[] | undefined
+    >(undefined);
+
+    useEffect(() => {
+        setCurrentSection('readonly');
+    }, [educator]);
 
     function renderCurrentSection() {
-        if (!educator) {
+        if (!educator || !institution) {
             return <></>;
         }
 
         switch (currentSection) {
             case 'readonly':
-                return <EducatorOverlayReadonlyDetails educator={educator} />;
+                return (
+                    <EducatorOverlayReadonlyDetails
+                        educator={educator}
+                        disciplines={taughtDisciplines}
+                        setCurrentSection={setCurrentSection}
+                    />
+                );
+            case 'add-discipline':
+                return (
+                    <EducatorOverlayAddDiscipline
+                        educatorId={educator.id}
+                        parentInstitutionId={institution.id}
+                        setCurrentSection={setCurrentSection}
+                    />
+                );
             default:
                 return <></>;
         }
@@ -74,6 +101,35 @@ export default function EducatorDetailsOverlay({
             }
         );
     }
+
+    async function refreshTaughtDisciplines() {
+        if (!educator) {
+            return;
+        }
+
+        setTaughtDisciplines(undefined);
+
+        const disciplines = await fetchAllPages(
+            route('api.educators.disciplines.index', {
+                educator: educator.id,
+            }),
+            (response: PaginatedCollection<EducatorTaughtDisciplineDto>) =>
+                response
+        );
+
+        setTaughtDisciplines(disciplines);
+    }
+
+    useEffect(() => {
+        refreshTaughtDisciplines().then(
+            () => {
+                // Do nothing
+            },
+            () => {
+                // Do nothing
+            }
+        );
+    }, [educator]);
 
     return (
         <EducatorManagementContext.Provider
@@ -133,7 +189,7 @@ export default function EducatorDetailsOverlay({
                                                 </div>
                                             </div>
                                             {/* Main */}
-                                            <div className="divide-y divide-gray-200 overflow-y-auto">
+                                            <div className="grow divide-y divide-gray-200 overflow-y-auto">
                                                 <div className="pb-6">
                                                     <div className="h-24 bg-indigo-700 sm:h-20 lg:h-28" />
                                                     <div className="-mt-12 flow-root px-4 sm:-mt-8 sm:flex sm:items-end sm:px-6 lg:-mt-16">
