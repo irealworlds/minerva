@@ -22,6 +22,7 @@ import EducatorOverlayAddDiscipline from '@/Pages/Institutions/Partials/Manage/E
 import { PaginatedCollection } from '@/types/paginated-result.contract';
 import { EducatorTaughtDisciplineDto } from '@/types/dtos/educator-taught-discipline.dto';
 import { fetchAllPages } from '@/utils/pagination/get-all-pages.function';
+import EducatorOverlayAddRole from '@/Pages/Institutions/Partials/Manage/Educators/EducatorOverlayAddRole';
 
 interface EducatorDetailsOverlayProps {
     open: boolean;
@@ -39,7 +40,7 @@ export default function EducatorDetailsOverlay({
     onClose,
 }: EducatorDetailsOverlayProps) {
     const [currentSection, setCurrentSection] = useState<
-        'readonly' | 'add-discipline'
+        'readonly' | 'add-discipline' | 'add-roles'
     >('readonly');
     const [deleting, setDeleting] = useState(false);
     const { institution } = useContext(InstitutionManagementContext);
@@ -68,6 +69,14 @@ export default function EducatorDetailsOverlay({
             case 'add-discipline':
                 return (
                     <EducatorOverlayAddDiscipline
+                        educatorId={educator.id}
+                        parentInstitutionId={institution.id}
+                        setCurrentSection={setCurrentSection}
+                    />
+                );
+            case 'add-roles':
+                return (
+                    <EducatorOverlayAddRole
                         educatorId={educator.id}
                         parentInstitutionId={institution.id}
                         setCurrentSection={setCurrentSection}

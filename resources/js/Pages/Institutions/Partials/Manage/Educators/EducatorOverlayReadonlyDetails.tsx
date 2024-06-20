@@ -1,5 +1,4 @@
 import { InstitutionEducatorViewModel } from '@/types/view-models/institution-educator.view-model';
-import EducatorDetailsAddRole from '@/Pages/Institutions/Partials/Manage/Educators/EducatorDetailsAddRole';
 import EducatorDetailsRoleEntry from '@/Pages/Institutions/Partials/Manage/Educators/EducatorDetailsRoleEntry';
 import { EducatorTaughtDisciplineDto } from '@/types/dtos/educator-taught-discipline.dto';
 import EducatorTaughtDisciplineEntry from '@/Pages/Institutions/Partials/Manage/Educators/EducatorTaughtDisciplineEntry';
@@ -7,7 +6,7 @@ import { combineClassNames } from '@/utils/combine-class-names.function';
 
 interface EducatorOverlayReadonlyDetailsProps {
     educator: InstitutionEducatorViewModel;
-    setCurrentSection: (newSection: 'add-discipline') => void;
+    setCurrentSection: (newSection: 'add-discipline' | 'add-roles') => void;
     disciplines: EducatorTaughtDisciplineDto[] | undefined;
 }
 
@@ -31,18 +30,37 @@ export default function EducatorOverlayReadonlyDetails({
                     Roles
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:ml-6 sm:mt-0 grow">
-                    <ul role="list" className="divide-y divide-gray-200">
-                        {educator.roles.map((role, roleIdx) => (
-                            <EducatorDetailsRoleEntry
-                                key={roleIdx}
-                                role={role}
-                                index={roleIdx + 1}
-                            />
-                        ))}
-                        <li className="py-2">
-                            <EducatorDetailsAddRole />
-                        </li>
-                    </ul>
+                    <div className={educator.roles.length > 0 ? '-mt-3' : ''}>
+                        <ul
+                            role="list"
+                            className="divide-y divide-gray-100 text-sm leading-6">
+                            {educator.roles.map((role, roleIdx) => (
+                                <li key={roleIdx} className="py-3">
+                                    <EducatorDetailsRoleEntry role={role} />
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div
+                            className={combineClassNames(
+                                'flex',
+                                educator.roles.length > 0
+                                    ? 'border-t border-gray-100 pt-3'
+                                    : ''
+                            )}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setCurrentSection('add-roles');
+                                }}
+                                className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                <span aria-hidden="true" className="mr-2">
+                                    +
+                                </span>
+                                Add another role
+                            </button>
+                        </div>
+                    </div>
                 </dd>
             </div>
             <div className="sm:flex sm:px-6 sm:py-5">

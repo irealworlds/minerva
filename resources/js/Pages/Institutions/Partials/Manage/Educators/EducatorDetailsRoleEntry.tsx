@@ -2,15 +2,14 @@ import { useContext, useState } from 'react';
 import { router } from '@inertiajs/react';
 import { InstitutionManagementContext } from '@/Pages/Institutions/Partials/ManageInstitutionLayout';
 import { EducatorManagementContext } from '@/Pages/Institutions/Partials/Manage/Educators/EducatorDetailsOverlay';
+import { combineClassNames } from '@/utils/combine-class-names.function';
 
 interface EducatorDetailsRoleEntryProps {
     role: string;
-    index: number;
 }
 
 export default function EducatorDetailsRoleEntry({
     role,
-    index,
 }: EducatorDetailsRoleEntryProps) {
     const [revoking, setRevoking] = useState(false);
     const { institution } = useContext(InstitutionManagementContext);
@@ -44,15 +43,12 @@ export default function EducatorDetailsRoleEntry({
     }
 
     return (
-        <li
-            key={index}
-            className="flex gap-6 items-center justify-between py-3">
-            <div className="flex items-center gap-4">
-                <div className="size-8 flex items-center justify-center text-xl text-gray-300 select-none">
-                    {index}.
-                </div>
-                <p className="text-sm font-medium text-gray-900">{role}</p>
+        <div className="flex justify-between gap-x-6">
+            <div className={combineClassNames(revoking ? 'opacity-50' : '')}>
+                <span className="font-medium text-gray-900">{role}</span>
             </div>
+
+            {/* Revoke button */}
             <button
                 type="button"
                 onClick={() => {
@@ -63,6 +59,6 @@ export default function EducatorDetailsRoleEntry({
                 {revoking ? 'Revoking' : 'Revoke'}
                 <span className="sr-only">role {role}</span>
             </button>
-        </li>
+        </div>
     );
 }
