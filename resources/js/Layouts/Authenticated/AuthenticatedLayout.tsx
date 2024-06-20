@@ -4,7 +4,13 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import { BuildingLibraryIcon, HomeIcon } from '@heroicons/react/24/outline';
+import {
+    BuildingLibraryIcon,
+    ChartBarSquareIcon,
+    ClipboardDocumentListIcon,
+    IdentificationIcon,
+    UserGroupIcon,
+} from '@heroicons/react/24/outline';
 import Sidebar from '@/Layouts/Authenticated/Partials/Sidebar';
 import MobileSidebarOverlay from '@/Layouts/Authenticated/Partials/MobileSidebarOverlay';
 import Navbar from '@/Layouts/Authenticated/Partials/Navbar';
@@ -13,6 +19,8 @@ import { Permission } from '@/types/permission.enum';
 import { checkPermissionsForUser } from '@/utils/access-control/has-permission.function';
 import { router } from '@inertiajs/react';
 import Root from '@/Root';
+import { NavigationCategory } from '@/types/layouts/authenticated/navigation-category.dto';
+import { NavigationItem } from '@/types/layouts/authenticated/navigation-item.dto';
 
 export const AuthenticatedContext = createContext<{
     user: AuthenticatedUserViewModel;
@@ -39,38 +47,111 @@ export default function AuthenticatedLayout({
         return user;
     }, [user]);
 
-    const navigation = [
-        {
-            name: 'Dashboard',
-            actionRoute: 'dashboard',
-            icon: HomeIcon,
-        },
-        {
-            name: 'Institutions',
-            actionRoute: 'institutions.index',
-            icon: BuildingLibraryIcon,
-            permissions: [Permission.InstitutionsCreate],
-        },
-    ]
-        .filter(item => {
-            if ('permissions' in item) {
-                if (item.permissions?.length) {
+    const navigation: (NavigationItem | NavigationCategory)[] = [
+        // Admin routes
+        new NavigationCategory('Administration', [
+            {
+                name: 'Administration dashboard',
+                href: route('dashboard'),
+                current: route().current('dashboard'),
+                icon: ChartBarSquareIcon,
+            },
+            {
+                name: 'Institutions',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: BuildingLibraryIcon,
+                permissions: [Permission.InstitutionsCreate],
+            },
+        ]),
+
+        // Educator routes
+        new NavigationCategory('Educator area', [
+            {
+                name: 'Educator dashboard',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: ChartBarSquareIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+            {
+                name: 'Student groups',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: UserGroupIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+            {
+                name: 'Grades',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: ClipboardDocumentListIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+        ]),
+
+        // Student routes
+        new NavigationCategory('Student area', [
+            {
+                name: 'Student dashboard',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: ChartBarSquareIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+            {
+                name: 'Student ID',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: IdentificationIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+            {
+                name: 'My enrolments',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: UserGroupIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+            {
+                name: 'My grades',
+                href: route('institutions.index'),
+                current: route().current('institutions.index'),
+                icon: ClipboardDocumentListIcon,
+                permissions: [Permission.InstitutionsCreate],
+                disabled: true,
+            },
+        ]),
+    ].filter((item: NavigationItem | NavigationCategory) => {
+        if (item instanceof NavigationCategory) {
+            item.items = item.items.filter(i => {
+                if (!i.permissions?.length) {
                     return true;
                 } else {
                     return checkPermissionsForUser(
                         checkedUser,
-                        item.permissions ?? []
+                        i.permissions ?? []
                     );
                 }
+            });
+            return item.items.length > 0;
+        } else {
+            if (!item.permissions?.length) {
+                return true;
+            } else {
+                return checkPermissionsForUser(
+                    checkedUser,
+                    item.permissions ?? []
+                );
             }
-
-            return true;
-        })
-        .map(item => ({
-            ...item,
-            href: route(item.actionRoute),
-            current: route().current(item.actionRoute),
-        }));
+        }
+    });
 
     return (
         <Root>
