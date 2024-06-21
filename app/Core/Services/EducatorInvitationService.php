@@ -7,7 +7,7 @@ namespace App\Core\Services;
 use App\Core\Contracts\Services\IEducatorInvitationService;
 use App\Core\Models\{Educator, EducatorInvitation, Identity, Institution};
 use App\Core\Notifications\NewEducatorInvitationNotification;
-use App\Http\Web\Controllers\EducatorInvitations\ReadEducatorInvitationController;
+use App\Http\Web\Controllers\Educator\Invitations\ReadEducatorInvitationController;
 use Carbon\Carbon;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
