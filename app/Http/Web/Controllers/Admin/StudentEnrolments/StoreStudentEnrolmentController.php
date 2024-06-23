@@ -190,9 +190,8 @@ final readonly class StoreStudentEnrolmentController extends Controller
                 : $this->_redirector->back();
 
         // Add a success toast to the redirection response
-        return $redirection->with(
-            'success',
+        return $redirection->with('success', [
             __('toasts.studentEnrolments.created'),
-        );
+        ]);
     }
 }
