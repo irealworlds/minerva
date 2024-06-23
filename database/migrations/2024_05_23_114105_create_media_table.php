@@ -14,7 +14,7 @@ return new class() extends Migration {
             $table->id();
 
             $table->string('model_type');
-            $table->uuid('model_id');
+            $table->string('model_id');
             $table->index(['model_type', 'model_id']);
 
             $table->uuid()->nullable()->unique();

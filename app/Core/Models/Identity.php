@@ -7,6 +7,7 @@ namespace App\Core\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Core\Dtos\PersonalNameDto;
 use App\Core\Enums\Permission;
+use App\Core\Traits\Media\InteractsWithMediaUsingNumericKey;
 use App\Infrastructure\Casts\PersonalNameCast;
 use Carbon\Carbon;
 use Codestage\Authorization\Traits\HasPermissions;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\HasMedia;
 
 /**
  * @property int $id
@@ -24,16 +26,19 @@ use Illuminate\Notifications\Notifiable;
  * @property string $remember_token
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property-read Educator|null $educator The educator profile record associated with this identity.
+ * @property-read Educator|null $educatorProfile The educator profile record associated with this identity.
  * @property-read StudentRegistration|null $studentRegistration The student registration record associated with this identity.
  */
-class Identity extends Authenticatable
+class Identity extends Authenticatable implements HasMedia
 {
     use HasFactory;
     use Notifiable;
+    use InteractsWithMediaUsingNumericKey;
 
     /** @use HasPermissions<Permission> */
     use HasPermissions;
+
+    public const string ProfilePictureMediaCollection = 'profilePicture';
 
     /**
      * The attributes that are mass assignable.
@@ -69,6 +74,16 @@ class Identity extends Authenticatable
             'password' => 'hashed',
             'name' => PersonalNameCast::class,
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::ProfilePictureMediaCollection)
+            ->useFallbackUrl(
+                'https://ui-avatars.com/api/?name=' .
+                    urlencode($this->name->getFullName()) .
+                    '&background=random&size=128',
+            );
     }
 
     /**
