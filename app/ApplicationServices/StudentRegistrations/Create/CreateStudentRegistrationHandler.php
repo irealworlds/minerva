@@ -37,17 +37,17 @@ final readonly class CreateStudentRegistrationHandler implements ICommandHandler
                 $disciplines,
             ): void {
                 // Create an enrolment
-                /** @var StudentGroupEnrolment $enrolment */
-                $enrolment = StudentGroupEnrolment::query()->make();
-                $enrolment->student_group_id = $studentGroupKey;
-                $enrolment->student_registration_id = $studentKey;
-                $enrolment->saveOrFail();
+                /** @var StudentGroupEnrolment $studentGroupEnrolment */
+                $studentGroupEnrolment = StudentGroupEnrolment::query()->make();
+                $studentGroupEnrolment->student_group_id = $studentGroupKey;
+                $studentGroupEnrolment->student_registration_id = $studentKey;
+                $studentGroupEnrolment->saveOrFail();
 
                 // Create a registration for each discipline
                 foreach ($disciplines as $discipline) {
                     /** @var StudentDisciplineEnrolment $disciplineEnrolment */
                     $disciplineEnrolment = StudentDisciplineEnrolment::query()->make();
-                    $disciplineEnrolment->student_registration_id = $studentKey;
+                    $disciplineEnrolment->student_group_enrolment_id = $studentGroupEnrolment->getKey();
                     $disciplineEnrolment->discipline_id =
                         $discipline->disciplineKey;
                     $disciplineEnrolment->educator_id =

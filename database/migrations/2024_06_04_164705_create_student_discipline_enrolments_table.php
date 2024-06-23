@@ -20,10 +20,10 @@ return new class() extends Migration {
             $table->uuid('id');
             $table->primary('id');
             $table
-                ->foreignUuid('student_registration_id')
+                ->foreignUuid('student_group_enrolment_id')
                 ->constrained()
                 ->references('id')
-                ->on('student_registrations')
+                ->on('student_group_enrolments')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table

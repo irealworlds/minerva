@@ -12,34 +12,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $id
- * @property mixed $student_registration_id
+ * @property mixed $student_group_enrolment_id
  * @property mixed $discipline_id
  * @property mixed $educator_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property-read StudentRegistration $studentRegistration
+ * @property-read StudentGroupEnrolment $studentGroupEnrolment
  * @property-read Discipline $discipline
  * @property-read Educator $educator
  */
-class StudentDisciplineEnrolment extends Model
+final class StudentDisciplineEnrolment extends Model
 {
     use HasFactory;
     use HasUuids;
 
     protected $fillable = [
-        'student_registration_id',
+        'student_group_enrolment_id',
         'discipline_id',
         'educator_id',
     ];
 
     /**
-     * @return BelongsTo<StudentRegistration, self>
+     * @return BelongsTo<StudentGroupEnrolment, self>
      */
-    public function studentRegistration(): BelongsTo
+    public function studentGroupEnrolment(): BelongsTo
     {
         return $this->belongsTo(
-            StudentRegistration::class,
-            'student_registration_id',
+            StudentGroupEnrolment::class,
+            'student_group_enrolment_id',
         );
     }
 
