@@ -7,37 +7,33 @@ namespace App\Http\Web\Controllers\Educator\Students;
 use App\ApplicationServices\StudentDisciplineEnrolments\ListByStudent\ListStudentDisciplineEnrolmentsQuery;
 use App\ApplicationServices\StudentDisciplineGrades\List\ListStudentDisciplineGradesQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
-use App\Core\Models\Educator;
-use App\Core\Models\Identity;
-use App\Core\Models\StudentDisciplineEnrolment;
-use App\Core\Models\StudentDisciplineGrade;
-use App\Core\Models\StudentRegistration;
+use App\Core\Models\{
+    Identity,
+    StudentDisciplineEnrolment,
+    StudentDisciplineGrade,
+    StudentRegistration,
+};
 use App\Core\Optional;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\ViewModels\Assemblers\StudentDisciplineEnrolmentViewModelAssembler;
-use App\Http\Web\ViewModels\Assemblers\StudentGradeViewModelAssembler;
+use App\Http\Web\ViewModels\Assemblers\{
+    StudentDisciplineEnrolmentViewModelAssembler,
+    StudentGradeViewModelAssembler,
+};
 use Codestage\Authorization\Attributes\Authorize;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Http\Request;
-use Inertia\Response as InertiaResponse;
-use Inertia\ResponseFactory;
+use Inertia\{Response as InertiaResponse, ResponseFactory};
 use Spatie\RouteAttributes\Attributes\Get;
 
 final readonly class ManageStudentGradesController extends Controller
 {
-    function __construct(
+    public function __construct(
         private IQueryBus $_queryBus,
         private ResponseFactory $_inertia,
-        private Factory $_authManager,
         private StudentDisciplineEnrolmentViewModelAssembler $_taughtDisciplineViewModelAssembler,
         private StudentGradeViewModelAssembler $_studentGradeViewModelAssembler,
     ) {
     }
 
-    /**
-     * @throws AuthorizationException
-     */
     #[
         Get(
             '/Educator/Students/{student}/Grades',
@@ -49,8 +45,6 @@ final readonly class ManageStudentGradesController extends Controller
         Request $request,
         StudentRegistration $student,
     ): InertiaResponse {
-        $educator = $this->getAuthenticatedEducatorProfile();
-
         $taughtDisciplines = $this->_queryBus->dispatch(
             new ListStudentDisciplineEnrolmentsQuery(
                 studentRegistrationKey: $student->getKey(),
@@ -72,7 +66,7 @@ final readonly class ManageStudentGradesController extends Controller
                     ),
                 )
                 ->map(
-                    fn(
+                    fn (
                         StudentDisciplineGrade $grade,
                     ) => $this->_studentGradeViewModelAssembler->assemble(
                         $grade,
@@ -90,7 +84,7 @@ final readonly class ManageStudentGradesController extends Controller
             ],
 
             'taughtDisciplines' => $taughtDisciplines->map(
-                fn(
+                fn (
                     StudentDisciplineEnrolment $enrolment,
                 ) => $this->_taughtDisciplineViewModelAssembler->assemble(
                     $enrolment,
@@ -99,21 +93,5 @@ final readonly class ManageStudentGradesController extends Controller
             'grades' => $grades,
             'selectedDisciplineKey' => $request->string('disciplineKey'),
         ]);
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    protected function getAuthenticatedEducatorProfile(): Educator
-    {
-        /** @var Identity $identity */
-        $identity = $this->_authManager->guard()->user();
-
-        $educator = $identity->educatorProfile;
-
-        if (empty($educator)) {
-            throw new AuthorizationException();
-        }
-        return $educator;
     }
 }
