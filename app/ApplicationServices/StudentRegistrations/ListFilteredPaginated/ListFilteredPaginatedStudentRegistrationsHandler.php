@@ -44,7 +44,7 @@ final readonly class ListFilteredPaginatedStudentRegistrationsHandler implements
                     ): void {
                         $identityQueryBuilder->where(
                             $this->_db->raw(
-                                'LOWER(first_name) + LOWER(last_name)',
+                                'CONCAT(LOWER(first_name), LOWER(last_name))',
                             ),
                             'like',
                             '%' . mb_strtolower($search, 'UTF-8') . '%',

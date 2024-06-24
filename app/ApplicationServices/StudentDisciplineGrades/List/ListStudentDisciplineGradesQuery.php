@@ -17,10 +17,12 @@ final readonly class ListStudentDisciplineGradesQuery implements IQuery
     /**
      * @param Optional<iterable<mixed>> $studentRegistrationKeys
      * @param Optional<iterable<mixed>> $disciplineKeys
+     * @param Optional<iterable<mixed>> $studentGroupKeys
      */
     function __construct(
         public Optional $studentRegistrationKeys,
         public Optional $disciplineKeys,
+        public Optional $studentGroupKeys,
     ) {
     }
 }

@@ -63,10 +63,11 @@ final readonly class ManageStudentGradesController extends Controller
                         disciplineKeys: Optional::of([
                             $request->string('disciplineKey'),
                         ]),
+                        studentGroupKeys: Optional::empty(),
                     ),
                 )
                 ->map(
-                    fn (
+                    fn(
                         StudentDisciplineGrade $grade,
                     ) => $this->_studentGradeViewModelAssembler->assemble(
                         $grade,
@@ -84,7 +85,7 @@ final readonly class ManageStudentGradesController extends Controller
             ],
 
             'taughtDisciplines' => $taughtDisciplines->map(
-                fn (
+                fn(
                     StudentDisciplineEnrolment $enrolment,
                 ) => $this->_taughtDisciplineViewModelAssembler->assemble(
                     $enrolment,

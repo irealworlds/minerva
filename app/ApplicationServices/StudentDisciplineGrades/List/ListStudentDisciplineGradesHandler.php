@@ -28,6 +28,12 @@ final readonly class ListStudentDisciplineGradesHandler implements IQueryHandler
             $query->studentRegistrationKeys,
         );
 
+        // Add the student group filter
+        $queryBuilder = $this->addStudentGroupFilter(
+            $queryBuilder,
+            $query->studentGroupKeys,
+        );
+
         // Add the discipline filter
         $queryBuilder = $this->addDisciplineFilter(
             $queryBuilder,
@@ -42,7 +48,7 @@ final readonly class ListStudentDisciplineGradesHandler implements IQueryHandler
 
     /**
      * @param Builder<StudentDisciplineGrade> $query
-     * @param Optional<mixed> $studentKeys
+     * @param Optional<iterable<mixed>> $studentKeys
      * @return Builder<StudentDisciplineGrade>
      */
     protected function addStudentRegistrationFilter(
@@ -62,7 +68,27 @@ final readonly class ListStudentDisciplineGradesHandler implements IQueryHandler
 
     /**
      * @param Builder<StudentDisciplineGrade> $query
-     * @param Optional<mixed> $disciplineKeys
+     * @param Optional<iterable<mixed>> $studentGroupKeys
+     * @return Builder<StudentDisciplineGrade>
+     */
+    protected function addStudentGroupFilter(
+        Builder $query,
+        Optional $studentGroupKeys,
+    ): Builder {
+        if ($studentGroupKeys->hasValue()) {
+            $query = $query->whereIn(
+                (new StudentDisciplineGrade())
+                    ->studentGroup()
+                    ->getForeignKeyName(),
+                $studentGroupKeys->value,
+            );
+        }
+        return $query;
+    }
+
+    /**
+     * @param Builder<StudentDisciplineGrade> $query
+     * @param Optional<iterable<mixed>> $disciplineKeys
      * @return Builder<StudentDisciplineGrade>
      */
     protected function addDisciplineFilter(

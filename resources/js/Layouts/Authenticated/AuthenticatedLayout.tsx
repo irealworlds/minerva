@@ -104,11 +104,10 @@ export default function AuthenticatedLayout({
             },
             {
                 name: 'My enrolments',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
+                href: route('student.enrolments.list'),
+                current: route().current('student.enrolments.list'),
                 icon: UserGroupIcon,
-                permissions: [Permission.InstitutionsCreate],
-                disabled: true,
+                permissions: [],
             },
             {
                 name: 'My grades',

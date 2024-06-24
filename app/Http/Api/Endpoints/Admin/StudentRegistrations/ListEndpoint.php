@@ -36,7 +36,7 @@ final readonly class ListEndpoint
             new ListFilteredPaginatedStudentRegistrationsQuery(
                 page: $request->integer('page', 1),
                 pageSize: $request->integer('pageSize', 10),
-                searchQuery: $request->optionalString('search', false),
+                searchQuery: $request->optionalString('searchQuery', false),
             ),
         );
 
@@ -45,7 +45,7 @@ final readonly class ListEndpoint
             $registrations
                 ->getCollection()
                 ->map(
-                    static fn (
+                    static fn(
                         StudentRegistration $registration,
                     ) => StudentRegistrationDto::fromModel($registration),
                 ),

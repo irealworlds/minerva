@@ -146,6 +146,7 @@ final readonly class ReadTaughtStudentGroupStudentsController extends Controller
                 disciplineKeys: $disciplineKey->hasValue()
                     ? Optional::of([$disciplineKey->value])
                     : Optional::empty(),
+                studentGroupKeys: Optional::empty(),
             ),
         );
 

@@ -62,12 +62,10 @@ export default function StudentRegistrationSelector({
     );
 
     const updateSuggestions = useDebouncedCallback((searchQuery: string) => {
-        const query: {
-            search?: string;
-        } = {};
+        const query: Record<string, string> = {};
 
         if (searchQuery.length) {
-            query.search = searchQuery;
+            query.searchQuery = searchQuery;
         }
 
         axios

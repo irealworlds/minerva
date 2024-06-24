@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Enumerable;
 
 /**
  * @property string $id
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon $updated_at
  * @property-read StudentGroup $studentGroup
  * @property-read StudentRegistration $studentRegistration
+ * @property-read Enumerable<int, StudentDisciplineEnrolment> $disciplineEnrolments
  */
 class StudentGroupEnrolment extends Model
 {
