@@ -60,4 +60,7 @@ return [
             'removed' => 'Educator removed from discipline.',
         ],
     ],
+    'grades' => [
+        'created' => 'Grade created successfully.',
+    ],
 ];

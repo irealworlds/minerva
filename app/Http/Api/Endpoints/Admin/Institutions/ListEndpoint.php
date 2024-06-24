@@ -44,7 +44,7 @@ final readonly class ListEndpoint extends Endpoint
             $institutions
                 ->getCollection()
                 ->map(
-                    fn (
+                    fn(
                         Institution $institution,
                     ) => $this->_institutionViewModelAssembler->assemble(
                         $institution,

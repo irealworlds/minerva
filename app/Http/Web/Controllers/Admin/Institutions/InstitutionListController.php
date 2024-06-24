@@ -47,7 +47,7 @@ final readonly class InstitutionListController extends Controller
             $institutions
                 ->getCollection()
                 ->map(
-                    fn (
+                    fn(
                         mixed $institution,
                     ) => $this->_institutionViewModelAssembler->assemble(
                         $institution,

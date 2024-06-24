@@ -83,9 +83,9 @@ readonly class StudentGroupViewModel
                 ->childGroups()
                 ->select((new StudentGroup())->getKeyName())
                 ->get()
-                ->map(fn (StudentGroup $child) => $child->getKey()),
+                ->map(fn(StudentGroup $child) => $child->getKey()),
             disciplines: $model->disciplines->map(
-                static fn (
+                static fn(
                     Discipline $discipline,
                 ) => StudentGroupDisciplineViewModel::fromModel($discipline),
             ),

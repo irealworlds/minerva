@@ -11,10 +11,8 @@ use App\Core\Enums\Permission;
 use App\Core\Models\{Institution, StudentGroup};
 use App\Http\Web\Controllers\Admin\Institutions\InstitutionReadController;
 use App\Http\Web\Requests\StudentGroups\StudentGroupCreateRequest;
-use App\Http\Web\ViewModels\{
-    Assemblers\InstitutionViewModelAssembler,
-    StudentGroupViewModel,
-};
+use App\Http\Web\ViewModels\{StudentGroupViewModel};
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Routing\UrlGenerator;

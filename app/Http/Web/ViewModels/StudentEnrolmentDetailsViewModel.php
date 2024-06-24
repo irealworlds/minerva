@@ -56,7 +56,7 @@ final readonly class StudentEnrolmentDetailsViewModel
                 ->ancestors()
                 ->get()
                 ->map(
-                    static fn (StudentGroup $ancestor) => [
+                    static fn(StudentGroup $ancestor) => [
                         'id' => $ancestor->getRouteKey(),
                         'name' => $ancestor->name,
                     ],
@@ -74,7 +74,7 @@ final readonly class StudentEnrolmentDetailsViewModel
                 )
                 ->get()
                 ->map(
-                    static fn (StudentGroupEnrolment $en) => [
+                    static fn(StudentGroupEnrolment $en) => [
                         'id' => $en->getRouteKey(),
                         'name' => $en->studentGroup->name,
                     ],
@@ -85,7 +85,7 @@ final readonly class StudentEnrolmentDetailsViewModel
                 ->ancestors()
                 ->get()
                 ->map(
-                    static fn (Institution $ancestor) => [
+                    static fn(Institution $ancestor) => [
                         'id' => $ancestor->getRouteKey(),
                         'name' => $ancestor->name,
                     ],

@@ -12,7 +12,7 @@ use App\Core\Models\Discipline;
  */
 final readonly class FindDisciplineByRouteKeyQuery implements IQuery
 {
-    public function __construct(public string $routeKey)
+    public function __construct(public mixed $routeKey)
     {
     }
 }

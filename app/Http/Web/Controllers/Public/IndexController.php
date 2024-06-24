@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\{Inertia, Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
-
 use const PHP_VERSION;
 
 readonly class IndexController extends Controller

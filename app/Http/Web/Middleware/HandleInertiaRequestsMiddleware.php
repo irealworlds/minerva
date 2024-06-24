@@ -55,13 +55,13 @@ final class HandleInertiaRequestsMiddleware extends InertiaMiddleware
                     : null,
             ],
             'toasts' => [
-                'info' => fn () => $request->session()->get('info', []),
-                'success' => fn () => $request->session()->get('success', []),
-                'warning' => fn () => $request->session()->get('warning', []),
-                'error' => fn () => $request->session()->get('error', []),
-                'default' => fn () => $request->session()->get('default', []),
+                'info' => fn() => $request->session()->get('info', []),
+                'success' => fn() => $request->session()->get('success', []),
+                'warning' => fn() => $request->session()->get('warning', []),
+                'error' => fn() => $request->session()->get('error', []),
+                'default' => fn() => $request->session()->get('default', []),
             ],
-            'ziggy' => static fn () => [
+            'ziggy' => static fn() => [
                 ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],

@@ -18,11 +18,9 @@ use App\Core\Models\{
 use App\Core\Optional;
 use App\Http\Web\Controllers\Controller;
 use App\Http\Web\ViewModels\{InstitutionEducatorViewModel};
-use App\Http\Web\ViewModels\{
-    Assemblers\InstitutionViewModelAssembler,
-    EducatorSuggestionViewModel,
-    OutstandingEducatorInvitationViewModel,
-};
+use App\Http\Web\ViewModels\{OutstandingEducatorInvitationViewModel};
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
+use App\Http\Web\ViewModels\EducatorSuggestionViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Enumerable;
 use Inertia\{Response as InertiaResponse, ResponseFactory};
@@ -70,7 +68,7 @@ final readonly class ManageInstitutionEducatorsController extends Controller
             $educators
                 ->getCollection()
                 ->map(
-                    fn (
+                    fn(
                         InstitutionEducator $educator,
                     ) => InstitutionEducatorViewModel::fromModel($educator),
                 ),
@@ -80,24 +78,24 @@ final readonly class ManageInstitutionEducatorsController extends Controller
         return $this->_inertia->render(
             'Admin/Institutions/ManageInstitutionEducators',
             [
-                'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
+                'institution' => fn() => $this->_institutionViewModelAssembler->assemble(
                     $institution,
                 ),
-                'educators' => static fn () => $educators,
-                'outstandingInvitations' => fn () => $this->_queryBus
+                'educators' => static fn() => $educators,
+                'outstandingInvitations' => fn() => $this->_queryBus
                     ->dispatch(
                         new ListOutstandingInvitationsForInstitutionQuery(
                             institution: $institution,
                         ),
                     )
                     ->map(
-                        static fn (
+                        static fn(
                             EducatorInvitation $invitation,
                         ) => OutstandingEducatorInvitationViewModel::fromModel(
                             $invitation,
                         ),
                     ),
-                'suggestions' => fn () => $this->getEducatorSuggestions(
+                'suggestions' => fn() => $this->getEducatorSuggestions(
                     $institution,
                 ),
             ],
@@ -122,7 +120,7 @@ final readonly class ManageInstitutionEducatorsController extends Controller
                     searchQuery: Optional::empty(),
                     associatedToInstitutionIds: Optional::of(
                         $parentInstitutions->map(
-                            static fn (Institution $parent) => $parent->getKey(),
+                            static fn(Institution $parent) => $parent->getKey(),
                         ),
                     ),
                     notAssociatedToInstitutionIds: Optional::of([
@@ -133,7 +131,7 @@ final readonly class ManageInstitutionEducatorsController extends Controller
             ->getCollection()
             ->values()
             ->map(
-                static fn (
+                static fn(
                     Educator $e,
                 ) => EducatorSuggestionViewModel::fromModel($e),
             );

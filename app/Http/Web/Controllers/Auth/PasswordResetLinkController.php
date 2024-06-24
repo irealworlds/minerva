@@ -6,19 +6,13 @@ namespace App\Http\Web\Controllers\Auth;
 
 use App\Http\Web\Controllers\Controller;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Http\{
-    RedirectResponse,
-    Request};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\Routing\Redirector;
 use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
-use Inertia\{
-    Inertia,
-    Response};
+use Inertia\{Inertia, Response};
 use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{
-    Get,
-    Post};
+use Spatie\RouteAttributes\Attributes\{Get, Post};
 
 final readonly class PasswordResetLinkController extends Controller
 {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\ApplicationServices\StudentGroups\ListFilteredPaginated;
 
 use App\Core\Contracts\Cqrs\IQuery;
+use App\Core\EmptyOptional;
 use App\Core\Models\StudentGroup;
 use App\Core\Optional;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -20,6 +21,7 @@ final readonly class ListFilteredPaginatedStudentGroupsQuery implements IQuery
      * @param Optional<string|null> $parentId
      * @param Optional<string> $searchQuery
      * @param Optional<mixed[]> $descendantOfInstitutionIds
+     * @param Optional<mixed[]> $associatedEducatorIds
      */
     public function __construct(
         public int $page,
@@ -28,6 +30,7 @@ final readonly class ListFilteredPaginatedStudentGroupsQuery implements IQuery
         public Optional $parentId,
         public Optional $searchQuery,
         public Optional $descendantOfInstitutionIds,
+        public Optional $associatedEducatorIds = new EmptyOptional(),
     ) {
     }
 }

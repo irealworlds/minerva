@@ -6,6 +6,7 @@ namespace App\Core\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Enumerable;
@@ -23,6 +24,7 @@ use Illuminate\Support\Enumerable;
 final class Discipline extends Model
 {
     use HasUuids;
+    use HasFactory;
 
     protected $fillable = ['name', 'abbreviation'];
 

@@ -30,7 +30,7 @@ final readonly class ManageInstitutionPublicProfileController extends Controller
         return $this->_inertia->render(
             'Admin/Institutions/ManageInstitutionDetails',
             [
-                'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
+                'institution' => fn() => $this->_institutionViewModelAssembler->assemble(
                     $institution,
                 ),
                 'parentInstitutionId' => $institution->parent?->getRouteKey(),
@@ -42,7 +42,7 @@ final readonly class ManageInstitutionPublicProfileController extends Controller
                     ?->ancestors()
                     ->get()
                     ->map(
-                        static fn (Institution $ancestor) => [
+                        static fn(Institution $ancestor) => [
                             'id' => $ancestor->getRouteKey(),
                             'name' => $ancestor->name,
                         ],

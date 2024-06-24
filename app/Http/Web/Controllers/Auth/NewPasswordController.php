@@ -17,7 +17,6 @@ use Illuminate\Validation\{Rules, ValidationException};
 use Inertia\{Inertia, Response};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\{Get, Post};
-
 use function is_string;
 
 final readonly class NewPasswordController extends Controller

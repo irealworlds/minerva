@@ -79,7 +79,7 @@ final readonly class CreateEducatorInvitationController extends Controller
         // Check if the educator is already an educator of the institution
         if (
             $institution->educators->some(
-                fn (Educator $e) => $e->getKey() === $educator->getKey(),
+                fn(Educator $e) => $e->getKey() === $educator->getKey(),
             )
         ) {
             throw ValidationException::withMessages([
@@ -93,7 +93,7 @@ final readonly class CreateEducatorInvitationController extends Controller
         );
         if (
             $invitations->some(
-                fn (
+                fn(
                     EducatorInvitation $invitation,
                 ) => $invitation->invited_educator_id === $educator->getKey(),
             )

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
@@ -45,6 +46,19 @@ class StudentGroupEnrolment extends Model
         return $this->belongsTo(
             related: StudentRegistration::class,
             foreignKey: 'student_registration_id',
+        );
+    }
+
+    /**
+     * @return HasMany<StudentDisciplineEnrolment>
+     */
+    public function disciplineEnrolments(): HasMany
+    {
+        return $this->hasMany(
+            related: StudentDisciplineEnrolment::class,
+            foreignKey: (new StudentDisciplineEnrolment())
+                ->studentGroupEnrolment()
+                ->getForeignKeyName(),
         );
     }
 }

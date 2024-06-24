@@ -52,7 +52,7 @@ final readonly class StoreEducatorDisciplinesController extends Controller
                 educatorKey: $educator->getKey(),
                 studentGroupKey: $studentGroup->getKey(),
                 disciplineKeys: $disciplines->map(
-                    static fn (Discipline $d) => $d->getKey(),
+                    static fn(Discipline $d) => $d->getKey(),
                 ),
             ),
         );

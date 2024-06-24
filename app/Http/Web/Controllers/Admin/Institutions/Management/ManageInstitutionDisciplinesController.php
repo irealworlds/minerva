@@ -9,10 +9,8 @@ use App\ApplicationServices\Institutions\RemoveDiscipline\RemoveDisciplineFromIn
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\{Discipline, Institution};
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\ViewModels\{
-    Assemblers\InstitutionViewModelAssembler,
-    InstitutionDisciplineViewModel,
-};
+use App\Http\Web\ViewModels\{InstitutionDisciplineViewModel};
+use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -38,11 +36,11 @@ final readonly class ManageInstitutionDisciplinesController extends Controller
         return $this->_inertia->render(
             'Admin/Institutions/ManageInstitutionDisciplines',
             [
-                'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
+                'institution' => fn() => $this->_institutionViewModelAssembler->assemble(
                     $institution,
                 ),
-                'disciplines' => static fn () => $institution->disciplines->map(
-                    static fn (
+                'disciplines' => static fn() => $institution->disciplines->map(
+                    static fn(
                         Discipline $discipline,
                     ) => InstitutionDisciplineViewModel::fromModel($discipline),
                 ),

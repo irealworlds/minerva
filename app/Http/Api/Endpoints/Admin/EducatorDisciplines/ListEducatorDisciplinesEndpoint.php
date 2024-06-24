@@ -58,7 +58,7 @@ final readonly class ListEducatorDisciplinesEndpoint
             $disciplines
                 ->getCollection()
                 ->map(
-                    fn (
+                    fn(
                         StudentGroupDisciplineEducator $association,
                     ) => $this->_dtoAssembler->assemble($association),
                 ),

@@ -74,7 +74,7 @@ final readonly class ListEndpoint extends Endpoint
                         ),
                     )
                     ->map(
-                        static fn (
+                        static fn(
                             Institution $institution,
                         ) => $institution->getKey(),
                     )
@@ -101,7 +101,7 @@ final readonly class ListEndpoint extends Endpoint
             $studentGroups
                 ->getCollection()
                 ->map(
-                    static fn (
+                    static fn(
                         StudentGroup $group,
                     ) => StudentGroupViewModel::fromModel($group),
                 ),

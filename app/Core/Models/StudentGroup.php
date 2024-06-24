@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
     BelongsToMany,
     HasMany,
+    HasManyThrough,
     MorphMany,
     MorphTo,
 };
@@ -27,6 +28,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Model $parent
+ * @property-read Institution $parentInstitution
  * @property-read Enumerable<int, StudentGroup> $childGroups
  * @property-read Enumerable<int, Discipline> $disciplines Disciplines studied by this student group.
  */
@@ -93,5 +95,37 @@ final class StudentGroup extends Model
     public function parentInstitution(): BelongsTo
     {
         return $this->belongsTo(Institution::class, 'parent_institution_id');
+    }
+
+    /**
+     * @return HasManyThrough<StudentRegistration>
+     */
+    public function studentRegistrations(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            related: StudentRegistration::class,
+            through: StudentGroupEnrolment::class,
+            firstKey: (new StudentGroupEnrolment())
+                ->studentGroup()
+                ->getForeignKeyName(),
+            secondKey: (new StudentRegistration())->getKeyName(),
+            localKey: (new self())->getKeyName(),
+            secondLocalKey: (new StudentGroupEnrolment())
+                ->studentRegistration()
+                ->getForeignKeyName(),
+        );
+    }
+
+    /**
+     * @return HasMany<StudentGroupDisciplineEducator>
+     */
+    public function disciplineEducators(): HasMany
+    {
+        return $this->hasMany(
+            StudentGroupDisciplineEducator::class,
+            (new StudentGroupDisciplineEducator())
+                ->studentGroup()
+                ->getForeignKeyName(),
+        );
     }
 }

@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Inertia\{Response as InertiaResponse, ResponseFactory};
 use Spatie\RouteAttributes\Attributes\Get;
 use Throwable;
-
 use function is_string;
 
 final readonly class CreateStudentEnrolmentController extends Controller

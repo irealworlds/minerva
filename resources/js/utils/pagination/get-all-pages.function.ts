@@ -8,8 +8,15 @@ export async function fetchAllPages<T, TResponse>(
     const results: T[] = [];
     let lastPage = 1;
 
+    const baseRequestUri = new URL(uri);
+
     for (let currentPage = 1; currentPage <= lastPage; currentPage++) {
-        const response = await axios.get<TResponse>(uri);
+        const pageUri = new URL(baseRequestUri);
+        const queryParams = new URLSearchParams(pageUri.search);
+        queryParams.set('page', currentPage.toString());
+        pageUri.search = queryParams.toString();
+
+        const response = await axios.get<TResponse>(pageUri.toString());
         const paginatedCollection = responseSelector(response.data);
 
         results.push(...paginatedCollection.data);

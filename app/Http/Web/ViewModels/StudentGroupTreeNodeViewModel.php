@@ -40,7 +40,7 @@ final readonly class StudentGroupTreeNodeViewModel extends StudentGroupViewModel
         StudentGroup $model,
     ): StudentGroupTreeNodeViewModel {
         $children = $model->childGroups->map(
-            static fn (StudentGroup $child) => self::fromModel($child),
+            static fn(StudentGroup $child) => self::fromModel($child),
         );
 
         $parentResult = parent::fromModel($model);

@@ -22,7 +22,6 @@ use Illuminate\Support\ItemNotFoundException;
 use Inertia\{Response as InertiaResponse, ResponseFactory};
 use ReflectionException;
 use Spatie\RouteAttributes\Attributes\{Get, Post};
-
 use function is_string;
 
 final readonly class CreateDisciplineController extends Controller
@@ -46,7 +45,7 @@ final readonly class CreateDisciplineController extends Controller
         if ($request->query->has('institutions')) {
             $institutionKeys = array_filter(
                 explode(',', $request->query->getString('institutions')),
-                fn (mixed $key) => !empty($key),
+                fn(mixed $key) => !empty($key),
             );
             $institutionSuggestions = $this->_queryBus->dispatch(
                 new FindInstitutionsByRouteKeysQuery(...$institutionKeys),
@@ -65,8 +64,8 @@ final readonly class CreateDisciplineController extends Controller
 
         // Render the inertia page
         return $this->_inertiaResponse->render('Admin/Disciplines/Create', [
-            'initialInstitutions' => fn () => $institutionSuggestions?->map(
-                fn (
+            'initialInstitutions' => fn() => $institutionSuggestions?->map(
+                fn(
                     Institution $institution,
                 ) => $this->_institutionViewModelAssembler->assemble(
                     $institution,
@@ -106,13 +105,13 @@ final readonly class CreateDisciplineController extends Controller
             $redirectTo = match (true) {
                 $associatedInstitutions?->isNotEmpty()
                     => $this->_urlGenerator->action(
-                        ManageInstitutionDisciplinesController::class,
-                        [
+                    ManageInstitutionDisciplinesController::class,
+                    [
                         'institution' => $associatedInstitutions
                             ->firstOrFail()
                             ->getKey(),
                     ],
-                    ),
+                ),
 
                 default => $this->_urlGenerator->previous(
                     fallback: $this->_urlGenerator->action(

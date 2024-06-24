@@ -40,7 +40,7 @@ final readonly class ManageInstitutionStudentsController
 
         $studentEnrolments->setCollection(
             $studentEnrolments->getCollection()->map(
-                static fn (StudentGroupEnrolment $enrolment) => [
+                static fn(StudentGroupEnrolment $enrolment) => [
                     'id' => $enrolment->id,
                     'name' => $enrolment->studentRegistration->identity->name,
                     'studentRegistrationId' => $enrolment->studentRegistration->getKey(),
@@ -53,10 +53,10 @@ final readonly class ManageInstitutionStudentsController
         return $this->_inertia->render(
             'Admin/Institutions/ManageInstitutionStudents',
             [
-                'institution' => fn () => $this->_institutionViewModelAssembler->assemble(
+                'institution' => fn() => $this->_institutionViewModelAssembler->assemble(
                     $institution,
                 ),
-                'enrolments' => static fn () => $studentEnrolments,
+                'enrolments' => static fn() => $studentEnrolments,
             ],
         );
     }

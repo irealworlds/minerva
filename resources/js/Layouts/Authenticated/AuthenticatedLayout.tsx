@@ -77,19 +77,10 @@ export default function AuthenticatedLayout({
             },
             {
                 name: 'Student groups',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
+                href: route('educators.studentGroups.list'),
+                current: route().current('educators.studentGroups.list'),
                 icon: UserGroupIcon,
-                permissions: [Permission.InstitutionsCreate],
-                disabled: true,
-            },
-            {
-                name: 'Grades',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
-                icon: ClipboardDocumentListIcon,
-                permissions: [Permission.InstitutionsCreate],
-                disabled: true,
+                permissions: [],
             },
         ]),
 

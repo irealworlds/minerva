@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\ApplicationServices\StudentGroups\ListFilteredPaginated;
 
 use App\Core\Contracts\Cqrs\IQueryHandler;
-use App\Core\Models\{Institution, StudentGroup};
+use App\Core\Models\{Institution, StudentGroup, StudentGroupDisciplineEducator};
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\DatabaseManager;
@@ -68,6 +68,13 @@ final readonly class ListFilteredPaginatedStudentGroupsHandler implements
             $queryBuilder = $this->addParentInstitutionKeyConstraint(
                 $queryBuilder,
                 $query->descendantOfInstitutionIds->value,
+            );
+        }
+
+        if ($query->associatedEducatorIds->hasValue()) {
+            $queryBuilder = $this->addAssociatedEducatorIdsConstraint(
+                $queryBuilder,
+                $query->associatedEducatorIds->value,
             );
         }
 
@@ -138,5 +145,29 @@ final readonly class ListFilteredPaginatedStudentGroupsHandler implements
                 $descendantIds,
             );
         }
+    }
+
+    /**
+     * @param EloquentBuilder<StudentGroup> $queryBuilder
+     * @param mixed[] $educatorIds
+     * @return EloquentBuilder<StudentGroup>
+     */
+    private function addAssociatedEducatorIdsConstraint(
+        EloquentBuilder $queryBuilder,
+        iterable $educatorIds,
+    ): EloquentBuilder {
+        return $queryBuilder->whereHas(
+            'disciplineEducators', // todo do nto rely on magic strings
+            static function (EloquentBuilder $disciplineEducatorQuery) use (
+                $educatorIds,
+            ) {
+                return $disciplineEducatorQuery->whereIn(
+                    (new StudentGroupDisciplineEducator())
+                        ->educator()
+                        ->getForeignKeyName(),
+                    $educatorIds,
+                );
+            },
+        );
     }
 }

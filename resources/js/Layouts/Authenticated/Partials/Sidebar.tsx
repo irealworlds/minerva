@@ -28,7 +28,9 @@ export default function Sidebar({
                                 {navigation.map((navigationItem, index) =>
                                     navigationItem instanceof
                                     NavigationCategory ? (
-                                        <li className={index > 0 ? 'pt-7' : ''}>
+                                        <li
+                                            key={index}
+                                            className={index > 0 ? 'pt-7' : ''}>
                                             <div className="text-xs font-semibold leading-6 text-gray-400">
                                                 {navigationItem.name}
                                             </div>
