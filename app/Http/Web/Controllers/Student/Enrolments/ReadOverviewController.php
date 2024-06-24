@@ -11,6 +11,7 @@ use App\Core\Models\StudentDisciplineEnrolment;
 use App\Core\Models\StudentDisciplineGrade;
 use App\Core\Models\StudentGroupEnrolment;
 use App\Core\Optional;
+use App\Http\Web\Controllers\Controller;
 use App\Http\Web\ViewModels\Assemblers\Student\StudentGroupEnrolmentViewModelAssembler;
 use App\Http\Web\ViewModels\Student\StudentEnrolmentActivityItemViewModel;
 use Illuminate\Support\Collection;
@@ -19,7 +20,7 @@ use Inertia\Response as InertiaResponse;
 use Inertia\ResponseFactory;
 use Spatie\RouteAttributes\Attributes\Get;
 
-final readonly class ReadOverviewController
+final readonly class ReadOverviewController extends Controller
 {
     function __construct(
         private IQueryBus $_queryBus,

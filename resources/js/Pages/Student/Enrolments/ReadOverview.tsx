@@ -32,6 +32,13 @@ export default function ReadOverview({
             }),
             current: route().current('student.enrolments.read.overview'),
         },
+        {
+            name: 'Disciplines',
+            href: route('student.enrolments.read.disciplines', {
+                enrolment: enrolment.key,
+            }),
+            current: route().current('student.enrolments.read.disciplines'),
+        },
     ];
 
     const stats = [
