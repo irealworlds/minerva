@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\StudentRegistrations;
+namespace App\Http\Api\Endpoints\Admin\StudentRegistrations;
 
 use App\ApplicationServices\StudentRegistrations\ListFilteredPaginated\ListFilteredPaginatedStudentRegistrationsQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\StudentRegistration;
-use App\Http\Api\Dtos\StudentRegistrationDto;
+use App\Http\Api\Dtos\Admin\StudentRegistrationDto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
@@ -23,7 +23,12 @@ final readonly class ListEndpoint
      * @throws InvalidArgumentException
      * @throws ValidationException
      */
-    #[Get('/StudentRegistrations', 'api.student_registrations.index')]
+    #[
+        Get(
+            '/Admin/StudentRegistrations',
+            'api.admin.student_registrations.index',
+        ),
+    ]
     public function __invoke(ListEndpointRequest $request): JsonResponse
     {
         // Fetch the registrations via a query

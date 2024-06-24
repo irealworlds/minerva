@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\Disciplines;
+namespace App\Http\Api\Endpoints\Admin\Disciplines;
 
 use App\Core\Traits\Requests\WithOptionals;
 use Illuminate\Foundation\Http\FormRequest;

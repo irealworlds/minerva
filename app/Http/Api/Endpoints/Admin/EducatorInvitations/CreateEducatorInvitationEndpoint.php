@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\EducatorInvitations;
+namespace App\Http\Api\Endpoints\Admin\EducatorInvitations;
 
 use App\ApplicationServices\EducatorInvitations\Create\CreateEducatorInvitationCommand;
 use App\ApplicationServices\EducatorInvitations\ListOutstandingForInstitution\ListOutstandingInvitationsForInstitutionQuery;
@@ -38,7 +38,12 @@ final readonly class CreateEducatorInvitationEndpoint extends Endpoint
      * @throws ReflectionException
      * @throws InvalidArgumentException
      */
-    #[Post('/EducatorInvitations', name: 'api.educator_invitations.create')]
+    #[
+        Post(
+            '/Admin/EducatorInvitations',
+            name: 'api.admin.educator_invitations.create',
+        ),
+    ]
     #[Authorize]
     public function __invoke(
         EducatorInstitutionCreationRequest $request,

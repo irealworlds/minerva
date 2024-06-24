@@ -30,7 +30,7 @@ export default function EducatorSuggestionEntry({
 
         setProcessingInvitation(true);
         axios
-            .post(route('api.educator_invitations.create'), {
+            .post(route('api.admin.educator_invitations.create'), {
                 institutionKey: institution.id,
                 email: suggestion.email,
                 roles: invitationRoles,

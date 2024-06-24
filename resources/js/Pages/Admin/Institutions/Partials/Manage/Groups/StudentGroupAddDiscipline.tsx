@@ -47,7 +47,7 @@ export default function StudentGroupAddDiscipline({
             .get<{
                 disciplines: PaginatedCollection<DisciplineDto>;
             }>(
-                route('api.disciplines.index', {
+                route('api.admin.disciplines.index', {
                     search: searchQuery,
                     associatedToInstitutionIds: parentInstitutionId,
                     notAssociatedToStudentGroupIds: group.id,

@@ -51,7 +51,7 @@ export default function StudentGroupSelector({
         axios
             .get<{
                 results: PaginatedCollection<StudentGroupViewModel>;
-            }>(route('api.student_groups.index', query))
+            }>(route('api.admin.student_groups.index', query))
             .then(response => {
                 setSuggestions(response.data.results.data);
             })

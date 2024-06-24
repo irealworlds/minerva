@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\Disciplines;
+namespace App\Http\Api\Endpoints\Admin\Disciplines;
 
 use App\ApplicationServices\Disciplines\ListFilteredPaginated\ListFilteredPaginatedDisciplinesQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\{Discipline, Institution, StudentGroup};
 use App\Core\Optional;
-use App\Http\Api\Dtos\DisciplineDto;
+use App\Http\Api\Dtos\Admin\DisciplineDto;
 use App\Http\Api\Endpoints\Endpoint;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -25,7 +25,7 @@ final readonly class ListEndpoint extends Endpoint
      * @throws InvalidArgumentException
      * @throws ValidationException
      */
-    #[Get('/Disciplines', name: 'api.disciplines.index')]
+    #[Get('/Admin/Disciplines', name: 'api.admin.disciplines.index')]
     public function __invoke(ListEndpointRequest $request): JsonResponse
     {
         // Parse the notAssociatedToInstitutionIds filter

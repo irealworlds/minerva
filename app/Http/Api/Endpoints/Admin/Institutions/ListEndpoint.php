@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\Institutions;
+namespace App\Http\Api\Endpoints\Admin\Institutions;
 
 use App\ApplicationServices\Institutions\ListFilteredPaginated\ListFilteredPaginatedInstitutionsQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
@@ -26,7 +26,7 @@ final readonly class ListEndpoint extends Endpoint
      * @throws InvalidArgumentException
      * @throws ValidationException
      */
-    #[Get('/Institutions', name: 'api.institutions.index')]
+    #[Get('/Admin/Institutions', name: 'api.admin.institutions.index')]
     public function __invoke(ListEndpointRequest $request): JsonResponse
     {
         // Fetch the institutions via a query

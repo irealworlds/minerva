@@ -65,7 +65,7 @@ export default function NewEnrolmentDisciplinesForm({
             const response = await axios.get<{
                 results: PaginatedCollection<StudentGroupDisciplineDto>;
             }>(
-                route('api.student_groups.disciplines.index', {
+                route('api.admin.student_groups.disciplines.index', {
                     studentGroup: studentGroup.id,
                     page,
                     pageSize: 100,

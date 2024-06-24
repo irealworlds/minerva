@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\EducatorDisciplines;
+namespace App\Http\Api\Endpoints\Admin\EducatorDisciplines;
 
 use App\ApplicationServices\Educators\ListStudentGroupDisciplinesFilteredPaginated\ListStudentGroupDisciplinesForEducatorFilteredPaginatedQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\{Educator, StudentGroupDisciplineEducator};
 use App\Core\Optional;
-use App\Http\Api\Dtos\Assemblers\EducatorTaughtDisciplineDtoAssembler;
+use App\Http\Api\Assemblers\Dtos\Admin\EducatorTaughtDisciplineDtoAssembler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
@@ -28,8 +28,8 @@ final readonly class ListEducatorDisciplinesEndpoint
      */
     #[
         Get(
-            '/Educators/{educator}/Disciplines',
-            name: 'api.educators.disciplines.index',
+            '/Admin/Educators/{educator}/Disciplines',
+            name: 'api.admin.educators.disciplines.index',
         ),
     ]
     public function __invoke(

@@ -50,7 +50,7 @@ export default function InstitutionDisciplineSelector({
             .get<{
                 disciplines: PaginatedCollection<DisciplineDto>;
             }>(
-                route('api.disciplines.index', {
+                route('api.admin.disciplines.index', {
                     query,
                     notAssociatedToInstitutionIds: institution?.id,
                 })

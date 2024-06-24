@@ -73,7 +73,7 @@ export default function StudentRegistrationSelector({
         axios
             .get<{
                 results: PaginatedCollection<StudentRegistrationDto>;
-            }>(route('api.student_registrations.index', query))
+            }>(route('api.admin.student_registrations.index', query))
             .then(response => {
                 setSuggestions(response.data.results.data);
             })

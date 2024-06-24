@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Dtos;
+namespace App\Http\Api\Dtos\Admin;
 
 use App\Core\Models\Discipline;
 

@@ -38,7 +38,7 @@ export default function DisciplineAssociationSelector({
         axios
             .get<{
                 institutions: PaginatedCollection<InstitutionViewModel>;
-            }>(route('api.institutions.index', query))
+            }>(route('api.admin.institutions.index', query))
             .then(response => {
                 setSuggestions(response.data.institutions.data);
             })

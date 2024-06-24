@@ -119,7 +119,7 @@ export default function EducatorDetailsOverlay({
         setTaughtDisciplines(undefined);
 
         const disciplines = await fetchAllPages(
-            route('api.educators.disciplines.index', {
+            route('api.admin.educators.disciplines.index', {
                 educator: educator.id,
             }),
             (response: PaginatedCollection<EducatorTaughtDisciplineDto>) =>

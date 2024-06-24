@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Dtos\Assemblers;
+namespace App\Http\Api\Assemblers\Dtos\Admin;
 
 use App\Core\Models\StudentGroupDisciplineEducator;
-use App\Http\Api\Dtos\EducatorTaughtDisciplineDto;
+use App\Http\Api\Dtos\Admin\EducatorTaughtDisciplineDto;
 
 final readonly class EducatorTaughtDisciplineDtoAssembler
 {

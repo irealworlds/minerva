@@ -31,7 +31,7 @@ export default function StudentGroupDisciplinesSelector({
 
     useEffect(() => {
         fetchAllPages(
-            route('api.disciplines.index', {
+            route('api.admin.disciplines.index', {
                 associatedToStudentGroupIds: studentGroupId,
             }),
             (response: { disciplines: PaginatedCollection<DisciplineDto> }) =>

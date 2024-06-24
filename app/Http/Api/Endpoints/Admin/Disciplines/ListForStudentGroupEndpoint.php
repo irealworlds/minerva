@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\Disciplines;
+namespace App\Http\Api\Endpoints\Admin\Disciplines;
 
 use App\ApplicationServices\StudentGroupDisciplines\ListPaginatedFiltered\ListPaginatedFilteredStudentGroupDisciplinesQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Models\{StudentGroup, StudentGroupDiscipline};
-use App\Http\Api\Dtos\StudentGroupDisciplineDto;
+use App\Http\Api\Dtos\Admin\StudentGroupDisciplineDto;
 use App\Http\Api\Endpoints\Endpoint;
 use Illuminate\Http\JsonResponse;
 use InvalidArgumentException;
 use Spatie\RouteAttributes\Attributes\{Get, Group};
 
-#[Group('/StudentGroups/{studentGroup}/Disciplines')]
+#[Group('/Admin/StudentGroups/{studentGroup}/Disciplines')]
 final readonly class ListForStudentGroupEndpoint extends Endpoint
 {
     public function __construct(private IQueryBus $_queryBus)
@@ -23,7 +23,7 @@ final readonly class ListForStudentGroupEndpoint extends Endpoint
     /**
      * @throws InvalidArgumentException
      */
-    #[Get('/', name: 'api.student_groups.disciplines.index')]
+    #[Get('/', name: 'api.admin.student_groups.disciplines.index')]
     public function __invoke(
         ListForStudentGroupEndpointRequest $request,
         StudentGroup $studentGroup,

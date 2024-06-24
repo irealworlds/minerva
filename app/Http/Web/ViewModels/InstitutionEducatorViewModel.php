@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Web\ViewModels;
 
 use App\Core\Models\InstitutionEducator;
-use App\Http\Api\Dtos\EducatorTaughtDisciplineDto;
+use App\Http\Api\Dtos\Admin\EducatorTaughtDisciplineDto;
 
 final readonly class InstitutionEducatorViewModel
 {

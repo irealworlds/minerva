@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Endpoints\StudentGroups;
+namespace App\Http\Api\Endpoints\Admin\StudentGroups;
 
 use App\ApplicationServices\Institutions\FindById\FindInstitutionsByRouteKeysQuery;
 use App\ApplicationServices\StudentGroups\ListFilteredPaginated\ListFilteredPaginatedStudentGroupsQuery;
@@ -28,7 +28,7 @@ final readonly class ListEndpoint extends Endpoint
      * @throws ValidationException
      * @throws InvalidArgumentException
      */
-    #[Get('/StudentGroups', name: 'api.student_groups.index')]
+    #[Get('/Admin/StudentGroups', name: 'api.admin.student_groups.index')]
     public function __invoke(ListEndpointRequest $request): JsonResponse
     {
         // Parse the parent type from the request
