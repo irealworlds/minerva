@@ -1,5 +1,8 @@
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { GroupedDisciplineEnrolment } from '@/Pages/Student/Enrolments/Partials/Read/Disciplines/DisciplinesList';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
+import { Link } from '@inertiajs/react';
 
 interface DisciplineCardProps {
     className?: string;
@@ -26,6 +29,29 @@ export default function DisciplineCard({
                     {discipline.disciplineAbbreviation ??
                         discipline.disciplineName}
                 </div>
+                <Menu as="div" className="relative ml-auto">
+                    <MenuButton className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
+                        <span className="sr-only">Open options</span>
+                        <EllipsisVerticalIcon
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                        />
+                    </MenuButton>
+                    <MenuItems className="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                        <MenuItem>
+                            {({ focus }) => (
+                                <Link
+                                    href="#"
+                                    className={combineClassNames(
+                                        focus ? 'bg-gray-50' : '',
+                                        'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                    )}>
+                                    Edit
+                                </Link>
+                            )}
+                        </MenuItem>
+                    </MenuItems>
+                </Menu>
             </div>
             <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
                 {/* Discipline name */}

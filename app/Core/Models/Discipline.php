@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
 use Illuminate\Support\Enumerable;
 
 /**
@@ -52,5 +52,18 @@ final class Discipline extends Model
             StudentGroup::class,
             StudentGroupDiscipline::class,
         )->withTimestamps();
+    }
+
+    /**
+     * @return HasMany<StudentDisciplineEnrolment>
+     */
+    public function studentEnrolments(): HasMany
+    {
+        return $this->hasMany(
+            StudentDisciplineEnrolment::class,
+            (new StudentDisciplineEnrolment())
+                ->discipline()
+                ->getForeignKeyName(),
+        );
     }
 }

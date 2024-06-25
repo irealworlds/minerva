@@ -39,6 +39,13 @@ export default function ReadOverview({
             }),
             current: route().current('student.enrolments.read.disciplines'),
         },
+        {
+            name: 'Grades',
+            href: route('student.enrolments.read.grades', {
+                enrolment: enrolment.key,
+            }),
+            current: route().current('student.enrolments.read.grades'),
+        },
     ];
 
     const stats = [
@@ -76,7 +83,7 @@ export default function ReadOverview({
                             className="flex min-w-full flex-none gap-x-6 text-sm font-semibold leading-6 text-gray-500 sm:px-2">
                             {secondaryNavigation.map(item => (
                                 <li key={item.name}>
-                                    <a
+                                    <Link
                                         href={item.href}
                                         className={
                                             item.current
@@ -84,7 +91,7 @@ export default function ReadOverview({
                                                 : ''
                                         }>
                                         {item.name}
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

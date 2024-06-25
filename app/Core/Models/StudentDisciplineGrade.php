@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Educator $educator
+ * @property-read Discipline $discipline
  */
 final class StudentDisciplineGrade extends Model
 {

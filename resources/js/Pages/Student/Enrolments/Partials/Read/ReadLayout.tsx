@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { createContext, PropsWithChildren } from 'react';
 import { combineClassNames } from '@/utils/combine-class-names.function';
 import { StudentGroupEnrolmentViewModel } from '@/types/view-models/student/student-group-enrolment.view-model';
 import { Link } from '@inertiajs/react';
@@ -7,6 +7,10 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 interface ReadLayoutProps extends PropsWithChildren {
     enrolment: StudentGroupEnrolmentViewModel;
 }
+
+export const StudentGroupEnrolmentManagementContext = createContext<{
+    enrolment?: StudentGroupEnrolmentViewModel;
+}>({});
 
 export default function ReadLayout({ children, enrolment }: ReadLayoutProps) {
     const tabs = [
@@ -24,9 +28,16 @@ export default function ReadLayout({ children, enrolment }: ReadLayoutProps) {
             }),
             current: route().current('student.enrolments.read.disciplines'),
         },
+        {
+            name: 'Grades',
+            href: route('student.enrolments.read.grades', {
+                enrolment: enrolment.key,
+            }),
+            current: route().current('student.enrolments.read.grades'),
+        },
     ];
     return (
-        <>
+        <StudentGroupEnrolmentManagementContext.Provider value={{ enrolment }}>
             <div className="border-b border-gray-200 pb-5 sm:pb-0">
                 <div className="flex items-center gap-x-3">
                     <Link href={route('student.enrolments.list')}>
@@ -49,7 +60,7 @@ export default function ReadLayout({ children, enrolment }: ReadLayoutProps) {
                             id="current-tab"
                             name="current-tab"
                             className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                            defaultValue={tabs.find(tab => tab.current).name}>
+                            defaultValue={tabs.find(tab => tab.current)?.name}>
                             {tabs.map(tab => (
                                 <option key={tab.name}>{tab.name}</option>
                             ))}
@@ -58,7 +69,7 @@ export default function ReadLayout({ children, enrolment }: ReadLayoutProps) {
                     <div className="hidden sm:block">
                         <nav className="-mb-px flex space-x-8">
                             {tabs.map(tab => (
-                                <a
+                                <Link
                                     key={tab.name}
                                     href={tab.href}
                                     className={combineClassNames(
@@ -71,13 +82,13 @@ export default function ReadLayout({ children, enrolment }: ReadLayoutProps) {
                                         tab.current ? 'page' : undefined
                                     }>
                                     {tab.name}
-                                </a>
+                                </Link>
                             ))}
                         </nav>
                     </div>
                 </div>
             </div>
             <div className="mt-6">{children}</div>
-        </>
+        </StudentGroupEnrolmentManagementContext.Provider>
     );
 }
