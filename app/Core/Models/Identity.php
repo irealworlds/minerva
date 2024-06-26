@@ -7,10 +7,12 @@ namespace App\Core\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Core\Dtos\PersonalNameDto;
 use App\Core\Enums\Permission;
+use App\Core\Observers\IdentityObserver;
 use App\Core\Traits\Media\InteractsWithMediaUsingNumericKey;
 use App\Infrastructure\Casts\PersonalNameCast;
 use Carbon\Carbon;
 use Codestage\Authorization\Traits\HasPermissions;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +21,8 @@ use Spatie\MediaLibrary\HasMedia;
 
 /**
  * @property int $id
+ * @property string $username
+ * @property string $normalized_username
  * @property PersonalNameDto $name
  * @property string $email
  * @property Carbon|null $email_verified_at
@@ -27,8 +31,10 @@ use Spatie\MediaLibrary\HasMedia;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Educator|null $educatorProfile The educator profile record associated with this identity.
- * @property-read StudentRegistration|null $studentRegistration The student registration record associated with this identity.
+ * @property-read StudentRegistration|null $studentRegistration The student registration record associated with this
+ *     identity.
  */
+#[ObservedBy(IdentityObserver::class)]
 class Identity extends Authenticatable implements HasMedia
 {
     use HasFactory;
@@ -46,6 +52,7 @@ class Identity extends Authenticatable implements HasMedia
      * @var list<string>
      */
     protected $fillable = [
+        'username',
         'name_prefix',
         'first_name',
         'middle_names',

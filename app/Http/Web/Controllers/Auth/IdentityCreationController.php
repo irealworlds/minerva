@@ -7,7 +7,6 @@ namespace App\Http\Web\Controllers\Auth;
 use App\Core\Dtos\PersonalNameDto;
 use App\Core\Models\Identity;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\Auth\IdentityCreationRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\{Factory as AuthManager, StatefulGuard};
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
@@ -48,6 +47,7 @@ final readonly class IdentityCreationController extends Controller
         // Build and save the identity
         /** @var Identity $identity */
         $identity = Identity::query()->make();
+        $identity->username = $request->idNumber;
         $identity->name = new PersonalNameDto(
             prefix: empty($request->namePrefix) ? null : $request->namePrefix,
             firstName: $request->firstName,

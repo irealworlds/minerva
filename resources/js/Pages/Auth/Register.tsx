@@ -8,6 +8,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import TextChipsInput from '@/Components/Forms/Controls/TextChipsInput';
 
 export interface RegistrationFormData {
+    idNumber: string;
     namePrefix: string;
     firstName: string;
     middleNames: string[];
@@ -21,6 +22,7 @@ export interface RegistrationFormData {
 export default function Register() {
     const { data, setData, post, processing, errors, reset } =
         useForm<RegistrationFormData>({
+            idNumber: '',
             namePrefix: '',
             firstName: '',
             middleNames: [],
@@ -49,6 +51,29 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-6">
+                    {/* Id number */}
+                    <div className="col-span-full">
+                        <InputLabel htmlFor="idNumber" value="Id number" />
+
+                        <TextInput
+                            id="idNumber"
+                            name="idNumber"
+                            value={data.idNumber}
+                            className="mt-1 block w-full"
+                            autoComplete="idNumber"
+                            isFocused={true}
+                            onChange={e => {
+                                setData('idNumber', e.target.value);
+                            }}
+                            placeholder="e.g. 1234567890123"
+                        />
+
+                        <InputError
+                            message={errors.idNumber}
+                            className="mt-2"
+                        />
+                    </div>
+
                     {/* Name prefix */}
                     <div className="sm:col-span-2">
                         <InputLabel htmlFor="namePrefix" value="Name prefix" />

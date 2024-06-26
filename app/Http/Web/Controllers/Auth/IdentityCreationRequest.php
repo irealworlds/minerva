@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests\Auth;
+namespace App\Http\Web\Controllers\Auth;
 
 use App\Core\Models\Identity;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
 /**
+ * @property-read string $idNumber
  * @property-read string|null $namePrefix
  * @property-read string $firstName
  * @property-read string[] $middleNames
@@ -21,6 +22,7 @@ final class IdentityCreationRequest extends FormRequest
 {
     /**
      * @return array{
+     *     idNumber: string[],
      *     namePrefix: string[],
      *     firstName: string[],
      *     middleNames: string[],
@@ -34,12 +36,18 @@ final class IdentityCreationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'namePrefix' => ['sometimes', 'string', 'max:64'],
+            'idNumber' => [
+                'required',
+                'string',
+                'size:13',
+                'regex:/^[0-9]+$/i',
+            ],
+            'namePrefix' => ['sometimes', 'nullable', 'string', 'max:64'],
             'firstName' => ['required', 'string', 'max:64'],
-            'middleNames' => ['required', 'array'],
+            'middleNames' => ['present', 'array'],
             'middleNames.*' => ['sometimes', 'string', 'max:64'],
             'lastName' => ['required', 'string', 'max:64'],
-            'nameSuffix' => ['sometimes', 'string', 'max:64'],
+            'nameSuffix' => ['sometimes', 'nullable', 'string', 'max:64'],
             'email' => [
                 'required',
                 'string',
