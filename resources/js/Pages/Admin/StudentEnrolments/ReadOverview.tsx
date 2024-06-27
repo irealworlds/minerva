@@ -1,12 +1,12 @@
 import { PageProps } from '@/types';
 import AuthenticatedLayout from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import EnrolmentManagementLayout from '@/Pages/Admin/StudentEnrolments/Components/EnrolmentManagementLayout';
+import ReadEnrolmentLayout from '@/Pages/Admin/StudentEnrolments/Partials/Read/ReadEnrolmentLayout';
 import { StudentEnrolmentDetailsViewModel } from '@/types/view-models/student-enrolment-details.view-model';
 import React from 'react';
 import StudentRegistrationId from '@/Components/Students/StudentRegistrationId';
 
-export default function ManageDetails({
+export default function ReadOverview({
     auth,
     enrolment,
 }: PageProps<{
@@ -14,9 +14,9 @@ export default function ManageDetails({
 }>) {
     return (
         <AuthenticatedLayout user={auth.user}>
-            <Head title="Manage" />
+            <Head title="Overview" />
 
-            <EnrolmentManagementLayout enrolment={enrolment}>
+            <ReadEnrolmentLayout enrolment={enrolment}>
                 <div className="overflow-hidden bg-white shadow sm:rounded-lg">
                     <div className="px-4 py-6 sm:px-6">
                         <h3 className="text-base font-semibold leading-7 text-gray-900">
@@ -182,7 +182,7 @@ export default function ManageDetails({
                         </dl>
                     </div>
                 </div>
-            </EnrolmentManagementLayout>
+            </ReadEnrolmentLayout>
         </AuthenticatedLayout>
     );
 }

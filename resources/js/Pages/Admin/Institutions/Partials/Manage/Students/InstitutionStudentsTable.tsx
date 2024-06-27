@@ -63,7 +63,7 @@ export default function InstitutionStudentsTable({
                                 <td className="relative py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                     <a
                                         href={route(
-                                            'admin.student_enrolments.manage',
+                                            'admin.studentGroupEnrolments.read.overview',
                                             { enrolment: enrolment.id }
                                         )}
                                         className="text-indigo-600 hover:text-indigo-900">

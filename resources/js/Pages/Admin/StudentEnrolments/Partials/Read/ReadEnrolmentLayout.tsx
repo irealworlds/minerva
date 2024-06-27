@@ -1,4 +1,5 @@
 import {
+    AcademicCapIcon,
     ChartPieIcon,
     ClipboardDocumentListIcon,
     DocumentDuplicateIcon,
@@ -11,63 +12,80 @@ import { PropsWithChildren, useMemo } from 'react';
 import { StudentEnrolmentDetailsViewModel } from '@/types/view-models/student-enrolment-details.view-model';
 import { Link } from '@inertiajs/react';
 
-const navigation = [
-    {
-        name: 'Details',
-        href: '#',
-        icon: IdentificationIcon,
-        current: true,
-        disabled: false,
-    },
-    {
-        name: 'Grades',
-        href: '#',
-        count: 'soon',
-        icon: ClipboardDocumentListIcon,
-        current: false,
-        disabled: true,
-    },
-    {
-        name: 'Documents',
-        href: '#',
-        icon: DocumentDuplicateIcon,
-        count: 'soon',
-        current: false,
-        disabled: true,
-    },
-    {
-        name: 'Reports',
-        href: '#',
-        icon: ChartPieIcon,
-        count: 'soon',
-        current: false,
-        disabled: true,
-    },
-    {
-        name: 'History',
-        href: '#',
-        icon: ListBulletIcon,
-        count: 'soon',
-        current: false,
-        disabled: true,
-    },
-];
-
 interface EnrolmentManagementLayoutProps extends PropsWithChildren {
     enrolment: StudentEnrolmentDetailsViewModel;
 }
 
-export default function EnrolmentManagementLayout({
+export default function ReadEnrolmentLayout({
     children,
     enrolment,
 }: EnrolmentManagementLayoutProps) {
+    const navigation = useMemo(() => {
+        return [
+            {
+                name: 'Overview',
+                href: route('admin.studentGroupEnrolments.read.overview', {
+                    enrolment: enrolment.id,
+                }),
+                icon: IdentificationIcon,
+                current: route().current(
+                    'admin.studentGroupEnrolments.read.overview'
+                ),
+                disabled: false,
+            },
+            {
+                name: 'Disciplines',
+                href: route('admin.studentGroupEnrolments.read.disciplines', {
+                    enrolment: enrolment.id,
+                }),
+                icon: AcademicCapIcon,
+                current: route().current(
+                    'admin.studentGroupEnrolments.read.disciplines'
+                ),
+                disabled: false,
+            },
+            {
+                name: 'Grades',
+                href: '#',
+                count: 'soon',
+                icon: ClipboardDocumentListIcon,
+                current: false,
+                disabled: true,
+            },
+            {
+                name: 'Documents',
+                href: '#',
+                icon: DocumentDuplicateIcon,
+                count: 'soon',
+                current: false,
+                disabled: true,
+            },
+            {
+                name: 'Reports',
+                href: '#',
+                icon: ChartPieIcon,
+                count: 'soon',
+                current: false,
+                disabled: true,
+            },
+            {
+                name: 'History',
+                href: '#',
+                icon: ListBulletIcon,
+                count: 'soon',
+                current: false,
+                disabled: true,
+            },
+        ];
+    }, [enrolment]);
+
     const secondaryNavigation = useMemo(
         () =>
             enrolment.allEnrolmentsList
                 .filter(e => e.id !== enrolment.id)
                 .map(e => ({
                     name: e.name,
-                    href: route('admin.student_enrolments.manage', {
+                    href: route('admin.studentGroupEnrolments.read.overview', {
                         enrolment: e.id,
                     }),
                     initial: e.name.trim().charAt(0),
@@ -77,7 +95,7 @@ export default function EnrolmentManagementLayout({
 
     return (
         <>
-            <div className="grid grid-cols-4 gap-x-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-6 gap-y-6">
                 <div>
                     <nav className="flex flex-1 flex-col" aria-label="Sidebar">
                         <ul

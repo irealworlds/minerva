@@ -4,7 +4,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import React, { useMemo } from 'react';
 import { StudentRegistrationDto } from '@/types/dtos/student-registration.dto';
 import StudentRegistrationSelector from '@/Pages/Admin/StudentEnrolments/Components/StudentRegistrationSelector';
-import NewEnrolmentIdentityForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentIdentityForm';
+import NewEnrolmentIdentityForm from '@/Pages/Admin/StudentEnrolments/Partials/Create/NewEnrolmentIdentityForm';
 import { IdentityFormData } from '@/Pages/Admin/StudentEnrolments/Create';
 
 interface NewEnrolmentStudentProfileFormProps {

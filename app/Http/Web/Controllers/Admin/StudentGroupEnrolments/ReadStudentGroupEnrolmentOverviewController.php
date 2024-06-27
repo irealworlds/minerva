@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Controllers\Admin\StudentEnrolments;
+namespace App\Http\Web\Controllers\Admin\StudentGroupEnrolments;
 
 use App\Core\Models\StudentGroupEnrolment;
 use App\Http\Web\Controllers\Controller;
@@ -11,7 +11,8 @@ use Inertia\{Response as InertiaResponse, ResponseFactory};
 use RuntimeException;
 use Spatie\RouteAttributes\Attributes\Get;
 
-final readonly class ManageStudentEnrolmentController extends Controller
+final readonly class ReadStudentGroupEnrolmentOverviewController extends
+    Controller
 {
     public function __construct(private ResponseFactory $_inertia)
     {
@@ -22,19 +23,16 @@ final readonly class ManageStudentEnrolmentController extends Controller
      */
     #[
         Get(
-            '/Admin/StudentEnrolments/{enrolment}',
-            name: 'admin.student_enrolments.manage',
+            '/Admin/StudentEnrolments/{enrolment}/Overview',
+            name: 'admin.studentGroupEnrolments.read.overview',
         ),
     ]
     public function __invoke(StudentGroupEnrolment $enrolment): InertiaResponse
     {
-        return $this->_inertia->render(
-            'Admin/StudentEnrolments/ManageDetails',
-            [
-                'enrolment' => StudentEnrolmentDetailsViewModel::fromModel(
-                    $enrolment,
-                ),
-            ],
-        );
+        return $this->_inertia->render('Admin/StudentEnrolments/ReadOverview', [
+            'enrolment' => StudentEnrolmentDetailsViewModel::fromModel(
+                $enrolment,
+            ),
+        ]);
     }
 }

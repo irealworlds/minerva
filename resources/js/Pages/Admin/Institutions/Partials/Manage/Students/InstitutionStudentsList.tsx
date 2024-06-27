@@ -38,7 +38,7 @@ export default function InstitutionStudentsList({
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                     <Link
-                        href={route('admin.student_enrolments.create', {
+                        href={route('admin.studentGroupEnrolments.create', {
                             institutionKey: institution?.id,
                         })}>
                         <PrimaryButton type="button">

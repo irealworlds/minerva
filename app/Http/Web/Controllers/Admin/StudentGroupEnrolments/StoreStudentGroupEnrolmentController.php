@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Controllers\Admin\StudentEnrolments;
+namespace App\Http\Web\Controllers\Admin\StudentGroupEnrolments;
 
 use App\ApplicationServices\Disciplines\FindByRouteKey\FindDisciplineByRouteKeyQuery;
 use App\ApplicationServices\Educators\FindByRouteKey\FindEducatorByRouteKeyQuery;
@@ -27,7 +27,7 @@ use ReflectionException;
 use Spatie\RouteAttributes\Attributes\Post;
 use Throwable;
 
-final readonly class StoreStudentEnrolmentController extends Controller
+final readonly class StoreStudentGroupEnrolmentController extends Controller
 {
     public function __construct(
         private Redirector $_redirector,
@@ -46,11 +46,11 @@ final readonly class StoreStudentEnrolmentController extends Controller
     #[
         Post(
             '/Admin/StudentEnrolments/Create',
-            name: 'admin.student_enrolments.store',
+            name: 'admin.studentGroupEnrolments.store',
         ),
     ]
     public function __invoke(
-        StoreStudentEnrolmentRequest $request,
+        StoreStudentGroupEnrolmentRequest $request,
     ): RedirectResponse {
         // Get the student group from the request
         $studentGroup = $this->extractStudentGroup($request);
@@ -94,7 +94,7 @@ final readonly class StoreStudentEnrolmentController extends Controller
      * @throws InvalidArgumentException
      */
     protected function extractOrCreateStudentRegistration(
-        StoreStudentEnrolmentRequest $request,
+        StoreStudentGroupEnrolmentRequest $request,
     ): StudentRegistration {
         if ($request->studentKey) {
             $studentRegistration = $this->_queryBus->dispatch(
@@ -146,7 +146,7 @@ final readonly class StoreStudentEnrolmentController extends Controller
      * @throws ValidationException if the student group does not exist
      */
     public function extractStudentGroup(
-        StoreStudentEnrolmentRequest $request,
+        StoreStudentGroupEnrolmentRequest $request,
     ): StudentGroup {
         $studentGroup = $this->_queryBus->dispatch(
             new FindStudentGroupByRouteKeyQuery(
@@ -171,7 +171,7 @@ final readonly class StoreStudentEnrolmentController extends Controller
      * @throws ValidationException if any educator or discipline does not exist
      */
     public function extractStudiedDisciplines(
-        StoreStudentEnrolmentRequest $request,
+        StoreStudentGroupEnrolmentRequest $request,
     ): Enumerable {
         $disciplines = new Collection();
         foreach ($request->disciplines as $index => $studiedDiscipline) {

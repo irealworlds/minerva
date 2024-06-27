@@ -8,7 +8,7 @@ export default function NoStudentEnrolments() {
 
     return (
         <Link
-            href={route('admin.student_enrolments.create', {
+            href={route('admin.studentGroupEnrolments.create', {
                 institutionKey: institution?.id,
             })}
             className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

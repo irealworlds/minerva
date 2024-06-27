@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Controllers\Admin\StudentEnrolments;
+namespace App\Http\Web\Controllers\Admin\StudentGroupEnrolments;
 
 use App\ApplicationServices\Institutions\FindById\FindInstitutionsByRouteKeysQuery;
 use App\Core\Contracts\Cqrs\IQueryBus;
@@ -13,9 +13,10 @@ use Illuminate\Http\Request;
 use Inertia\{Response as InertiaResponse, ResponseFactory};
 use Spatie\RouteAttributes\Attributes\Get;
 use Throwable;
+
 use function is_string;
 
-final readonly class CreateStudentEnrolmentController extends Controller
+final readonly class CreateStudentGroupEnrolmentController extends Controller
 {
     public function __construct(
         private ResponseFactory $_inertia,
@@ -28,7 +29,7 @@ final readonly class CreateStudentEnrolmentController extends Controller
     #[
         Get(
             '/Admin/StudentEnrolments/Create',
-            name: 'admin.student_enrolments.create',
+            name: 'admin.studentGroupEnrolments.create',
         ),
     ]
     public function __invoke(Request $request): InertiaResponse

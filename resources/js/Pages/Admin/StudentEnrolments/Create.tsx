@@ -3,13 +3,13 @@ import AuthenticatedLayout from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import BulletsAndTextSteps from '@/Components/Steps/BulletsAndTextSteps';
 import { createContext, useEffect, useState } from 'react';
-import NewEnrolmentStudentProfileForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentStudentProfileForm';
+import NewEnrolmentStudentProfileForm from '@/Pages/Admin/StudentEnrolments/Partials/Create/NewEnrolmentStudentProfileForm';
 import { StudentRegistrationDto } from '@/types/dtos/student-registration.dto';
-import NewEnrolmentInstitutionForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentInstitutionForm';
+import NewEnrolmentInstitutionForm from '@/Pages/Admin/StudentEnrolments/Partials/Create/NewEnrolmentInstitutionForm';
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 import { StudentGroupViewModel } from '@/types/view-models/student-group.view-model';
-import NewEnrolmentDisciplinesForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentDisciplinesForm';
-import NewEnrolmentPreview from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentPreview';
+import NewEnrolmentDisciplinesForm from '@/Pages/Admin/StudentEnrolments/Partials/Create/NewEnrolmentDisciplinesForm';
+import NewEnrolmentPreview from '@/Pages/Admin/StudentEnrolments/Partials/Create/NewEnrolmentPreview';
 
 const steps = [
     {
@@ -129,7 +129,7 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
     }, [selectedDisciplines]);
 
     function submit() {
-        post(route('admin.student_enrolments.store'));
+        post(route('admin.studentGroupEnrolments.store'));
     }
 
     return (
@@ -248,8 +248,6 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
                                 }}
                             />
                         )}
-
-                        <pre>{JSON.stringify(data, null, 2)}</pre>
                     </StudentEnrolmentCreationContext.Provider>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Controllers\Admin\StudentEnrolments;
+namespace App\Http\Web\Controllers\Admin\StudentGroupEnrolments;
 
 use App\Core\Models\Identity;
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,7 +21,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $studentGroupKey
  * @property iterable<array{disciplineKey: string, educatorKey: string}> $disciplines
  */
-final class StoreStudentEnrolmentRequest extends FormRequest
+final class StoreStudentGroupEnrolmentRequest extends FormRequest
 {
     /**
      * @return array{
@@ -55,6 +55,7 @@ final class StoreStudentEnrolmentRequest extends FormRequest
                 'array',
             ],
             'newIdentity.idNumber' => [
+                'sometimes',
                 'required',
                 'string',
                 'size:13',
@@ -66,10 +67,20 @@ final class StoreStudentEnrolmentRequest extends FormRequest
                 'string',
                 'max:64',
             ],
-            'newIdentity.firstName' => ['required', 'string', 'max:64'],
-            'newIdentity.middleNames' => ['present', 'array'],
+            'newIdentity.firstName' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:64',
+            ],
+            'newIdentity.middleNames' => ['sometimes', 'present', 'array'],
             'newIdentity.middleNames.*' => ['sometimes', 'string', 'max:64'],
-            'newIdentity.lastName' => ['required', 'string', 'max:64'],
+            'newIdentity.lastName' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:64',
+            ],
             'newIdentity.nameSuffix' => [
                 'sometimes',
                 'nullable',
@@ -77,6 +88,7 @@ final class StoreStudentEnrolmentRequest extends FormRequest
                 'max:64',
             ],
             'newIdentity.email' => [
+                'sometimes',
                 'required',
                 'string',
                 'lowercase',
@@ -87,7 +99,7 @@ final class StoreStudentEnrolmentRequest extends FormRequest
 
             'studentGroupKey' => ['required', 'string'],
 
-            'disciplines' => ['required', 'array'],
+            'disciplines' => ['present', 'array'],
             'disciplines.*.disciplineKey' => ['required', 'string'],
             'disciplines.*.educatorKey' => ['required', 'string'],
         ];
