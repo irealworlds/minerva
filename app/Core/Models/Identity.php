@@ -26,7 +26,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property PersonalNameDto $name
  * @property string $email
  * @property Carbon|null $email_verified_at
- * @property string $password
+ * @property string|null $password
  * @property string $remember_token
  * @property Carbon $created_at
  * @property Carbon $updated_at

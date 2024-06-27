@@ -1,56 +1,28 @@
-import { FormEventHandler, useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/Forms/InputError';
+import { IdentityFormData } from '@/Pages/Admin/Educators/Create';
 import InputLabel from '@/Components/Forms/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Forms/Controls/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import InputError from '@/Components/Forms/InputError';
 import TextChipsInput from '@/Components/Forms/Controls/TextChipsInput';
 
-export interface RegistrationFormData {
-    idNumber: string;
-    namePrefix: string;
-    firstName: string;
-    middleNames: string[];
-    lastName: string;
-    nameSuffix: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
+interface IdentityFormProps {
+    className?: string;
+    data: IdentityFormData;
+    onChange: (newValue: IdentityFormData) => void;
+    errors: Partial<Record<keyof IdentityFormData, string>>;
+    disabled?: boolean;
 }
 
-export default function Register() {
-    const { data, setData, post, processing, errors, reset } =
-        useForm<RegistrationFormData>({
-            idNumber: '',
-            namePrefix: '',
-            firstName: '',
-            middleNames: [],
-            lastName: '',
-            nameSuffix: '',
-            email: '',
-            password: '',
-            password_confirmation: '',
-        });
-
-    useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
-
-    const submit: FormEventHandler = e => {
-        e.preventDefault();
-
-        post(route('register'));
-    };
-
+export default function IdentityForm({
+    className,
+    data,
+    onChange,
+    errors,
+    disabled,
+}: IdentityFormProps) {
     return (
-        <GuestLayout>
-            <Head title="Register" />
-
-            <form onSubmit={submit}>
-                <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-6">
+        <div className={className}>
+            <div className="px-4 py-6 sm:p-8">
+                <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     {/* Id number */}
                     <div className="col-span-full">
                         <InputLabel htmlFor="idNumber" value="Id number" />
@@ -60,10 +32,13 @@ export default function Register() {
                             name="idNumber"
                             value={data.idNumber}
                             className="mt-1 block w-full"
-                            autoComplete="username"
-                            isFocused={true}
+                            autoComplete="new-username"
+                            disabled={disabled}
                             onChange={e => {
-                                setData('idNumber', e.target.value);
+                                onChange({
+                                    ...data,
+                                    idNumber: e.target.value,
+                                });
                             }}
                             placeholder="e.g. 1234567890123"
                         />
@@ -84,9 +59,12 @@ export default function Register() {
                             value={data.namePrefix}
                             className="mt-1 block w-full"
                             autoComplete="honorific-prefix"
-                            isFocused={true}
+                            disabled={disabled}
                             onChange={e => {
-                                setData('namePrefix', e.target.value);
+                                onChange({
+                                    ...data,
+                                    namePrefix: e.target.value,
+                                });
                             }}
                             placeholder="e.g. Dr."
                         />
@@ -107,9 +85,12 @@ export default function Register() {
                             value={data.firstName}
                             className="mt-1 block w-full"
                             autoComplete="given-name"
-                            isFocused={true}
+                            disabled={disabled}
                             onChange={e => {
-                                setData('firstName', e.target.value);
+                                onChange({
+                                    ...data,
+                                    firstName: e.target.value,
+                                });
                             }}
                             placeholder="e.g. John"
                             required
@@ -134,9 +115,12 @@ export default function Register() {
                             value={data.middleNames}
                             className="mt-1 block w-full"
                             autoComplete="additional-name"
-                            isFocused={true}
+                            disabled={disabled}
                             onChange={names => {
-                                setData('middleNames', names);
+                                onChange({
+                                    ...data,
+                                    middleNames: names,
+                                });
                             }}
                             placeholder="e.g. Adam, Alan, Carl"
                         />
@@ -160,9 +144,12 @@ export default function Register() {
                             value={data.lastName}
                             className="mt-1 block w-full"
                             autoComplete="family-name"
-                            isFocused={true}
+                            disabled={disabled}
                             onChange={e => {
-                                setData('lastName', e.target.value);
+                                onChange({
+                                    ...data,
+                                    lastName: e.target.value,
+                                });
                             }}
                             placeholder="e.g. Doe"
                             required
@@ -184,9 +171,12 @@ export default function Register() {
                             value={data.nameSuffix}
                             className="mt-1 block w-full"
                             autoComplete="honorific-suffix"
-                            isFocused={true}
+                            disabled={disabled}
                             onChange={e => {
-                                setData('nameSuffix', e.target.value);
+                                onChange({
+                                    ...data,
+                                    nameSuffix: e.target.value,
+                                });
                             }}
                             placeholder="e.g. PhD"
                         />
@@ -208,8 +198,12 @@ export default function Register() {
                             value={data.email}
                             className="mt-1 block w-full"
                             autoComplete="email"
+                            disabled={disabled}
                             onChange={e => {
-                                setData('email', e.target.value);
+                                onChange({
+                                    ...data,
+                                    email: e.target.value,
+                                });
                             }}
                             placeholder="e.g. you@example.com"
                             required
@@ -217,74 +211,8 @@ export default function Register() {
 
                         <InputError message={errors.email} className="mt-2" />
                     </div>
-
-                    {/* Password */}
-                    <div className="sm:col-span-6">
-                        <InputLabel htmlFor="password" value="Password" />
-
-                        <TextInput
-                            id="password"
-                            type="password"
-                            name="password"
-                            value={data.password}
-                            className="mt-1 block w-full"
-                            autoComplete="new-password"
-                            onChange={e => {
-                                setData('password', e.target.value);
-                            }}
-                            placeholder="**********"
-                            required
-                        />
-
-                        <InputError
-                            message={errors.password}
-                            className="mt-2"
-                        />
-                    </div>
-
-                    {/* Password confirmation*/}
-                    <div className="sm:col-span-6">
-                        <InputLabel
-                            htmlFor="password_confirmation"
-                            value="Confirm Password"
-                        />
-
-                        <TextInput
-                            id="password_confirmation"
-                            type="password"
-                            name="password_confirmation"
-                            value={data.password_confirmation}
-                            className="mt-1 block w-full"
-                            autoComplete="new-password"
-                            onChange={e => {
-                                setData(
-                                    'password_confirmation',
-                                    e.target.value
-                                );
-                            }}
-                            placeholder="**********"
-                            required
-                        />
-
-                        <InputError
-                            message={errors.password_confirmation}
-                            className="mt-2"
-                        />
-                    </div>
                 </div>
-
-                <div className="flex items-center justify-end border-t mt-6 pt-6">
-                    <Link
-                        href={route('login')}
-                        className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+            </div>
+        </div>
     );
 }

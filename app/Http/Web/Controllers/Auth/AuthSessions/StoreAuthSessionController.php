@@ -80,6 +80,13 @@ final readonly class StoreAuthSessionController
             ]);
         }
 
+        // If the identity has no password, they cannot log in
+        if (empty($identity->getAuthPassword())) {
+            throw ValidationException::withMessages([
+                'username' => __('auth.auth_type_not_supported'),
+            ]);
+        }
+
         // Check if the password matches
         $passwordMatches = $this->_hasher->check(
             $request->password,

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\ApplicationServices\Educators\ListFilteredPaginated;
 
+use App\Core\{EmptyOptional, Optional};
 use App\Core\Contracts\Cqrs\IQuery;
 use App\Core\Models\Educator;
-use App\Core\Optional;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\AbstractPaginator;
 
@@ -23,9 +23,9 @@ final readonly class ListFilteredPaginatedEducatorsQuery implements IQuery
     public function __construct(
         public int $pageSize,
         public int $page,
-        public Optional $searchQuery,
-        public Optional $associatedToInstitutionIds,
-        public Optional $notAssociatedToInstitutionIds,
+        public Optional $searchQuery = new EmptyOptional(),
+        public Optional $associatedToInstitutionIds = new EmptyOptional(),
+        public Optional $notAssociatedToInstitutionIds = new EmptyOptional(),
     ) {
     }
 }

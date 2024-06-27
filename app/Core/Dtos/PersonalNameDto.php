@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core\Dtos;
 
+use Illuminate\Support\Str;
+
 final readonly class PersonalNameDto
 {
     /**
@@ -35,5 +37,10 @@ final readonly class PersonalNameDto
         }
 
         return $name;
+    }
+
+    public function getDirectoryName(): string
+    {
+        return Str::upper($this->lastName) . ', ' . $this->firstName;
     }
 }

@@ -5,6 +5,7 @@ import React, {
     useState,
 } from 'react';
 import {
+    AcademicCapIcon,
     BuildingLibraryIcon,
     ChartBarSquareIcon,
     ClipboardDocumentListIcon,
@@ -63,6 +64,12 @@ export default function AuthenticatedLayout({
                 icon: BuildingLibraryIcon,
                 permissions: [Permission.InstitutionsCreate],
             },
+            {
+                name: 'Educators',
+                href: route('admin.educators.list'),
+                current: route().current('admin.educators.list'),
+                icon: AcademicCapIcon,
+            },
         ]),
 
         // Educator routes
@@ -72,7 +79,6 @@ export default function AuthenticatedLayout({
                 href: route('admin.institutions.index'),
                 current: route().current('admin.institutions.index'),
                 icon: ChartBarSquareIcon,
-                permissions: [Permission.InstitutionsCreate],
                 disabled: true,
             },
             {
@@ -91,7 +97,6 @@ export default function AuthenticatedLayout({
                 href: route('admin.institutions.index'),
                 current: route().current('admin.institutions.index'),
                 icon: ChartBarSquareIcon,
-                permissions: [Permission.InstitutionsCreate],
                 disabled: true,
             },
             {
@@ -99,7 +104,6 @@ export default function AuthenticatedLayout({
                 href: route('admin.institutions.index'),
                 current: route().current('admin.institutions.index'),
                 icon: IdentificationIcon,
-                permissions: [Permission.InstitutionsCreate],
                 disabled: true,
             },
             {
@@ -114,7 +118,6 @@ export default function AuthenticatedLayout({
                 href: route('admin.institutions.index'),
                 current: route().current('admin.institutions.index'),
                 icon: ClipboardDocumentListIcon,
-                permissions: [Permission.InstitutionsCreate],
                 disabled: true,
             },
         ]),

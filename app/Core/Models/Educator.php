@@ -13,7 +13,7 @@ use Illuminate\Support\Enumerable;
 
 /**
  * @property string $id
- * @property int $identity_id
+ * @property mixed $identity_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Identity $identity
