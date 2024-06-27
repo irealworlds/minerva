@@ -1,15 +1,21 @@
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import React from 'react';
-import { NewStudentEnrolmentFormData } from '@/Pages/Admin/StudentEnrolments/Create';
+import { SelectableEnrolmentDiscipline } from '@/Pages/Admin/StudentEnrolments/Create';
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
+import { StudentGroupViewModel } from '@/types/view-models/student-group.view-model';
 
 interface NewEnrolmentPreviewProps {
     onAdvance: () => void;
     onPreviousRequested?: () => void;
     disabled?: boolean;
-    data?: NewStudentEnrolmentFormData & {
-        institution: InstitutionViewModel | null;
+    data: {
+        newStudent: boolean;
+        studentName: string | null;
+        studentPictureUri: string;
+        selectedInstitution: InstitutionViewModel | null;
+        selectedStudentGroup: StudentGroupViewModel | null;
+        selectedDisciplines: SelectableEnrolmentDiscipline[];
     };
 }
 
@@ -37,11 +43,11 @@ export default function NewEnrolmentPreview({
                             Full name
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {data?.studentProfile ? (
+                            {data.studentName?.trim().length ? (
                                 <div className="flex items-center gap-2">
                                     {/*  Picture */}
                                     <img
-                                        src={data.studentProfile.pictureUri}
+                                        src={data.studentPictureUri}
                                         className="size-8 bg-gray-200 flex items-center justify-center rounded-full text-white shrink-0"
                                         aria-hidden="true"
                                         alt="picture"
@@ -50,7 +56,7 @@ export default function NewEnrolmentPreview({
                                     {/* Text */}
                                     <div className="grow max-w-full">
                                         <h5 className="truncate">
-                                            {data.studentProfile.name}
+                                            {data.studentName}
                                         </h5>
                                         <p className="text-gray-500"></p>
                                     </div>
@@ -67,11 +73,11 @@ export default function NewEnrolmentPreview({
                             Institution
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {data?.institution ? (
+                            {data.selectedInstitution ? (
                                 <div>
                                     <nav className="truncate text-gray-500">
                                         <ol className="flex items-center space-x-1">
-                                            {data.institution.ancestors.map(
+                                            {data.selectedInstitution.ancestors.map(
                                                 ancestor => (
                                                     <li
                                                         key={ancestor.id}
@@ -91,7 +97,7 @@ export default function NewEnrolmentPreview({
                                             )}
                                         </ol>
                                     </nav>
-                                    {data.institution.name}
+                                    {data.selectedInstitution.name}
                                 </div>
                             ) : (
                                 <span className="text-gray-500">N/A</span>
@@ -105,8 +111,8 @@ export default function NewEnrolmentPreview({
                             Student group
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {data?.studentGroup ? (
-                                data.studentGroup.name
+                            {data.selectedStudentGroup ? (
+                                data.selectedStudentGroup.name
                             ) : (
                                 <span className="text-gray-500">N/A</span>
                             )}
@@ -119,35 +125,37 @@ export default function NewEnrolmentPreview({
                             Studied disciplines
                         </dt>
                         <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {data?.disciplines.length ? (
+                            {data.selectedDisciplines.length ? (
                                 <ul
                                     role="list"
                                     className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                                    {data.disciplines.map(discipline => (
-                                        <li
-                                            key={discipline.id}
-                                            className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                                            <div className="flex w-0 flex-1 items-center">
-                                                <div>
-                                                    <h5
-                                                        className="truncate font-medium"
-                                                        title={
-                                                            discipline.disciplineName
-                                                        }>
-                                                        {
-                                                            discipline.disciplineName
-                                                        }
-                                                    </h5>
-                                                    <p className="text-gray-400 text-sm">
-                                                        taught by{' '}
-                                                        {
-                                                            discipline.educatorName
-                                                        }
-                                                    </p>
+                                    {data.selectedDisciplines.map(
+                                        discipline => (
+                                            <li
+                                                key={discipline.id}
+                                                className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                                                <div className="flex w-0 flex-1 items-center">
+                                                    <div>
+                                                        <h5
+                                                            className="truncate font-medium"
+                                                            title={
+                                                                discipline.disciplineName
+                                                            }>
+                                                            {
+                                                                discipline.disciplineName
+                                                            }
+                                                        </h5>
+                                                        <p className="text-gray-400 text-sm">
+                                                            taught by{' '}
+                                                            {
+                                                                discipline.educatorName
+                                                            }
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    ))}
+                                            </li>
+                                        )
+                                    )}
                                 </ul>
                             ) : (
                                 <span className="text-gray-500">N/A</span>

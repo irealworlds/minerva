@@ -4,56 +4,67 @@ declare(strict_types=1);
 
 namespace App\ApplicationServices\StudentRegistrations\Create;
 
-use App\Core\Contracts\Cqrs\ICommandHandler;
-use App\Core\Models\{StudentDisciplineEnrolment, StudentGroupEnrolment};
+use App\ApplicationServices\Identities\Create\CreateIdentityCommand;
+use App\ApplicationServices\Identities\FindByUsername\FindIdentityByUsernameQuery;
+use App\Core\Contracts\Cqrs\{ICommandBus, ICommandHandler, IQueryBus};
+use App\Core\Models\StudentRegistration;
 use Illuminate\Database\ConnectionResolverInterface;
-use Throwable;
+use RuntimeException;
 
 /**
  * @implements ICommandHandler<CreateStudentRegistrationCommand>
  */
 final readonly class CreateStudentRegistrationHandler implements ICommandHandler
 {
-    public function __construct(private ConnectionResolverInterface $_database)
-    {
+    public function __construct(
+        private ICommandBus $_commandBus,
+        private IQueryBus $_queryBus,
+        private ConnectionResolverInterface $_db,
+    ) {
     }
 
     /**
      * @inheritDoc
-     *
-     * @throws Throwable
      */
     public function __invoke(mixed $command): void
     {
-        $studentGroupKey = $command->studentGroupKey;
-        $studentKey = $command->studentKey;
-        $disciplines = $command->disciplines;
+        $studentRegistrationKey = $command->studentKey;
+        $username = $command->username;
+        $email = $command->email;
+        $name = $command->name;
+        $password = $command->password;
 
-        $this->_database
+        $this->_db
             ->connection()
             ->transaction(function () use (
-                $studentKey,
-                $studentGroupKey,
-                $disciplines,
+                $studentRegistrationKey,
+                $username,
+                $email,
+                $name,
+                $password,
             ): void {
-                // Create an enrolment
-                /** @var StudentGroupEnrolment $studentGroupEnrolment */
-                $studentGroupEnrolment = StudentGroupEnrolment::query()->make();
-                $studentGroupEnrolment->student_group_id = $studentGroupKey;
-                $studentGroupEnrolment->student_registration_id = $studentKey;
-                $studentGroupEnrolment->saveOrFail();
+                $this->_commandBus->dispatch(
+                    new CreateIdentityCommand(
+                        username: $username,
+                        name: $name,
+                        email: $email,
+                        password: $password,
+                    ),
+                );
 
-                // Create a registration for each discipline
-                foreach ($disciplines as $discipline) {
-                    /** @var StudentDisciplineEnrolment $disciplineEnrolment */
-                    $disciplineEnrolment = StudentDisciplineEnrolment::query()->make();
-                    $disciplineEnrolment->student_group_enrolment_id = $studentGroupEnrolment->getKey();
-                    $disciplineEnrolment->discipline_id =
-                        $discipline->disciplineKey;
-                    $disciplineEnrolment->educator_id =
-                        $discipline->educatorKey;
-                    $disciplineEnrolment->saveOrFail();
+                $identity = $this->_queryBus->dispatch(
+                    new FindIdentityByUsernameQuery(username: $username),
+                );
+
+                if (empty($identity)) {
+                    throw new RuntimeException('Could not create identity.');
                 }
+
+                /** @var StudentRegistration $studentRegistration */
+                $studentRegistration = StudentRegistration::query()->make();
+                $studentRegistration->id = $studentRegistrationKey;
+                $studentRegistration->identity_id = $identity->getKey();
+                $studentRegistration->saveOrFail();
             });
     }
 }

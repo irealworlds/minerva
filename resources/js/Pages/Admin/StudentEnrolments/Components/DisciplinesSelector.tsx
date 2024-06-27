@@ -8,7 +8,7 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import { combineClassNames } from '@/utils/combine-class-names.function';
-import { SelectableEnrolmentDiscipline } from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentDisciplinesForm';
+import { SelectableEnrolmentDiscipline } from '@/Pages/Admin/StudentEnrolments/Create';
 
 interface DisciplinesSelectorProps {
     unselectedDisciplines: SelectableEnrolmentDiscipline[];

@@ -12,35 +12,22 @@ import { PaginatedCollection } from '@/types/paginated-result.contract';
 import Spinner from '@/Components/Spinner';
 import DisciplinesSelector from '@/Pages/Admin/StudentEnrolments/Components/DisciplinesSelector';
 import { StudentGroupDisciplineDto } from '@/types/dtos/student-group-discipline.dto';
-
-interface DisciplineFormData {
-    disciplines: SelectableEnrolmentDiscipline[];
-}
+import { SelectableEnrolmentDiscipline } from '@/Pages/Admin/StudentEnrolments/Create';
 
 interface NewEnrolmentDisciplinesFormProps {
+    disabled?: boolean;
+
     studentGroup: { id: string; name: string } | null;
-    data: DisciplineFormData;
-    setData: <K extends keyof DisciplineFormData>(
-        key: K,
-        value: DisciplineFormData[K]
-    ) => void;
-    errors: Partial<Record<keyof DisciplineFormData, string>>;
+    value: SelectableEnrolmentDiscipline[];
+    onChange: (disciplines: SelectableEnrolmentDiscipline[]) => void;
+
     onAdvance: () => void;
     onPreviousRequested?: () => void;
-    disabled?: boolean;
-}
-
-export interface SelectableEnrolmentDiscipline {
-    id: string;
-    disciplineId: string;
-    disciplineName: string;
-    educatorId: string;
-    educatorName: string;
 }
 
 export default function NewEnrolmentDisciplinesForm({
-    data,
-    setData,
+    value,
+    onChange,
     studentGroup,
     onAdvance,
     onPreviousRequested,
@@ -129,18 +116,18 @@ export default function NewEnrolmentDisciplinesForm({
 
     const unselectedDisciplines = useMemo(() => {
         return disciplines.filter(
-            d => !data.disciplines.some(selected => selected.id === d.id)
+            d => !value.some(selected => selected.id === d.id)
         );
-    }, [data, disciplines]);
+    }, [value, disciplines]);
 
     const hasSelectedDuplicateDisciplines = useMemo(() => {
-        return data.disciplines.some(
+        return value.some(
             (discipline, index) =>
-                data.disciplines.findIndex(
+                value.findIndex(
                     d => d.disciplineId === discipline.disciplineId
                 ) !== index
         );
-    }, [data]);
+    }, [value]);
 
     return (
         <>
@@ -170,10 +157,8 @@ export default function NewEnrolmentDisciplinesForm({
                                     unselectedDisciplines={
                                         unselectedDisciplines
                                     }
-                                    selectedDisciplines={data.disciplines}
-                                    onChange={newValue => {
-                                        setData('disciplines', newValue);
-                                    }}
+                                    selectedDisciplines={value}
+                                    onChange={onChange}
                                 />
                             )
                         ) : (

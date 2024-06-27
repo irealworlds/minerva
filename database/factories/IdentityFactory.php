@@ -48,6 +48,7 @@ final class IdentityFactory extends Factory
                 fake()->password(),
             )),
             'remember_token' => Str::random(10),
+            'username' => fake()->numerify('#############'),
         ];
     }
 

@@ -1,39 +1,33 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import ParentInstitutionSelector from '@/Pages/Admin/StudentEnrolments/Components/ParentInstitutionSelector';
 import ParentGroupSelector from '@/Pages/Admin/StudentEnrolments/Components/StudentGroupSelector';
 import { StudentGroupViewModel } from '@/types/view-models/student-group.view-model';
-import { StudentEnrolmentCreationContext } from '@/Pages/Admin/StudentEnrolments/Create';
-
-interface InstitutionForm {
-    studentGroup: StudentGroupViewModel | null;
-}
+import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 
 interface NewEnrolmentInstitutionFormProps {
-    data: InstitutionForm;
-    setData: <K extends keyof InstitutionForm>(
-        key: K,
-        value: InstitutionForm[K]
-    ) => void;
-    errors: Partial<Record<keyof InstitutionForm, string>>;
+    disabled?: boolean;
+
+    selectedInstitution: InstitutionViewModel | null;
+    setSelectedInstitution: (value: InstitutionViewModel | null) => void;
+    selectedStudentGroup: StudentGroupViewModel | null;
+    setSelectedStudentGroup: (value: StudentGroupViewModel | null) => void;
+
     onAdvance: () => void;
     onPreviousRequested?: () => void;
-    disabled?: boolean;
 }
 
 export default function NewEnrolmentInstitutionForm({
-    onAdvance,
-    data,
-    setData,
-    onPreviousRequested,
     disabled,
+    selectedInstitution,
+    setSelectedInstitution,
+    selectedStudentGroup,
+    setSelectedStudentGroup,
+    onAdvance,
+    onPreviousRequested,
 }: NewEnrolmentInstitutionFormProps) {
-    const { selectedInstitution, setSelectedInstitution } = useContext(
-        StudentEnrolmentCreationContext
-    );
-
     return (
         <>
             <div className="space-y-12 sm:space-y-16">
@@ -51,18 +45,14 @@ export default function NewEnrolmentInstitutionForm({
                         <ParentInstitutionSelector
                             className="sm:col-span-4"
                             value={selectedInstitution}
-                            onChange={newValue => {
-                                setSelectedInstitution(newValue);
-                            }}
+                            onChange={setSelectedInstitution}
                         />
 
                         {selectedInstitution && (
                             <ParentGroupSelector
                                 className="sm:col-span-4"
-                                value={data.studentGroup}
-                                onChange={newValue => {
-                                    setData('studentGroup', newValue);
-                                }}
+                                value={selectedStudentGroup}
+                                onChange={setSelectedStudentGroup}
                             />
                         )}
                     </div>

@@ -2,15 +2,13 @@ import { PageProps } from '@/types';
 import AuthenticatedLayout from '@/Layouts/Authenticated/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import BulletsAndTextSteps from '@/Components/Steps/BulletsAndTextSteps';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import NewEnrolmentStudentProfileForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentStudentProfileForm';
 import { StudentRegistrationDto } from '@/types/dtos/student-registration.dto';
 import NewEnrolmentInstitutionForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentInstitutionForm';
 import { InstitutionViewModel } from '@/types/view-models/institution.view-model';
 import { StudentGroupViewModel } from '@/types/view-models/student-group.view-model';
-import NewEnrolmentDisciplinesForm, {
-    SelectableEnrolmentDiscipline,
-} from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentDisciplinesForm';
+import NewEnrolmentDisciplinesForm from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentDisciplinesForm';
 import NewEnrolmentPreview from '@/Pages/Admin/StudentEnrolments/Partials/NewEnrolmentPreview';
 
 const steps = [
@@ -37,9 +35,28 @@ export interface NewStudentEnrolmentFormData {
     studentGroup: StudentGroupViewModel | null;
     disciplines: SelectableEnrolmentDiscipline[];
 }
+export interface IdentityFormData {
+    idNumber: string;
+    namePrefix: string;
+    firstName: string;
+    middleNames: string[];
+    lastName: string;
+    nameSuffix: string;
+    email: string;
+}
 
-interface NewStudentEnrolmentCreationData {
-    studentKey: string;
+export interface SelectableEnrolmentDiscipline {
+    id: string;
+    disciplineId: string;
+    disciplineName: string;
+    educatorId: string;
+    educatorName: string;
+}
+
+interface StudentEnrolmentCreationData {
+    studentKey: string | null;
+    newIdentity: IdentityFormData | null;
+
     studentGroupKey: string;
     disciplines: {
         disciplineKey: string;
@@ -63,33 +80,53 @@ export const StudentEnrolmentCreationContext = createContext<{
 
 export default function Create({ auth, intendedInstitution }: CreatePageProps) {
     const [activeStep, setActiveStep] = useState(steps[0].id);
-    const { data, setData, processing, errors, post, transform } =
-        useForm<NewStudentEnrolmentFormData>({
-            studentProfile: null,
-            studentGroup: null,
+    const { data, setData, processing, post } =
+        useForm<StudentEnrolmentCreationData>({
+            studentKey: '',
+            newIdentity: null,
+            studentGroupKey: '',
             disciplines: [],
         });
+    const [selectedStudentProfile, setSelectedStudentProfile] =
+        useState<StudentRegistrationDto | null>(null);
     const [selectedInstitution, setSelectedInstitution] =
         useState<InstitutionViewModel | null>(intendedInstitution ?? null);
+    const [selectedStudentGroup, setSelectedStudentGroup] =
+        useState<StudentGroupViewModel | null>(null);
+    const [selectedDisciplines, setSelectedDisciplines] = useState<
+        SelectableEnrolmentDiscipline[]
+    >([]);
 
-    transform(data => {
-        if (!data.studentProfile) {
-            throw new Error('Student profile is required');
+    useEffect(() => {
+        if (selectedStudentProfile) {
+            setData(previousData => ({
+                ...previousData,
+                studentKey: selectedStudentProfile.id,
+            }));
+        } else {
+            setData(previousData => ({
+                ...previousData,
+                studentKey: null,
+            }));
         }
+    }, [selectedStudentProfile]);
 
-        if (!data.studentGroup) {
-            throw new Error('Student group is required');
-        }
+    useEffect(() => {
+        setData(previousData => ({
+            ...previousData,
+            studentGroupKey: selectedStudentGroup?.id ?? '',
+        }));
+    }, [selectedStudentGroup]);
 
-        return {
-            studentKey: data.studentProfile.id,
-            studentGroupKey: data.studentGroup.id,
-            disciplines: data.disciplines.map(d => ({
-                disciplineKey: d.disciplineId,
-                educatorKey: d.educatorId,
+    useEffect(() => {
+        setData(previousData => ({
+            ...previousData,
+            disciplines: selectedDisciplines.map(discipline => ({
+                disciplineKey: discipline.disciplineId,
+                educatorKey: discipline.educatorId,
             })),
-        } as NewStudentEnrolmentCreationData as unknown as NewStudentEnrolmentFormData;
-    });
+        }));
+    }, [selectedDisciplines]);
 
     function submit() {
         post(route('admin.student_enrolments.store'));
@@ -124,9 +161,20 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
                         {activeStep === 1 && (
                             <NewEnrolmentStudentProfileForm
                                 disabled={processing}
-                                data={data}
-                                setData={setData}
-                                errors={errors}
+                                selectedStudentProfile={selectedStudentProfile}
+                                newIdentityData={data.newIdentity}
+                                onChange={(
+                                    studentRegistration,
+                                    newIdentityData
+                                ) => {
+                                    setSelectedStudentProfile(
+                                        studentRegistration
+                                    );
+                                    setData(previousData => ({
+                                        ...previousData,
+                                        newIdentity: newIdentityData,
+                                    }));
+                                }}
                                 onAdvance={() => {
                                     setActiveStep(2);
                                 }}
@@ -137,9 +185,12 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
                         {activeStep === 2 && (
                             <NewEnrolmentInstitutionForm
                                 disabled={processing}
-                                data={data}
-                                setData={setData}
-                                errors={errors}
+                                selectedStudentGroup={selectedStudentGroup}
+                                setSelectedStudentGroup={
+                                    setSelectedStudentGroup
+                                }
+                                selectedInstitution={selectedInstitution}
+                                setSelectedInstitution={setSelectedInstitution}
                                 onPreviousRequested={() => {
                                     setActiveStep(1);
                                 }}
@@ -152,11 +203,12 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
                         {/* Disciplines form */}
                         {activeStep === 3 && (
                             <NewEnrolmentDisciplinesForm
-                                studentGroup={data.studentGroup}
+                                studentGroup={selectedStudentGroup}
+                                value={selectedDisciplines}
+                                onChange={disciplines => {
+                                    setSelectedDisciplines(disciplines);
+                                }}
                                 disabled={processing}
-                                data={data}
-                                setData={setData}
-                                errors={errors}
                                 onPreviousRequested={() => {
                                     setActiveStep(2);
                                 }}
@@ -170,8 +222,22 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
                         {activeStep === 4 && (
                             <NewEnrolmentPreview
                                 data={{
-                                    ...data,
-                                    institution: intendedInstitution,
+                                    newStudent: data.newIdentity !== null,
+                                    studentName: selectedStudentProfile
+                                        ? selectedStudentProfile.name
+                                        : data.newIdentity
+                                          ? `${data.newIdentity.firstName} ${data.newIdentity.lastName}`
+                                          : null,
+                                    studentPictureUri: selectedStudentProfile
+                                        ? selectedStudentProfile.pictureUri
+                                        : 'https://ui-avatars.com/api/?name=' +
+                                          encodeURIComponent(
+                                              `${data.newIdentity?.firstName ?? ''} ${data.newIdentity?.lastName ?? ''}`
+                                          ) +
+                                          '&background=random&size=128',
+                                    selectedInstitution,
+                                    selectedStudentGroup,
+                                    selectedDisciplines,
                                 }}
                                 disabled={processing}
                                 onPreviousRequested={() => {
@@ -182,6 +248,8 @@ export default function Create({ auth, intendedInstitution }: CreatePageProps) {
                                 }}
                             />
                         )}
+
+                        <pre>{JSON.stringify(data, null, 2)}</pre>
                     </StudentEnrolmentCreationContext.Provider>
                 </div>
             </div>

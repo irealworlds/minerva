@@ -6,22 +6,26 @@ namespace App\Http\Web\Controllers\Admin\StudentEnrolments;
 
 use App\ApplicationServices\Disciplines\FindByRouteKey\FindDisciplineByRouteKeyQuery;
 use App\ApplicationServices\Educators\FindByRouteKey\FindEducatorByRouteKeyQuery;
+use App\ApplicationServices\StudentGroupEnrolments\Create\CreateStudentGroupEnrolmentCommand;
 use App\ApplicationServices\StudentGroups\FindByRouteKey\FindStudentGroupByRouteKeyQuery;
 use App\ApplicationServices\StudentRegistrations\Create\CreateStudentRegistrationCommand;
 use App\ApplicationServices\StudentRegistrations\FindByRouteKey\FindStudentRegistrationByRouteKeyQuery;
 use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
-use App\Core\Dtos\StudentEnrolmentDisciplineDto;
+use App\Core\Dtos\{PersonalNameDto, StudentEnrolmentDisciplineDto};
 use App\Core\Models\{Institution, StudentGroup, StudentRegistration};
 use App\Http\Web\Controllers\Admin\Institutions\Management\ManageInstitutionStudentsController;
 use App\Http\Web\Controllers\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Eloquent\{Model, ModelNotFoundException};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\{Collection, Enumerable};
+use Illuminate\Support\{Collection, Enumerable, Str};
 use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
 use ReflectionException;
 use Spatie\RouteAttributes\Attributes\Post;
+use Throwable;
 
 final readonly class StoreStudentEnrolmentController extends Controller
 {
@@ -29,6 +33,7 @@ final readonly class StoreStudentEnrolmentController extends Controller
         private Redirector $_redirector,
         private IQueryBus $_queryBus,
         private ICommandBus $_commandBus,
+        private ConnectionResolverInterface $_db,
     ) {
     }
 
@@ -36,6 +41,7 @@ final readonly class StoreStudentEnrolmentController extends Controller
      * @throws ValidationException
      * @throws BindingResolutionException
      * @throws ReflectionException
+     * @throws Throwable
      */
     #[
         Post(
@@ -46,53 +52,90 @@ final readonly class StoreStudentEnrolmentController extends Controller
     public function __invoke(
         StoreStudentEnrolmentRequest $request,
     ): RedirectResponse {
-        // Get the student registration id from the request
-        $studentRegistration = $this->extractStudentRegistration($request);
-
         // Get the student group from the request
         $studentGroup = $this->extractStudentGroup($request);
 
         // Get the disciplines from the request
         $disciplines = $this->extractStudiedDisciplines($request);
 
-        // Create the student enrolment
-        $this->_commandBus->dispatch(
-            new CreateStudentRegistrationCommand(
-                studentKey: $studentRegistration->getKey(),
-                studentGroupKey: $studentGroup->getKey(),
-                disciplines: $disciplines,
-            ),
-        );
+        $this->_db
+            ->connection()
+            ->transaction(function () use (
+                $studentGroup,
+                $disciplines,
+                $request,
+            ): void {
+                // Get the student registration id from the request
+                $studentRegistration = $this->extractOrCreateStudentRegistration(
+                    $request,
+                );
 
-        // Get the institution from the student group
-        $institution = $studentGroup
-            ->ancestors()
-            ->where('parent_type', Institution::class)
-            ->first();
+                // Create the student enrolment
+                $this->_commandBus->dispatch(
+                    new CreateStudentGroupEnrolmentCommand(
+                        studentRegistrationKey: $studentRegistration->getKey(),
+                        studentGroupKey: $studentGroup->getKey(),
+                        disciplines: $disciplines,
+                    ),
+                );
+            });
 
         // Redirect to the institution students management page
-        return $this->buildRedirectResponse($institution);
+        return $this->buildRedirectResponse($studentGroup->parentInstitution);
     }
 
     /**
      * Get the student registration that is being enroled from the request.
      *
+     * @throws BindingResolutionException
+     * @throws ReflectionException
      * @throws ValidationException if the student registration does not exist
+     * @throws ModelNotFoundException
+     * @throws InvalidArgumentException
      */
-    protected function extractStudentRegistration(
+    protected function extractOrCreateStudentRegistration(
         StoreStudentEnrolmentRequest $request,
     ): StudentRegistration {
-        $studentRegistration = $this->_queryBus->dispatch(
-            new FindStudentRegistrationByRouteKeyQuery(
-                routeKey: $request->studentKey,
-            ),
-        );
-        if (empty($studentRegistration)) {
-            throw ValidationException::withMessages([
-                'studentKey' => __('validation.exists', [
-                    'attribute' => 'student key',
-                ]),
-            ]);
+        if ($request->studentKey) {
+            $studentRegistration = $this->_queryBus->dispatch(
+                new FindStudentRegistrationByRouteKeyQuery(
+                    routeKey: $request->studentKey,
+                ),
+            );
+            if (empty($studentRegistration)) {
+                throw ValidationException::withMessages([
+                    'studentKey' => __('validation.exists', [
+                        'attribute' => 'student key',
+                    ]),
+                ]);
+            }
+        } elseif ($request->newIdentity) {
+            $studentKey = Str::orderedUuid()->toString();
+            $this->_commandBus->dispatch(
+                new CreateStudentRegistrationCommand(
+                    studentKey: $studentKey,
+                    username: $request->newIdentity['idNumber'],
+                    name: new PersonalNameDto(
+                        prefix: empty($request->newIdentity['namePrefix'])
+                            ? null
+                            : $request->newIdentity['namePrefix'],
+                        firstName: $request->newIdentity['firstName'],
+                        middleNames: $request->newIdentity['middleNames'],
+                        lastName: $request->newIdentity['lastName'],
+                        suffix: empty($request->newIdentity['nameSuffix'])
+                            ? null
+                            : $request->newIdentity['nameSuffix'],
+                    ),
+                    email: $request->newIdentity['email'],
+                ),
+            );
+            $studentRegistration = StudentRegistration::query()->findOrFail(
+                $studentKey,
+            );
+        } else {
+            throw new InvalidArgumentException(
+                'Invalid student registration data.',
+            );
         }
         return $studentRegistration;
     }
