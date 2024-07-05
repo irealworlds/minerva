@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Web\Controllers\Public;
 
+use App\Http\Web\Controllers\Auth\AuthSessions\CreateAuthSessionController;
 use App\Http\Web\Controllers\Controller;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Inertia\{Inertia, Response};
-use RuntimeException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Spatie\RouteAttributes\Attributes\Get;
-use const PHP_VERSION;
 
 readonly class IndexController extends Controller
 {
-    /**
-     * @throws RuntimeException
-     */
-    #[Get('/')]
-    public function __invoke(Request $request): Response
+    public function __construct(private Redirector $_redirector)
     {
-        return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-        ]);
+    }
+
+    #[Get('/')]
+    public function __invoke(): RedirectResponse
+    {
+        return $this->_redirector->action(CreateAuthSessionController::class);
     }
 }
