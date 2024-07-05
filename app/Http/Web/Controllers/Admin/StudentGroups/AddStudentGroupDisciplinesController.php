@@ -8,7 +8,6 @@ use App\ApplicationServices\Disciplines\FindByRouteKey\FindDisciplineByRouteKeyQ
 use App\ApplicationServices\StudentGroups\AssociateDisciplines\AssociateDisciplinesToStudentGroupCommand;
 use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
 use App\Core\Models\StudentGroup;
-use App\Http\Web\Requests\StudentGroups\AddStudentGroupDisciplinesRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;

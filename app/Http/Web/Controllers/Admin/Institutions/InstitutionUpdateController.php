@@ -9,7 +9,6 @@ use App\ApplicationServices\Institutions\UpdatePicture\UpdateInstitutionPictureC
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\Institution;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\Institutions\InstitutionPublicProfileUpdateRequest;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
@@ -34,7 +33,7 @@ final readonly class InstitutionUpdateController extends Controller
     #[Patch('/PublicProfile', name: 'admin.institutions.update.public')]
     public function __invoke(
         Institution $institution,
-        InstitutionPublicProfileUpdateRequest $request,
+        InstitutionUpdateRequest $request,
     ): RedirectResponse {
         $this->_commandBus->dispatch(
             new UpdateInstitutionDetailsCommand(

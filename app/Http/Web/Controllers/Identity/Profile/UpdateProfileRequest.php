@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests;
+namespace App\Http\Web\Controllers;
 
 use App\Core\Traits\Requests\WithOptionals;
 use Illuminate\Foundation\Http\FormRequest;
@@ -15,7 +15,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property-read string|null $nameSuffix
  * @property-read string $email
  */
-class ProfileUpdateRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     use WithOptionals;
 

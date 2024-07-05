@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests\Disciplines;
+namespace App\Http\Web\Controllers\Admin\Disciplines;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string|null $abbreviation
  * @property iterable<string> $associatedInstitutionKeys
  */
-final class DisciplineCreateRequest extends FormRequest
+final class CreateDisciplineRequest extends FormRequest
 {
     /**
      * Validation rules that apply to the request.

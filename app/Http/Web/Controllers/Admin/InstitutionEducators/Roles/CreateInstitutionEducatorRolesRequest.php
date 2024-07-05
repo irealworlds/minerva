@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests\InstitutionEducators\Roles;
+namespace App\Http\Web\Controllers\Admin\InstitutionEducators\Roles;
 
 use Illuminate\Foundation\Http\FormRequest;
 

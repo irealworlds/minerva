@@ -9,7 +9,6 @@ use App\ApplicationServices\EducatorInvitations\Decline\DeclineEducatorInvitatio
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\EducatorInvitation;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\EducatorInstitutions\EducatorInvitationUpdateRequest;
 use Illuminate\Http\{RedirectResponse, Response};
 use Illuminate\Routing\Redirector;
 use InvalidArgumentException;
@@ -29,7 +28,7 @@ final readonly class UpdateEducatorInvitationController extends Controller
      */
     #[Patch('/Educator/Invitations/{invitation}')]
     public function __invoke(
-        EducatorInvitationUpdateRequest $request,
+        UpdateEducatorInvitationRequest $request,
         EducatorInvitation $invitation,
     ): RedirectResponse|Response {
         // If the invitation has expired, return a 410 Gone response

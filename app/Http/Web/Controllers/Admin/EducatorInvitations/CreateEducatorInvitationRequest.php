@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests\EducatorInstitutions;
+namespace App\Http\Web\Controllers\Admin\EducatorInvitations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $email
  * @property string[] $roles
  */
-final class EducatorInstitutionCreationRequest extends FormRequest
+final class CreateEducatorInvitationRequest extends FormRequest
 {
     /**
      * @return array{

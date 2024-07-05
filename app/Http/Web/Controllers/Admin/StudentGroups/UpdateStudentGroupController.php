@@ -9,7 +9,6 @@ use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Enums\Permission;
 use App\Core\Models\StudentGroup;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\StudentGroups\StudentGroupUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;

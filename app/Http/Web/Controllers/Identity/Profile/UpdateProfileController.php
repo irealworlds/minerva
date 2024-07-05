@@ -8,41 +8,21 @@ use App\ApplicationServices\Identities\Update\UpdateIdentityCommand;
 use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Models\Identity;
 use App\Core\Optional;
-use App\Http\Web\Requests\ProfileUpdateRequest;
+use App\Http\Web\Controllers\Identity\Profile\ReadProfileController;
 use Codestage\Authorization\Attributes\Authorize;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\{RedirectResponse, Request};
+use Illuminate\Http\{RedirectResponse};
 use Illuminate\Routing\Redirector;
-use Illuminate\Session\SessionManager;
 use Illuminate\Validation\ValidationException;
-use Inertia\{Inertia, Response};
 use ReflectionException;
-use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{Get, Patch};
+use Spatie\RouteAttributes\Attributes\{Patch};
 
-final readonly class ProfileController extends Controller
+final readonly class UpdateProfileController extends Controller
 {
     public function __construct(
-        private SessionManager $_sessionManager,
         private Redirector $_redirector,
         private ICommandBus $_commandBus,
     ) {
-    }
-
-    /**
-     * Display the user's profile form.
-     *
-     * @throws RuntimeException
-     */
-    #[Get('/Profile', name: 'profile.edit')]
-    #[Authorize]
-    public function edit(Request $request): Response
-    {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => $this->_sessionManager->get('status'),
-        ]);
     }
 
     /**
@@ -54,7 +34,7 @@ final readonly class ProfileController extends Controller
      */
     #[Patch('/Profile', name: 'profile.update')]
     #[Authorize]
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function __invoke(UpdateProfileRequest $request): RedirectResponse
     {
         /** @var Identity $identity */
         $identity = $request->user();
@@ -76,7 +56,7 @@ final readonly class ProfileController extends Controller
 
         // Redirect back to the profile page
         return $this->_redirector
-            ->action([ProfileController::class, 'edit'])
+            ->action(ReadProfileController::class)
             ->with('success', [__('toasts.profile.updated')]);
     }
 }

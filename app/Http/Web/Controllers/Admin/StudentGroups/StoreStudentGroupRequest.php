@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests\StudentGroups;
+namespace App\Http\Web\Controllers\Admin\StudentGroups;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\In;
@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\In;
  * @property string $parentId
  * @property string $name
  */
-final class StudentGroupCreateRequest extends FormRequest
+final class StoreStudentGroupRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

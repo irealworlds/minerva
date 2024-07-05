@@ -12,7 +12,6 @@ use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
 use App\Core\Models\{Educator, EducatorInvitation, Identity, Institution};
 use App\Http\Web\Controllers\Admin\Institutions\Management\ManageInstitutionEducatorsController;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\EducatorInstitutions\EducatorInstitutionCreationRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
@@ -49,7 +48,7 @@ final readonly class CreateEducatorInvitationController extends Controller
     ]
     #[Authorize]
     public function __invoke(
-        EducatorInstitutionCreationRequest $request,
+        CreateEducatorInvitationRequest $request,
     ): RedirectResponse {
         // Get the institution from the request
         /** @var Institution|null $institution */
@@ -79,7 +78,7 @@ final readonly class CreateEducatorInvitationController extends Controller
         // Check if the educator is already an educator of the institution
         if (
             $institution->educators->some(
-                fn(Educator $e) => $e->getKey() === $educator->getKey(),
+                fn (Educator $e) => $e->getKey() === $educator->getKey(),
             )
         ) {
             throw ValidationException::withMessages([
@@ -93,7 +92,7 @@ final readonly class CreateEducatorInvitationController extends Controller
         );
         if (
             $invitations->some(
-                fn(
+                fn (
                     EducatorInvitation $invitation,
                 ) => $invitation->invited_educator_id === $educator->getKey(),
             )

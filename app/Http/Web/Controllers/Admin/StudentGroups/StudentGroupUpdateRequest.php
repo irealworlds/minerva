@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Web\Requests\StudentGroups;
+namespace App\Http\Web\Controllers\Admin\StudentGroups;
 
 use App\Core\Traits\Requests\WithOptionals;
 use Illuminate\Foundation\Http\FormRequest;

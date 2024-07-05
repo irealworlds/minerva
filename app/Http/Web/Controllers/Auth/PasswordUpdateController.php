@@ -6,7 +6,6 @@ namespace App\Http\Web\Controllers\Auth;
 
 use App\Core\Models\Identity;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\Auth\PasswordUpdateRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -15,7 +14,7 @@ use Illuminate\Routing\Redirector;
 use Spatie\RouteAttributes\Attributes\Put;
 use Throwable;
 
-final readonly class PasswordController extends Controller
+final readonly class PasswordUpdateController extends Controller
 {
     public function __construct(
         private Redirector $_redirector,
@@ -31,7 +30,7 @@ final readonly class PasswordController extends Controller
      */
     #[Put('/Password', name: 'password.update')]
     #[Authorize]
-    public function update(PasswordUpdateRequest $request): RedirectResponse
+    public function __invoke(PasswordUpdateRequest $request): RedirectResponse
     {
         /** @var Identity $user */
         $user = $this->_authManager->guard()->user();

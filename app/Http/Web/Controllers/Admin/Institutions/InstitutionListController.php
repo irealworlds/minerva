@@ -9,7 +9,6 @@ use App\Core\Contracts\Cqrs\IQueryBus;
 use App\Core\Enums\Permission;
 use App\Core\Optional;
 use App\Http\Web\Controllers\Controller;
-use App\Http\Web\Requests\Institutions\InstitutionListRequest;
 use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Validation\ValidationException;
@@ -47,7 +46,7 @@ final readonly class InstitutionListController extends Controller
             $institutions
                 ->getCollection()
                 ->map(
-                    fn(
+                    fn (
                         mixed $institution,
                     ) => $this->_institutionViewModelAssembler->assemble(
                         $institution,

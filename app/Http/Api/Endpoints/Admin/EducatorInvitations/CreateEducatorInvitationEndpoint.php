@@ -11,7 +11,7 @@ use App\ApplicationServices\Institutions\FindById\FindInstitutionsByRouteKeysQue
 use App\Core\Contracts\Cqrs\{ICommandBus, IQueryBus};
 use App\Core\Models\{Educator, EducatorInvitation, Identity, Institution};
 use App\Http\Api\Endpoints\Endpoint;
-use App\Http\Web\Requests\EducatorInstitutions\EducatorInstitutionCreationRequest;
+use App\Http\Web\Controllers\Admin\EducatorInvitations\CreateEducatorInvitationRequest;
 use Codestage\Authorization\Attributes\Authorize;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Factory as AuthManager;
@@ -45,9 +45,8 @@ final readonly class CreateEducatorInvitationEndpoint extends Endpoint
         ),
     ]
     #[Authorize]
-    public function __invoke(
-        EducatorInstitutionCreationRequest $request,
-    ): Response {
+    public function __invoke(CreateEducatorInvitationRequest $request): Response
+    {
         // Get the institution from the request
         /** @var Institution|null $institution */
         $institution = $this->_queryBus
@@ -76,7 +75,7 @@ final readonly class CreateEducatorInvitationEndpoint extends Endpoint
         // Check if the educator is already an educator of the institution
         if (
             $institution->educators->some(
-                fn(Educator $e) => $e->getKey() === $educator->getKey(),
+                fn (Educator $e) => $e->getKey() === $educator->getKey(),
             )
         ) {
             throw ValidationException::withMessages([
@@ -90,7 +89,7 @@ final readonly class CreateEducatorInvitationEndpoint extends Endpoint
         );
         if (
             $invitations->some(
-                fn(
+                fn (
                     EducatorInvitation $invitation,
                 ) => $invitation->invited_educator_id === $educator->getKey(),
             )

@@ -4,36 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Web\Controllers\Admin\StudentGroups;
 
-use App\ApplicationServices\StudentGroups\Create\CreateStudentGroupCommand;
-use App\Core\Contracts\Cqrs\ICommandBus;
 use App\Core\Contracts\Services\IInertiaService;
 use App\Core\Enums\Permission;
 use App\Core\Models\{Institution, StudentGroup};
-use App\Http\Web\Controllers\Admin\Institutions\InstitutionReadController;
-use App\Http\Web\Requests\StudentGroups\StudentGroupCreateRequest;
 use App\Http\Web\ViewModels\{StudentGroupViewModel};
 use App\Http\Web\ViewModels\Assemblers\InstitutionViewModelAssembler;
 use Codestage\Authorization\Attributes\Authorize;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\{RedirectResponse, Request};
-use Illuminate\Routing\Redirector;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\{Request};
 use Inertia\{Response as InertiaResponse, ResponseFactory};
 use InvalidArgumentException;
-use ReflectionException;
-use RuntimeException;
-use Spatie\RouteAttributes\Attributes\{Get, Post};
+use Spatie\RouteAttributes\Attributes\{Get};
 
 final readonly class CreateStudentGroupController
 {
     public function __construct(
-        private ICommandBus $_commandBus,
         private IInertiaService $_inertiaService,
         private ResponseFactory $_inertia,
-        private Redirector $_redirector,
-        private UrlGenerator $_urlGenerator,
         private InstitutionViewModelAssembler $_institutionViewModelAssembler,
     ) {
     }
@@ -45,7 +32,7 @@ final readonly class CreateStudentGroupController
      */
     #[Get('/Admin/StudentGroups/Create', name: 'admin.student_groups.create')]
     #[Authorize(permissions: Permission::StudentGroupCreate)]
-    public function create(Request $request): InertiaResponse
+    public function __invoke(Request $request): InertiaResponse
     {
         // Determine the parent for the new group
         $parent = null;
@@ -110,100 +97,5 @@ final readonly class CreateStudentGroupController
                         ? StudentGroupViewModel::fromModel($parent)
                         : null),
         ]);
-    }
-
-    /**
-     * Handle the incoming request.
-     *
-     * @throws ValidationException
-     * @throws BindingResolutionException
-     * @throws ReflectionException
-     * @throws RuntimeException
-     */
-    #[Post('/StudentGroups/Create', name: 'student_groups.store')]
-    #[Authorize(permissions: Permission::StudentGroupCreate)]
-    public function store(StudentGroupCreateRequest $request): RedirectResponse
-    {
-        // Validate and extract the parent from the request
-        try {
-            if (!strcasecmp($request->parentType, 'institution')) {
-                $parent = Institution::query()
-                    ->where(
-                        (new Institution())->getRouteKeyName(),
-                        $request->parentId,
-                    )
-                    ->firstOrFail();
-            } elseif (!strcasecmp($request->parentType, 'studentGroup')) {
-                $parent = StudentGroup::query()
-                    ->where(
-                        (new StudentGroup())->getRouteKeyName(),
-                        $request->parentId,
-                    )
-                    ->firstOrFail();
-            } else {
-                throw new ModelNotFoundException();
-            }
-        } catch (ModelNotFoundException) {
-            $validationMessage = __('validation.exists', [
-                'attribute' => 'parent id',
-            ]);
-            if (is_iterable($validationMessage)) {
-                $validationMessage = 'Parent id not found.';
-            }
-            throw ValidationException::withMessages([
-                'parentId' => $validationMessage,
-            ]);
-        }
-
-        // Generate a new id for the group
-        $id = (new StudentGroup())->newUniqueId();
-
-        // Create a new student group entity
-        $this->_commandBus->dispatch(
-            new CreateStudentGroupCommand(
-                id: $id,
-                name: $request->name,
-                parent: $parent,
-            ),
-        );
-
-        // Figure out where the user should be redirected
-        if ($parent instanceof Institution) {
-            $redirectTo = $this->_urlGenerator->action(
-                InstitutionReadController::class,
-                [
-                    'institution' => $parent,
-                ],
-            );
-        } else {
-            $parentInstitution = $parent->parent;
-            while (!($parentInstitution instanceof Institution)) {
-                if ($parentInstitution instanceof StudentGroup) {
-                    $parentInstitution = $parentInstitution->parent;
-                } else {
-                    throw new RuntimeException(
-                        'Unexpected parent of type [' .
-                            $parentInstitution::class .
-                            '] encountered in the parent tree of [' .
-                            $parent::class .
-                            '] with id [' .
-                            $parent->getKey() .
-                            '].',
-                    );
-                }
-            }
-
-            $redirectTo = $this->_urlGenerator->action(
-                InstitutionReadController::class,
-                [
-                    'institution' => $parentInstitution,
-                ],
-            );
-        }
-
-        // Redirect the user
-        return $this->_redirector
-            ->to($redirectTo)
-            ->with('success', [__('toasts.studentGroups.created')]);
     }
 }
