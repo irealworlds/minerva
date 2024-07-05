@@ -22,8 +22,8 @@ interface StudentDisciplineEnrolmentSelectorProps {
     value: StudentDisciplineEnrolmentDto | null;
     onChange: (value: StudentDisciplineEnrolmentDto | null) => void;
 
-    disciplineKey: string;
-    studentGroupKey: string;
+    disciplineKey?: string;
+    studentGroupKey?: string;
 }
 
 export default function StudentDisciplineEnrolmentSelector({

@@ -43,18 +43,24 @@ export default function ActivityListCard({
                                 StudentEnrolmentActivityType.NewGrade ? (
                                     <NewGrade
                                         awardedBy={
-                                            activityItem.properties.awardedBy
+                                            activityItem.properties
+                                                .awardedBy as {
+                                                name: string;
+                                            }
                                         }
                                         awardedPoints={
                                             activityItem.properties
-                                                .awardedPoints
+                                                .awardedPoints as number
                                         }
                                         maximumPoints={
                                             activityItem.properties
-                                                .maximumPoints
+                                                .maximumPoints as number
                                         }
                                         awardedAt={activityItem.date}
-                                        notes={activityItem.properties.notes}
+                                        notes={
+                                            activityItem.properties
+                                                .notes as string
+                                        }
                                     />
                                 ) : (
                                     <Enrolment enroledAt={activityItem.date} />
