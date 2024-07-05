@@ -9,7 +9,6 @@ import {
     BuildingLibraryIcon,
     ChartBarSquareIcon,
     ClipboardDocumentListIcon,
-    IdentificationIcon,
     UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import Sidebar from '@/Layouts/Authenticated/Partials/Sidebar';
@@ -75,13 +74,6 @@ export default function AuthenticatedLayout({
         // Educator routes
         new NavigationCategory('Educator area', [
             {
-                name: 'Educator dashboard',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
-                icon: ChartBarSquareIcon,
-                disabled: true,
-            },
-            {
                 name: 'Student groups',
                 href: route('educators.studentGroups.list'),
                 current: route().current('educators.studentGroups.list'),
@@ -93,20 +85,6 @@ export default function AuthenticatedLayout({
         // Student routes
         new NavigationCategory('Student area', [
             {
-                name: 'Student dashboard',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
-                icon: ChartBarSquareIcon,
-                disabled: true,
-            },
-            {
-                name: 'Student ID',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
-                icon: IdentificationIcon,
-                disabled: true,
-            },
-            {
                 name: 'My enrolments',
                 href: route('student.enrolments.list'),
                 current: route().current('student.enrolments.list'),
@@ -115,10 +93,9 @@ export default function AuthenticatedLayout({
             },
             {
                 name: 'My grades',
-                href: route('admin.institutions.index'),
-                current: route().current('admin.institutions.index'),
+                href: route('student.enrolments.list'),
+                current: false,
                 icon: ClipboardDocumentListIcon,
-                disabled: true,
             },
         ]),
     ].filter((item: NavigationItem | NavigationCategory) => {
