@@ -80,7 +80,7 @@ export default function DisciplineCard({
                                     of {discipline.gradesCount.toLocaleString()}{' '}
                                     {discipline.gradesCount === 1
                                         ? 'grade'
-                                        : 'grade'}
+                                        : 'grades'}
                                 </span>
                             </>
                         )}
