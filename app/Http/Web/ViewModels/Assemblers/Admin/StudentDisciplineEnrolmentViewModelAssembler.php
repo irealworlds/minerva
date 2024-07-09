@@ -96,7 +96,7 @@ final readonly class StudentDisciplineEnrolmentViewModelAssembler
     ): Enumerable {
         return $this->_queryBus->dispatch(
             new ListStudentDisciplineGradesQuery(
-                studentRegistrationKeys: Optional::of([
+                studentRegistrationKeys: Optional::of(
                     $enrolments
                         ->map(static function (
                             StudentDisciplineEnrolment $disciplineEnrolment,
@@ -106,7 +106,7 @@ final readonly class StudentDisciplineEnrolmentViewModelAssembler
                         ->unique()
                         ->values()
                         ->toArray(),
-                ]),
+                ),
                 disciplineKeys: Optional::of([$discipline->getKey()]),
                 studentGroupKeys: Optional::of(
                     $enrolments
